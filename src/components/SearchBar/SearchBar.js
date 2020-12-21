@@ -10,7 +10,7 @@ function SearchBar() {
     return (
         <div>
             <IconButton onClick={() => inputRef.current.focus()} type="submit">
-                <SearchOutlined color="white" className="searchBar__icon" />
+                <SearchOutlined className="searchBar__icon" />
             </IconButton>
             <InputBase
                 inputRef={inputRef}

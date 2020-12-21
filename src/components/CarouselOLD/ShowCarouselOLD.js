@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import "./Carousel.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import PropTypes from 'prop-types';
@@ -18,9 +18,9 @@ function ShowCarousel(games) {
         }
     }
 
-    useEffect(() => {
-        console.log("INSIDE CAROUSEL ", games);
-    }, [games])
+    // useEffect(() => {
+    //     console.log("INSIDE CAROUSEL ", games);
+    // }, [games])
 
     return (
         <div className="carousel">
@@ -36,6 +36,7 @@ function ShowCarousel(games) {
                 showArrows={true}
                 showIndicators={false}
                 selectedItem={currentSlide}
+
             >
                 {games.data.map((element, i) => {
                     return <CarouselItem
@@ -43,10 +44,8 @@ function ShowCarousel(games) {
                         isSelected={currentSlide === i ? true : false}
                         imageId={element.imageID}
                         title={element.game}
-                        category="Role-playing (RPG)"
-                        company="CD Projekt Red"
-                        companyLogoId="cl2dk"
-                        rate={80}
+                        category={element.genre}
+                        rate={element.rating}
                     />
                 })}
             </Carousel>

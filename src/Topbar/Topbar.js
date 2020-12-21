@@ -11,7 +11,7 @@ function Topbar() {
         <div className="topbar">
             <SearchBar />
             <div className="topbar__rightLayout">
-                <Tooltip title="Toggle notifications panel">
+                <Tooltip title="Notifications">
                     <IconButton size="medium" className="topbar__iconButton">
                         <NotificationsOutlined/>
                     </IconButton>
