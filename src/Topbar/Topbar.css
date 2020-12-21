@@ -1,0 +1,17 @@
+.topbar {
+    height: 50px;
+    border-bottom: 1px solid var(--app-700);
+    padding: 18px 24px;
+    display: flex;
+    align-items: center;
+    box-shadow: var(--bar-boxShadow);
+    justify-content: space-between;
+}
+
+.topbar__rightLayout {
+    display: flex;
+}
+
+.topbar__iconButton {
+    margin-left: 16px !important;
+}

@@ -1,0 +1,108 @@
+.carousel li.slide.selected {
+    z-index: 10 !important;
+}
+
+.carousel__item__image {
+    object-fit: cover;
+    border-radius: 8px;
+    transition: all 500ms ease;
+    /* opacity: 0.4; */
+    filter: brightness(20%);
+    transform: scale(0.7, 0.7);
+    -ms-transform: scale(0.7, 0.7);
+    -webkit-transform: scale(0.7, 0.7);
+    z-index: -10 !important;
+}
+
+.carousel__item__image.selected {
+    filter: brightness(75%);
+    transform: scale(1, 1);
+    -ms-transform: scale(1, 1);
+    -webkit-transform: scale(1, 1);
+    z-index: 10 !important;
+}
+
+.carousel__item__legend {
+    transform: scale(0, 0);
+    -ms-transform: scale(0, 0);
+    -webkit-transform: scale(0, 0);
+    transition: opacity 800ms ease-in-out;
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: baseline;
+    bottom: 0px;
+    opacity: 0;
+    padding: 24px;
+    height: 100%;
+    text-align: left;
+}
+
+.carousel__item__bottom {
+    margin-top: auto;
+}
+
+.carousel__item__critic {
+    transform: scale(0, 0);
+    -ms-transform: scale(0, 0);
+    -webkit-transform: scale(0, 0);
+    transition: opacity 800ms ease-in-out;
+    position: absolute;
+    bottom: 0px;
+    right: -100px;
+    opacity: 0;
+    padding: 24px;
+    height: 100%;
+    display: flex;
+    text-align: right;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.carousel__item__critic.selected {
+    transform: scale(1, 1);
+    -ms-transform: scale(1, 1);
+    -webkit-transform: scale(1, 1);
+    opacity: 1;
+}
+
+.carousel__item__legend.selected {
+    transform: scale(1, 1);
+    -ms-transform: scale(1, 1);
+    -webkit-transform: scale(1, 1);
+    opacity: 1;
+    /* background: linear-gradient( to bottom, rgba(0, 0, 0, 0), rgb(0, 0, 0, 0.5)); */
+}
+
+.carousel__item__legend.selected h2 {
+    font-size: 2.3em;
+    margin-bottom: 8px;
+}
+
+.carousel__item__legend.selected p {
+    font-weight: 400;
+}
+
+.carousel__item__legend__company {
+    display: flex;
+    align-items: center;
+    margin-bottom: 32px;
+}
+
+.carousel__item__legend__company img {
+    width: 50px !important;
+    height: 50px !important;
+    object-fit: cover;
+    border-radius: 100%;
+    margin-right: 8px;
+}
+
+.carousel__item__category {
+    display: flex;
+    margin-bottom: 16px;
+}
+
+.carousel__item__category button {
+    padding: 16px;
+    height: 30px;
+}

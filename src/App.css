@@ -1,0 +1,20 @@
+body {
+  --primary-color: linear-gradient(90deg, #FC5D44 0%, #FEAA45 100%);
+  --secondary-color: #6d5dd3;
+  --background-color: #212028;
+  --app-900: #131D25;
+  --app-800: #1D242E;
+  --app-700: #282F3A;
+  --app-600: #58606C;
+  --app-500: #9FA6B1;
+  --app-400: #EDF1F6;
+  --app-300: #FFFFFF;
+
+  --bar-boxShadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+  height: 100%
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+}

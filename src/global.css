@@ -1,0 +1,11 @@
+.carousel__dot--selected {
+  background-color: yellow;
+}
+
+.carousel__slider--horizontal {
+  border-radius: 40px;
+}
+
+.carousel .slide {
+  background: none !important;
+}
