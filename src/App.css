@@ -11,10 +11,16 @@ body {
   --app-300: #FFFFFF;
 
   --bar-boxShadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
-  height: 100%
+  --skeleton-color: var(--app-700);
+  height: 100%;
 }
 
 .app {
   display: flex;
   flex-direction: column;
+  margin-bottom: 32px;
+}
+
+.MuiSkeleton-wave::after {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.04), transparent) !important;
 }

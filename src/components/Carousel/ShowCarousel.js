@@ -7,9 +7,19 @@ import { Carousel } from 'react-responsive-carousel';
 import CarouselItem from "../CarouselItem/CarouselItem";
 
 import CarouselIndicator from "../CarouselIndicator/CarouselIndicator";
+import styled from 'styled-components';
 
+const Container = styled.div`
+    position: relative;
+    width: 100%;
+`;
 
-function ShowCarousel(games) {
+const IndicatorContainer = styled.div`
+    margin-top: 24px;
+    text-align: center;
+`;
+
+function ShowCarousel({ data, loadingStatus }) {
     const [currentSlide, setCurrentSlide] = useState(0);
 
     const updateCurrentSlide = (index) => {
@@ -18,51 +28,61 @@ function ShowCarousel(games) {
         }
     }
 
-    // useEffect(() => {
-    //     console.log("INSIDE CAROUSEL ", games);
-    // }, [games])
-
     return (
-        <div className="carousel">
+        <Container>
             <Carousel
                 centerMode
                 infiniteLoop
                 showThumbs={false}
-                autoPlay={false}
+                interval={5000}
+                autoPlay={data.length === 10 ? true : false}
                 onChange={updateCurrentSlide}
                 centerSlidePercentage={40}
                 onClickItem={updateCurrentSlide}
                 showStatus={false}
-                showArrows={true}
+                showArrows={false}
                 showIndicators={false}
                 selectedItem={currentSlide}
-
             >
-                {games.data.map((element, i) => {
+                {data.length === 10 ? data.map((element, i) => {
                     return <CarouselItem
                         key={i}
                         isSelected={currentSlide === i ? true : false}
-                        imageId={element.imageID}
+                        imageId={element.screenshotID}
                         title={element.game}
-                        category={element.genre}
+                        genres={element.genres}
                         rate={element.rating}
+                        company={element.company}
+                        videoId={element.videoID}
+                        isLoading={false}
                     />
-                })}
+                }) : (
+                        Array.from({ length: 10 }, (item, index) => {
+                            return <CarouselItem
+                                key={index}
+                                isSelected={currentSlide === index ? true : false}
+                                isLoading={true}
+                            />
+                        }
+                        )
+                    )
+                }
             </Carousel>
-
-            <div className="carousel__indicator">
+            <IndicatorContainer>
                 <CarouselIndicator
-                    itemCount={games.data.length}
+                    itemCount={data.length}
                     onClick={(index) => updateCurrentSlide(index)}
                     selectedIndex={currentSlide}
                     setSelectedIndex={updateCurrentSlide}
+                    loadingStatus={data.length === 10 ? null : loadingStatus}
                 />
-            </div>
-        </div>
+            </IndicatorContainer>
+        </Container>
     );
 }
 
 ShowCarousel.prototype = {
     games: PropTypes.array.isRequired
 }
+
 export default ShowCarousel;

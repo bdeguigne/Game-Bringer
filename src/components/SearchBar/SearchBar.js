@@ -1,20 +1,28 @@
 import React from "react"
 import { IconButton, InputBase } from "@material-ui/core"
-import { SearchOutlined } from "@material-ui/icons"
+import { SearchOutlined } from "@material-ui/icons";
+import styled from 'styled-components'
 
 import "./SearchBar.css"
 
 function SearchBar() {
     const inputRef = React.useRef();
 
+    const Icon = styled(SearchOutlined)`
+        color: white;
+    `
+
+    const Input = styled(InputBase)`
+        margin-left: 8px;
+    `
+
     return (
         <div>
             <IconButton onClick={() => inputRef.current.focus()} type="submit">
-                <SearchOutlined className="searchBar__icon" />
+                <Icon/>
             </IconButton>
-            <InputBase
+            <Input
                 inputRef={inputRef}
-                className="searchBar__input"
                 placeholder="Search Everything"
             />
         </div>

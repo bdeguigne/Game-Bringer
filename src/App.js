@@ -1,18 +1,18 @@
 import './App.css';
 import "./global.css";
 import React, { useEffect } from "react";
-import HomePage from './HomePage/HomePage';
-import Topbar from "./Topbar/Topbar";
+import HomePage from './components/HomePage/HomePage';
+import Topbar from "./components/Topbar/Topbar";
 
 // REDUX
 import { connect } from "react-redux";
-import { getPopularGames, storeGenres } from "./redux/actions/homePageRequestsActions";
-
+import { getPopularGames, getRecentlyReleasedGames, getComingSoonGames } from './redux/actions/homePageRequestsActions';
 function App(props) {
 
   useEffect(() => {
     props.getPopularGames();
-    props.storeGenres();
+    props.getRecentlyReleasedGames();
+    props.getComingSoonGames();
   }, [props])
 
   return (
@@ -25,7 +25,8 @@ function App(props) {
 
 const actionCreators = {
   getPopularGames,
-  storeGenres
+  getRecentlyReleasedGames,
+  getComingSoonGames
 }
 
 function mapStateToProps(state) {

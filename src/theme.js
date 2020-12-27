@@ -88,6 +88,6 @@ export default createMuiTheme({
                 fontFamily: "Montserrat, sans-serif",
                 backgroundColor: "#6d5dd3"
             }
-        }
+        },
     }
 });

@@ -1,4 +1,4 @@
-import { homePageRequestsConstants } from "../constants/homePageRequestsConstants";
+import { CarouselRequestsConstants } from "../constants/CarouselRequestsConstants";
 
 let defaultState = {
     popularGames: [],
@@ -7,24 +7,24 @@ let defaultState = {
     genres: []
 };
 
-function homePageRequestReducer(state = defaultState, action) {
+function CarouselRequestsReducer(state = defaultState, action) {
     switch (action.type) {
-        case homePageRequestsConstants.SET_POPULAR_GAMES:
+        case CarouselRequestsConstants.SET_POPULAR_GAMES:
             return {
                 ...state,
                 popularGames: action.popularGames
             }
-        case homePageRequestsConstants.ADD_POPULAR_GAME_DATA:
+        case CarouselRequestsConstants.ADD_POPULAR_GAME_DATA:
             return {
                 ...state,
                 popularGamesData: [...state.popularGamesData, action.data]
             }
-        case homePageRequestsConstants.POPULAR_GAMES_COMPLETE:
+        case CarouselRequestsConstants.POPULAR_GAMES_COMPLETE:
             return {
                 ...state,
                 isRequestComplete: !state.isRequestComplete
             }
-        case homePageRequestsConstants.STORE_GENRES:
+        case CarouselRequestsConstants.STORE_GENRES:
             return {
                 ...state,
                 genres: action.genres
@@ -34,4 +34,4 @@ function homePageRequestReducer(state = defaultState, action) {
     }
 };
 
-export default homePageRequestReducer;
+export default CarouselRequestsReducer;

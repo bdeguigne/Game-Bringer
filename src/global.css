@@ -1,3 +1,5 @@
+/* This file allows to change the styles of the third party components */
+
 .carousel__dot--selected {
   background-color: yellow;
 }
@@ -8,4 +10,40 @@
 
 .carousel .slide {
   background: none !important;
+}
+
+.slider-wrapper.axis-horizontal {
+  /* NEW */
+  padding: 50px;
+  padding-top: 0px;
+  padding-bottom: 0px;
+
+  overflow: hidden !important;
+  max-width: 1200px;
+  /* width: 75% !important; */
+  width: 100% !important;
+}
+
+.carousel li.slide.selected {
+  z-index: 10 !important;
+}
+
+.carousel-video-player {
+  position: static !important;
+}
+
+.carousel-video-player div {
+  position: absolute;
+}
+
+.carousel .slide iframe {
+  margin: 0 !important;
+  width: 100% !important;
+  border-radius: 16px !important;
+}
+
+.card-slider-video {
+  display: flex !important;
+    height: 100% !important;
+    width: 100% !important;
 }

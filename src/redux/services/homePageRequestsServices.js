@@ -1,33 +1,38 @@
-import { doRequest } from "../services/request";
+import { doRequest } from "./request";
+import moment from "moment";
 
-//TODO REALASE DATE DE 3 MOIS A PARTIR d'AUJOURDHUI
+// Popular Game = follows > 1 || external rating > 1 for the last 3 months
+export const getPopularGameRequest = () => {
+    // const nowUnix = moment().unix();
+    const last3MonthsUnix = moment().subtract(3, "months").unix();
 
-export const getPopularGame = () => {
-    var raw = "fields name, screenshots,aggregated_rating, genres;sort follows desc;where first_release_date > 1600601466 & follows > 10;limit 10;";
+    var query = `fields name, follows, genres.name, involved_companies.developer, involved_companies.company.name, involved_companies.company.logo.image_id, aggregated_rating, screenshots.image_id, videos.video_id, videos.name, rating_count;
+                sort follows desc;
+                where first_release_date > ${last3MonthsUnix} & (follows > 1 | rating_count > 1);
+                limit 100;`
 
-    return doRequest("http://localhost:3000/v4/games/", raw);
+    return doRequest("http://localhost:3000/v4/games/", query);
 }
 
-export const getScreenshots = (screenshotID) => {
-    var raw = `fields image_id;where id = ${screenshotID};`;
+export const getRecentlyReleasedRequest = (limit) => {
+    const nowUnix = moment().unix();
+    const lastMonthUnix = moment().subtract(1, "months").unix();
 
-    return doRequest("http://localhost:3000/v4/screenshots", raw);
+    var query = `fields game.name,game.genres.name,game.cover.image_id, date, game.videos.video_id, game.videos.name;
+                where date > ${lastMonthUnix} & date < ${nowUnix};
+                sort date desc;
+                limit ${limit};`;
+
+    return doRequest("http://localhost:3000/v4/release_dates/", query);
 }
 
-// export const getCompanyService = (involved_companyID) => {
-//     var raw = `fields company, developer;where id = ${involved_companyID};`
+export const getComingSoonGamesRequest = (limit) => {
+    const nowUnix = moment().unix();
 
-//     return doRequest("http://localhost:3000/v4/involved_companies", raw);
-// }
+    var query = `fields human, date, game.name, game.cover.image_id, game.genres.name, game.videos.video_id, game.videos.name;
+                sort date asc;
+                where date > ${nowUnix} & category = 0;
+                limit ${limit};`;
 
-// export const getCompanyName = (companyID) => {
-//     var raw = `fields name;where id = ${companyID};`
-
-//     return doRequest("http://localhost:3000/v4/companies", raw);
-// }
-
-export const storeGenresService = () => {
-    var raw = "fields name;limit 500;";
-
-    return doRequest("http://localhost:3000/v4/genres", raw);
+    return doRequest("http://localhost:3000/v4/release_dates/", query);
 }
