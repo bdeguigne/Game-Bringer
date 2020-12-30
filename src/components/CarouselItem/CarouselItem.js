@@ -84,8 +84,13 @@ const Genre = styled(Button)`
 `
 
 const GameName = styled.h2`
+  display: -webkit-box;
     font-size: 2.3em;
     margin-bottom: 8px;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  overflow: hidden;
 `
 
 const SeeMoreButton = styled(Button)`

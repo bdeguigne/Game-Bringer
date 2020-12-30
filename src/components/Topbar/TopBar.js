@@ -27,7 +27,7 @@ const Icon = styled(IconButton)`
     margin-left: 16px !important;
 `;
 
-function Topbar() {
+function TopBar() {
     return (
         <Container>
             <SearchBar />
@@ -45,4 +45,4 @@ function Topbar() {
     )
 }
 
-export default Topbar;
+export default TopBar;

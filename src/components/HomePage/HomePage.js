@@ -59,7 +59,6 @@ const HomePage = (props) => {
 function mapStateToProps(state) {
     return {
         popularGames: state.homePageRequests.popularGames,
-        popularGamesData: state.CarouselRequests.popularGamesData,
         recentlyReleasedGames: state.homePageRequests.recentlyReleasedGames,
         comingSoonGames: state.homePageRequests.comingSoonGames
     }

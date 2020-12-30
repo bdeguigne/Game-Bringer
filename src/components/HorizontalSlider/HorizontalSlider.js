@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import "./HorizontalSlider.css";
 import { SkeletonColor } from "../../utils/styles";
+import { connect } from 'react-redux'
 
 
 const Header = styled.div`
@@ -103,7 +104,7 @@ const sliderConfiguration = {
     animationDuration: 500
 };
 
-const HorizontalSlider = ({ sliderName, title, children, isLoading }) => {
+const HorizontalSlider = ({ sliderName, title, children, isLoading, menuExpanded }) => {
     const ref = React.useRef();
 
     const [slider] = useState(new Glide(`#${sliderName}`, sliderConfiguration));
@@ -126,7 +127,6 @@ const HorizontalSlider = ({ sliderName, title, children, isLoading }) => {
             slider.mount();
         }
     }, [isLoading, slider])
-
 
     return (
         <div>
@@ -164,4 +164,12 @@ const HorizontalSlider = ({ sliderName, title, children, isLoading }) => {
     )
 }
 
-export default HorizontalSlider;
+function mapStateToProps(state) {
+    return {
+        menuExpanded: state.uiReducer.menuExpanded
+    }
+}
+
+const connectedHorizontalSlider = connect(mapStateToProps)(HorizontalSlider)
+
+export default connectedHorizontalSlider;

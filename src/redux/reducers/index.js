@@ -1,12 +1,10 @@
-import CarouselRequests from "./CarouselRequests";
-import RecentlyReleased from "./RecentlyReleased";
 import homePageRequests from "./homePageRequestsReducer";
+import uiReducer from "./uiReducer"; 
 import {combineReducers} from "redux";
 
 const reducers = combineReducers({
-    CarouselRequests,
-    RecentlyReleased,
-    homePageRequests
+    homePageRequests,
+    uiReducer
 })
 
 export default reducers;

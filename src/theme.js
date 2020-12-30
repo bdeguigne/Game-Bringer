@@ -1,4 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles';
+import {appColors} from "./utils/styles";
 
 export default createMuiTheme({
     overrides: {
@@ -79,7 +80,7 @@ export default createMuiTheme({
             root: {
                 color: 'rgba(255, 255, 255, 0.54)',
                 "&:hover": {
-                    backgroundColor: "#58606c54"
+                    backgroundColor: appColors.hover
                 }
             }
         },
@@ -87,7 +88,43 @@ export default createMuiTheme({
             tooltip: {
                 fontFamily: "Montserrat, sans-serif",
                 backgroundColor: "#6d5dd3"
+            },
+        },
+        MuiTabs: {
+            root: {
+                width: "100%"
+            },
+            indicator: {
+                width: "100%",
+                borderRadius: 10,
+                backgroundColor: appColors.navBarTabs,
+                zIndex: "-1"
             }
         },
+        MuiTab: {
+            root: {
+                fontFamily: "Montserrat, sans-serif",
+                minWidth: 0,
+                borderRadius: 10,
+                padding: "0px 0px 0px 13px !important",
+                textTransform: "inherit",
+                fontSize: "1rem",
+                transition: "0.3s ease",
+                "&:hover": {
+                    backgroundColor: appColors.hover
+                }
+            },
+            wrapper: {
+                // minWidth: "50px",
+                display: "flex",
+                alignItems: "center",
+                flexDirection: "row",
+                justifyContent: "flex-start"
+            },
+            labelIcon: {
+                minHeight: "48px",
+                marginBottom: "8px"
+            }
+        }
     }
 });

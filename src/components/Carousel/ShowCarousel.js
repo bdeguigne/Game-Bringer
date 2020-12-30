@@ -35,7 +35,7 @@ function ShowCarousel({ data, loadingStatus }) {
                 infiniteLoop
                 showThumbs={false}
                 interval={5000}
-                autoPlay={data.length === 10 ? true : false}
+                autoPlay={data.length === 10}
                 onChange={updateCurrentSlide}
                 centerSlidePercentage={40}
                 onClickItem={updateCurrentSlide}

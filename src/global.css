@@ -47,3 +47,21 @@
     height: 100% !important;
     width: 100% !important;
 }
+
+.MuiTab-labelIcon .MuiTab-wrapper > *:first-child {
+    margin-bottom: 0px !important;
+    margin-right: 16px;
+}
+.MuiTooltip-tooltip.MuiTooltip-tooltipPlacementRight {
+    font-size: 0.8rem;
+}
+
+
+/*.sideNav-tab svg {*/
+/*    margin-left: 0px;*/
+/*    transition: 0.3s;*/
+/*}*/
+
+/*.sideNav-tab.icon svg {*/
+/*    margin-left: 11px;*/
+/*}*/
