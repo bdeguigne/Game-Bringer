@@ -3,8 +3,6 @@ import { IconButton, InputBase } from "@material-ui/core"
 import { SearchOutlined } from "@material-ui/icons";
 import styled from 'styled-components'
 
-import "./SearchBar.css"
-
 function SearchBar() {
     const inputRef = React.useRef();
 

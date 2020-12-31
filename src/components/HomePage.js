@@ -1,12 +1,12 @@
 import React, {useState} from "react"
-import ShowCarousel from "../Carousel/ShowCarousel";
-import HorizontalSlider from "../HorizontalSlider/HorizontalSlider";
-import ImageHoverInfo from "../ImageHoverInfo/ImageHoverInfo";
-import CardGameInfo from "../CardGameInfo/CardGameInfo";
-import "./HomePage.css";
+import ShowCarousel from "./ShowCarousel";
+import HorizontalSlider from "./HorizontalSlider";
+import ImageHoverInfo from "./ImageHoverInfo";
+import CardGameInfo from "./CardGameInfo";
+import Test from "./Test";
 import { connect } from "react-redux";
 import styled from 'styled-components';
-import { Padding } from '../../utils/styles';
+import { Padding } from '../utils/styles';
 
 const TitleContainer = styled(Padding)`
     margin-top: 16px;
@@ -52,6 +52,7 @@ const HomePage = (props) => {
                 </HorizontalSlider>
                 {/* )} */}
             </Padding>
+
         </div>
     )
 }

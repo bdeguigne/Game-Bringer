@@ -1,12 +1,9 @@
 import React from "react";
-import "./Topbar.css";
-import SearchBar from "../SearchBar/SearchBar";
+import SearchBar from "./SearchBar";
 import { Avatar, IconButton, Tooltip } from "@material-ui/core";
 import { NotificationsOutlined } from "@material-ui/icons";
 import styled from "styled-components";
-import { appColors, barBoxShadow, Padding } from "../../utils/styles";
-
-import "./Topbar.css";
+import { appColors, barBoxShadow, Padding } from "../utils/styles";
 
 const Container = styled(Padding)`
     height: 50px;

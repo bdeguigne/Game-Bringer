@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import "./Carousel.css";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import PropTypes from 'prop-types';
 
 import { Carousel } from 'react-responsive-carousel';
-import CarouselItem from "../CarouselItem/CarouselItem";
+import CarouselItem from "./CarouselItem";
 
-import CarouselIndicator from "../CarouselIndicator/CarouselIndicator";
+import CarouselIndicator from "./CarouselIndicator";
 import styled from 'styled-components';
 
 const Container = styled.div`
@@ -35,7 +34,8 @@ function ShowCarousel({ data, loadingStatus }) {
                 infiniteLoop
                 showThumbs={false}
                 interval={5000}
-                autoPlay={data.length === 10}
+                // autoPlay={data.length === 10}
+                autoPlay={false}
                 onChange={updateCurrentSlide}
                 centerSlidePercentage={40}
                 onClickItem={updateCurrentSlide}

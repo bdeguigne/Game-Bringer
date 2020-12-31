@@ -5,9 +5,8 @@ import { ArrowBackIos, ArrowForwardIos } from "@material-ui/icons"
 import Skeleton from '@material-ui/lab/Skeleton';
 import styled from 'styled-components';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import "./HorizontalSlider.css";
-import { SkeletonColor } from "../../utils/styles";
-import { connect } from 'react-redux'
+import { SkeletonColor } from "../utils/styles";
+import { connect } from 'react-redux';
 
 
 const Header = styled.div`

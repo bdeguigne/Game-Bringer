@@ -15,8 +15,8 @@
 .slider-wrapper.axis-horizontal {
   /* NEW */
   padding: 50px;
-  padding-top: 0px;
-  padding-bottom: 0px;
+  padding-top: 12px;
+  padding-bottom: 12px;
 
   overflow: hidden !important;
   max-width: 1200px;
@@ -30,10 +30,13 @@
 
 .carousel-video-player {
   position: static !important;
+    border-radius: 45px;
 }
 
 .carousel-video-player div {
   position: absolute;
+    width: 632px !important;
+    height: 357px !important;
 }
 
 .carousel .slide iframe {

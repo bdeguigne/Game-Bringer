@@ -1,7 +1,5 @@
 import React from "react"
-import "./ImageHoverInfo.css"
 import styled from "styled-components";
-
 
 //TODO Abstraire ce composant pour pouvoir appeler facilement un composant qui sera affiché en hover interactif
 

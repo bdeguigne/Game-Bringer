@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { sideNavWidth, appColors } from "../../utils/styles";
+import { sideNavWidth, appColors } from "../utils/styles";
 import { IconButton } from '@material-ui/core';
 import { Menu } from "@material-ui/icons";
 import { connect } from "react-redux";
-import { expandMenuState } from '../../redux/actions/UIActions';
+import { expandMenuState } from '../redux/actions/UIActions';
 import { Tabs, Tab, Tooltip } from "@material-ui/core";
 import {ExploreOutlined, ThumbUpAltOutlined, Search} from "@material-ui/icons"
 

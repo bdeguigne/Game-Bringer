@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import "./CardGameInfo.css";
 import { Button } from "@material-ui/core";
 import styled from 'styled-components';
-import VideoPlayer from '../VideoPlayer/VideoPlayer';
+import VideoPlayer from './VideoPlayer';
 
 const Container = styled.div`
     height: 100%;

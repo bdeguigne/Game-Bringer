@@ -1,10 +1,9 @@
 import React from "react";
-import "./CarouselIndicator.css";
 import { FiberManualRecordRounded, ArrowBackIos, ArrowForwardIos } from "@material-ui/icons";
 import { ButtonBase, IconButton } from "@material-ui/core";
 import { CircularProgress } from '@material-ui/core';
 import styled from 'styled-components';
-import { appColors } from '../../utils/styles'
+import { appColors } from '../utils/styles'
 
 const ArrowButton = styled(IconButton)`
     margin-left: 16px !important;

@@ -1,9 +1,9 @@
 import './App.css';
 import "./global.css";
 import React, { useEffect, useState } from "react";
-import HomePage from './components/HomePage/HomePage';
-import TopBar from "./components/Topbar/TopBar";
-import SideNav from "./components/SideNav/SideNav";
+import HomePage from './components/HomePage';
+import TopBar from "./components/TopBar";
+import SideNav from "./components/SideNav";
 import styled from 'styled-components';
 import { sideNavWidth } from './utils/styles';
 // REDUX

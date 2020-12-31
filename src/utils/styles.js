@@ -9,11 +9,25 @@ export const appColors = {
     "400": "#EDF1F6",
     "300": "#FFFFFF",
     "primary": "linear-gradient(90deg, #FC5D44 0%, #FEAA45 100%);",
-    "secondary": "#6d5dd3",
+    "secondary": "rgb(109,93,211)",
+    "secondaryTransparent": "rgba(109,93,211,0.2)",
+    "secondaryDarker": "rgb(39,35,79, 0.8)",
     "backgroundColor": "#212028",
     "hover": "rgba(254,170,69, 0.1)",
     "navBarTabs": "rgb(254,170,69)",
 };
+
+/* Carousel */
+
+const selectedShadowColor = "rgba(109,93,211,0.17)";
+const shadowColor = "rgba(0,0,0,0.19)";
+
+export const carousel = {
+    hoveredBoxShadow : `12px 6px 14px -3px ${selectedShadowColor}, -12px 6px 14px -3px ${selectedShadowColor};`,
+    selectedBoxShadow: "0px 0px 20px 4px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.19);",
+    boxShadow : `0 10px 20px ${shadowColor}, 0 6px 6px ${shadowColor};`,
+    border: `3px solid ${appColors.secondaryTransparent};`
+}
 
 export const sideNavWidth = {
     expanded: "180px",
