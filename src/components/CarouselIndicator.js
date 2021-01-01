@@ -3,27 +3,28 @@ import { FiberManualRecordRounded, ArrowBackIos, ArrowForwardIos } from "@materi
 import { ButtonBase, IconButton } from "@material-ui/core";
 import { CircularProgress } from '@material-ui/core';
 import styled from 'styled-components';
-import { appColors } from '../utils/styles'
+import {appColors, carousel} from '../utils/styles'
 
 const ArrowButton = styled(IconButton)`
-    margin-left: 16px !important;
-    margin-right: 16px !important;
+  margin-left: 16px !important;
+  margin-right: 16px !important;
 `
 
 const Indicator = styled(ButtonBase)`
-    width: 24px !important;
-    border-radius: 100% !important;
+  width: 24px !important;
+  border-radius: 100% !important;
 `
 
 const Loading = styled(CircularProgress)`
-    width: 24px !important;
-    height: 24px !important;
+  width: 24px !important;
+  height: 24px !important;
 `
 
 const RoundedIcon = styled(FiberManualRecordRounded)`
-    transition: color 0.3s ease-in-out !important;
-    width: 20px !important;
-    color: ${props => props.isselected === "true" ? appColors[300] : appColors[600] };
+  border-radius: 50% !important;
+  transition: color 0.3s ease !important;
+  color: ${props => props.isselected === "true" ? appColors[300] : appColors.secondaryDarker };
+  box-shadow: ${props => props.isselected === "true" ? carousel.indicatorBoxShadow : "none"};
 `
 
 function CarouselIndicator({ itemCount, onClick, selectedIndex, setSelectedIndex, loadingStatus, onLeftArrowClick, onRightArrowClick }) {
@@ -63,7 +64,7 @@ function CarouselIndicator({ itemCount, onClick, selectedIndex, setSelectedIndex
                 </ArrowButton>
                 {Array.from(Array(itemCount), (e, i) => {
                     return (
-                        <Indicator key={i} onClick={() => handler(i)}>
+                        <Indicator key={i} onClick={() => handler(i)} isselected={isActive(selectedIndex, i).toString()}>
                             <RoundedIcon isselected={isActive(selectedIndex, i).toString()} />
                         </Indicator>
                     )

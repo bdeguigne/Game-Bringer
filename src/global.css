@@ -14,11 +14,9 @@
 
 .slider-wrapper.axis-horizontal {
   /* NEW */
-  padding: 50px;
-  padding-top: 12px;
-  padding-bottom: 12px;
+    padding: 54px 50px;
 
-  overflow: hidden !important;
+    overflow: hidden !important;
   max-width: 1200px;
   /* width: 75% !important; */
   width: 100% !important;
@@ -35,7 +33,7 @@
 
 .carousel-video-player div {
   position: absolute;
-    width: 632px !important;
+    /*width: 632px !important;*/
     height: 357px !important;
 }
 
@@ -53,10 +51,14 @@
 
 .MuiTab-labelIcon .MuiTab-wrapper > *:first-child {
     margin-bottom: 0px !important;
-    margin-right: 16px;
+    margin-right: 24px;
 }
 .MuiTooltip-tooltip.MuiTooltip-tooltipPlacementRight {
     font-size: 0.8rem;
+}
+
+.MuiTab-textColorInherit.Mui-selected {
+    color: var(--primary-color-simple);
 }
 
 

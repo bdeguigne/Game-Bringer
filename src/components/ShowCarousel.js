@@ -14,7 +14,6 @@ const Container = styled.div`
 `;
 
 const IndicatorContainer = styled.div`
-    margin-top: 24px;
     text-align: center;
 `;
 

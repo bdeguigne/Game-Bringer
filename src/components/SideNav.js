@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { sideNavWidth, appColors } from "../utils/styles";
+import {
+    sideNavWidth,
+    appColors,
+    sideNavNeonBorder,
+    sideNavNeonBoxShadowSoft,
+    sideNavPaddingLeft
+} from "../utils/styles";
 import { IconButton } from '@material-ui/core';
 import { Menu } from "@material-ui/icons";
 import { connect } from "react-redux";
@@ -9,26 +15,28 @@ import { Tabs, Tab, Tooltip } from "@material-ui/core";
 import {ExploreOutlined, ThumbUpAltOutlined, Search} from "@material-ui/icons"
 
 const NavContainer = styled.div`
-    height: 100%;
-    width: ${props => props.expanded ? sideNavWidth.expanded : sideNavWidth.normal};
-    position: fixed;
-    z-index: 1;
-    top: 0;
-    left: 0;
-    background-color: ${appColors.backgroundColor};
-    border-right: 1px solid ${appColors[700]};
-    box-shadow: 2px 0px 1px 0px rgba(0,0,0,0.2);
-    overflow-x: hidden;
-    transition: 0.5s;
-    padding: 18px;
+  height: 100%;
+  width: ${props => props.expanded ? sideNavWidth.expanded : sideNavWidth.normal};
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: ${appColors.backgroundColor};
+    //border-right: 1px solid ${appColors[700]};
+  //border-right: ${sideNavNeonBorder};
+  box-shadow: ${sideNavNeonBoxShadowSoft};
+  //box-shadow: 2px 0px 1px 0px rgba(0,0,0,0.2);
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 18px;
 `
 
 const MenuIcon = styled(IconButton)`
-    margin-bottom: 8px !important;    
+  margin-left: 12px !important;
 `
 
 const VerticalTab = styled(Tab)`
-  //width: ${props => props.expanded ? "160px" : "50px"};
+    //width: ${props => props.expanded ? "160px" : "50px"};
   min-width: initial !important;
   transition: 0.5s;
 `

@@ -1,5 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles';
-import {appColors} from "./utils/styles";
+import {appColors, sideNavPaddingLeft, toolTipBoxShadow} from "./utils/styles";
 
 export default createMuiTheme({
     overrides: {
@@ -78,7 +78,7 @@ export default createMuiTheme({
         },
         MuiIconButton: {
             root: {
-                color: 'rgba(255, 255, 255, 0.54)',
+                color: appColors["600"],
                 "&:hover": {
                     backgroundColor: appColors.hover
                 }
@@ -87,26 +87,30 @@ export default createMuiTheme({
         MuiTooltip: {
             tooltip: {
                 fontFamily: "Montserrat, sans-serif",
-                backgroundColor: "#6d5dd3"
+                backgroundColor: appColors.backgroundColor ,
+                boxShadow: toolTipBoxShadow
             },
         },
         MuiTabs: {
             root: {
-                width: "100%"
+                width: "100%",
+            },
+            flexContainer: {
+                paddingTop: "16px",
+                paddingBottom: "16px",
             },
             indicator: {
-                width: "100%",
-                borderRadius: 10,
-                backgroundColor: appColors.navBarTabs,
-                zIndex: "-1"
+                // width: "100%",
+                backgroundColor: appColors.primarySimple,
+                boxShadow: "rgb(255 255 255) 0px 0px 20px 0px, rgb(254,170,69) 0px 0px 20px 1px;"
             }
         },
         MuiTab: {
             root: {
                 fontFamily: "Montserrat, sans-serif",
                 minWidth: 0,
-                borderRadius: 10,
-                padding: "0px 0px 0px 13px !important",
+                // borderRadius: 10,
+                padding: `12px 0px 12px ${sideNavPaddingLeft} !important`,
                 textTransform: "inherit",
                 fontSize: "1rem",
                 transition: "0.3s ease",
@@ -122,9 +126,13 @@ export default createMuiTheme({
                 justifyContent: "flex-start"
             },
             labelIcon: {
+                // paddingLeft: "22px !important",
                 minHeight: "48px",
-                marginBottom: "8px"
+            },
+            textColorInherit: {
+                color: appColors["600"],
             }
+
         }
     }
 });

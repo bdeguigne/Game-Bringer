@@ -12,6 +12,7 @@ import Shine from "./Shine";
 
 //TODO Gerer animation de chargement de l'image
 //     Responsive
+//     Afficher la date de sortie
 
 const borderRadius = "16px";
 
@@ -24,10 +25,9 @@ const Slide = styled.div`
   margin-right: ${props => props.isSelected ? '-100px !important' : '0px'};
   border-radius: ${borderRadius};
   transform: ${props => props.isSelected ? "scale(1, 1)" : "scale(0.7, 0.7)"};
-  box-shadow: ${props => props.isSelected ? (props.videoReady ? carousel.selectedBoxShadow : carousel.hoveredBoxShadow) : carousel.boxShadow}
+  box-shadow: ${props => props.isSelected ? (props.videoReady ? carousel.selectedBoxShadow : carousel.hoveredNeonBoxShadow) : carousel.boxShadow}
   //border: ${carousel.border};
   overflow: hidden;
-  }
 `
 
 const Image = styled.img`
@@ -146,8 +146,8 @@ function CarouselItem({ imageId, isSelected, title, genres, rate, isLoading, com
 
     if (isLoading) {
         return (
-            <Slide isSelected={isSelected} >
-                <Shine>
+            <Slide isSelected={isSelected} onMouseEnter={onSlideHover} onMouseLeave={onSlideLeave} videoReady={!hide}>
+                <Shine active={isHover} borderColor={hide ? appColors.shine : appColors.secondaryDarker} >
                     <StyledSkeleton selected={isSelected} variant="rect" animation="wave" />
                 </Shine>
             </Slide>
@@ -157,7 +157,7 @@ function CarouselItem({ imageId, isSelected, title, genres, rate, isLoading, com
         return (
             <Slide isSelected={isSelected} onMouseEnter={onSlideHover} onMouseLeave={onSlideLeave} videoReady={!hide}>
                 {/* <VideoPlayer videoID={videoId} onReady={() => console.log("REady !")} /> */}
-                <Shine active={isHover && !hide} borderColor={hide ? appColors.secondary : appColors.secondaryDarker} >
+                <Shine active={isHover && !hide} borderColor={hide ? appColors.shine : appColors.secondaryDarker} >
                     <div style={{ position: "relative", borderRadius: "45px !important" }}>
                         {isHover && (
                             <VideoPlayer className="carousel-video-player" videoID={videoId} onReady={() => setHide(true)} playtime="15" />

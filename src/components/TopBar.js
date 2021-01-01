@@ -3,16 +3,17 @@ import SearchBar from "./SearchBar";
 import { Avatar, IconButton, Tooltip } from "@material-ui/core";
 import { NotificationsOutlined } from "@material-ui/icons";
 import styled from "styled-components";
-import { appColors, barBoxShadow, Padding } from "../utils/styles";
+import {appColors, Padding, topBarNeonBorder, topBarNeonBoxShadow} from "../utils/styles";
 
 const Container = styled(Padding)`
     height: 50px;
-    border-bottom: 1px solid ${appColors[700]};
+    //border-bottom: 1px solid ${appColors[700]};
+    border-bottom: ${topBarNeonBorder};
     padding-top: 18px;
     padding-bottom: 18px;
     display: flex;
     align-items: center;
-    box-shadow: ${barBoxShadow};
+    box-shadow: ${topBarNeonBoxShadow};
     justify-content: space-between;
 `;
 

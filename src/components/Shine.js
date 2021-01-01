@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import {appColors} from "../utils/styles";
 
-const activeBackground = `linear-gradient(to right, ${appColors.secondaryDarker} 20%, ${appColors.secondaryDarker} 40%, ${appColors.secondary} 50%, rgb(104, 83, 214) 55%, ${appColors.secondaryDarker} 70%, ${appColors.secondaryDarker} 100%);`
+const activeBackground = `linear-gradient(to right, ${appColors.secondaryDarker} 20%, ${appColors.secondaryDarker} 40%, ${appColors.shine} 50%, rgb(104, 83, 214) 55%, ${appColors.secondaryDarker} 70%, ${appColors.secondaryDarker} 100%);`
 
 const Border = styled.div`
   position: absolute;
