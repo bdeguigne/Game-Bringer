@@ -1,5 +1,9 @@
 import styled from "styled-components";
 
+//RED THEME
+//secondary : "rgb(238,13,13)"
+//background : "--background-color: #290000;"
+
 export const appColors = {
     "900": "#131d25",
     "800": "#1D242E",
@@ -13,6 +17,7 @@ export const appColors = {
     "secondaryTransparent": "rgba(109,93,211,0.2)",
     "secondaryDarker": "rgb(39,35,79, 0.8)",
     "backgroundColor": "#0d0e1b",
+    "backgroundContrast": "#120c13",
     "hover": "rgba(254,170,69, 0.04)",
     "primarySimple": "rgb(254,170,69)",
     "shine": "#fff"
@@ -22,6 +27,8 @@ export const appColors = {
 
 const selectedShadowColor = "rgba(109,93,211,0.17)";
 const shadowColor = "rgba(0,0,0,0.19)";
+
+export const maxWidth = "1152px";
 
 export const carousel = {
     hoveredNeonBoxShadow: `0 0 0.5rem ${appColors.secondary}, 0 0 2rem -21px ${appColors.secondary}, inset 12px -20px 2rem -24px ${appColors.secondary}, 0 0 4rem -15px ${appColors.secondary};`,
@@ -50,8 +57,21 @@ export const topBarNeonBoxShadowSoft = `0 0 20px -11px #fff, 0 0 0rem -12px ${ap
 export const topBarNeonBorder = "2px solid #fff;";
 
 
+/* Game Showcase */
+export const gameShowNeonBoxShadow = `0px 0px 64px -24px ${appColors.secondary}, 0px 0px 8px #FFFFFF, inset 0px 0px 32px -15px ${appColors.secondary};`
+
 export const SkeletonColor = appColors[900];
 export const toolTipBoxShadow = `0px 0px 0.5rem -4px #fff, 0 0 2rem 0px ${appColors.secondary}, inset 12px -20px 2rem -45px ${appColors.secondary}, 0 0 4rem -39px ${appColors.secondary};`
+
+/* Buttons */
+
+/* Primary Button */
+export const PrimaryNeonBoxShadow = `0px 0px 64px -23px ${appColors.primarySimple};`
+export const PrimaryNeonBoxShadowHover = `0px 0px 64px -15px ${appColors.primarySimple}, 0px 0px 32px -14px #FFFFFF, inset 0px 0px 32px -14px #FFFFFF;`
+
+/* Genres */
+export const genresNeonBoxShadow = `0px 0px 64px -20px ${appColors.secondary}, 0px 0px 8px -4px #FFFFFF, inset 0px 0px 32px -15px ${appColors.secondary}`
+export const genresNeonBoxShadowHover = `0px 0px 64px 0px ${appColors.secondary}, 0px 0px 21px -4px #FFFFFF, inset 0px 0px 32px -15px ${appColors.secondary};`
 
 export const Padding = styled.div`
     padding-left: 16px;

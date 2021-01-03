@@ -3,6 +3,7 @@ import ShowCarousel from "./ShowCarousel";
 import HorizontalSlider from "./HorizontalSlider";
 import ImageHoverInfo from "./ImageHoverInfo";
 import CardGameInfo from "./CardGameInfo";
+import TopRatedGames from "./TopRatedGames";
 import { connect } from "react-redux";
 import styled from 'styled-components';
 import { Padding } from '../utils/styles';
@@ -24,6 +25,10 @@ const HomePage = (props) => {
             <div>
                 <ShowCarousel data={props.popularGames} />
             </div>
+
+            <Padding>
+                <TopRatedGames />
+            </Padding>
 
             <Padding>
                 <HorizontalSlider sliderName={"recent"} title="Recently released" isLoading={props.recentlyReleasedGames.length === 0 ? true : false}>

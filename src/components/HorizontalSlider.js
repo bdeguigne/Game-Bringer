@@ -8,6 +8,10 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { SkeletonColor } from "../utils/styles";
 import { connect } from 'react-redux';
 
+const Container = styled.div`
+  margin-top: 16px;
+  margin-bottom: 16px;
+`
 
 const Header = styled.div`
     display: flex;
@@ -47,7 +51,6 @@ const Arrow = styled(IconButton)`
     margin-right: 4px !important;
 `
 
-// TODO Separer le 'CardStyle' Skeleton et Normal dans un fichier appart 
 const CardStyleSkeleton = styled(Skeleton)`
     height: 245px !important;
     width: 180px;
@@ -73,17 +76,11 @@ const sliderConfiguration = {
     type: "slider",
     startAt: 0,
     animationTimingFunc: "ease-in-out",
-    perView: 8,
+    perView: 5,
     focusAt: 0,
     gap: 16,
     bound: true,
     breakpoints: {
-        1780: {
-            perView: 7,
-        },
-        1600: {
-            perView: 6,
-        },
         1380: {
             perView: 5
         },
@@ -128,7 +125,7 @@ const HorizontalSlider = ({ sliderName, title, children, isLoading, menuExpanded
     }, [isLoading, slider])
 
     return (
-        <div>
+        <Container>
             <Header>
                 <Title>{title}</Title>
                 <ArrowContainer>
@@ -159,7 +156,7 @@ const HorizontalSlider = ({ sliderName, title, children, isLoading, menuExpanded
                     )}
                 </div>
             </Slider>
-        </div >
+        </Container >
     )
 }
 

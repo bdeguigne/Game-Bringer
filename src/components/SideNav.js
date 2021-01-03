@@ -5,7 +5,6 @@ import {
     appColors,
     sideNavNeonBorder,
     sideNavNeonBoxShadowSoft,
-    sideNavPaddingLeft
 } from "../utils/styles";
 import { IconButton } from '@material-ui/core';
 import { Menu } from "@material-ui/icons";
@@ -16,7 +15,7 @@ import {ExploreOutlined, ThumbUpAltOutlined, Search} from "@material-ui/icons"
 
 const NavContainer = styled.div`
   height: 100%;
-  width: ${props => props.expanded ? sideNavWidth.expanded : sideNavWidth.normal};
+  width: ${props => props.expanded === "true" ? sideNavWidth.expanded : sideNavWidth.normal};
   position: fixed;
   z-index: 1;
   top: 0;
@@ -36,7 +35,6 @@ const MenuIcon = styled(IconButton)`
 `
 
 const VerticalTab = styled(Tab)`
-    //width: ${props => props.expanded ? "160px" : "50px"};
   min-width: initial !important;
   transition: 0.5s;
 `
@@ -58,7 +56,7 @@ function SideNav({ onExpand, expandMenuState }) {
     }
 
     return (
-        <NavContainer expanded={expanded}>
+        <NavContainer expanded={expanded.toString()}>
             <MenuIcon onClick={expandMenu}>
                 <Menu />
             </MenuIcon>
@@ -69,9 +67,9 @@ function SideNav({ onExpand, expandMenuState }) {
                     aria-label="sidenav tabs"
                     orientation="vertical"
                 >
-                    <VerticalTab expanded={expanded} label="Discover" icon={<ExploreOutlined />} className={expanded ? "sideNav-tab" : "sideNav-tab icon"} />
-                    <VerticalTab expanded={expanded} label="Reviews" icon={<ThumbUpAltOutlined />}  className={expanded ? "sideNav-tab" : "sideNav-tab icon"}/>
-                    <VerticalTab expanded={expanded} label="Search" icon={<Search />}  className={expanded ? "sideNav-tab" : "sideNav-tab icon"}/>
+                    <VerticalTab  label="Discover" icon={<ExploreOutlined />} className={expanded ? "sideNav-tab" : "sideNav-tab icon"} />
+                    <VerticalTab label="Reviews" icon={<ThumbUpAltOutlined />}  className={expanded ? "sideNav-tab" : "sideNav-tab icon"}/>
+                    <VerticalTab  label="Search" icon={<Search />}  className={expanded ? "sideNav-tab" : "sideNav-tab icon"}/>
                 </Tabs>
             ) : (
                 <Tabs
@@ -81,13 +79,13 @@ function SideNav({ onExpand, expandMenuState }) {
                     orientation="vertical"
                 >
                     <Tooltip title="Discover" placement="right" className="sideNav-tooltip">
-                        <VerticalTab expanded={expanded} label="Discover" icon={<ExploreOutlined />} className={expanded ? "sideNav-tab" : "sideNav-tab icon"} />
+                        <VerticalTab  label="Discover" icon={<ExploreOutlined />} className={expanded ? "sideNav-tab" : "sideNav-tab icon"} />
                     </Tooltip>
                     <Tooltip title="Reviews" placement="right" className="sideNav-tooltip">
-                        <VerticalTab expanded={expanded} label="Reviews" icon={<ThumbUpAltOutlined />}  className={expanded ? "sideNav-tab" : "sideNav-tab icon"}/>
+                        <VerticalTab  label="Reviews" icon={<ThumbUpAltOutlined />}  className={expanded ? "sideNav-tab" : "sideNav-tab icon"}/>
                     </Tooltip>
                     <Tooltip title="Search" placement="right" className="sideNav-tooltip">
-                        <VerticalTab expanded={expanded} label="Search" icon={<Search />}  className={expanded ? "sideNav-tab" : "sideNav-tab icon"}/>
+                        <VerticalTab label="Search" icon={<Search />}  className={expanded ? "sideNav-tab" : "sideNav-tab icon"}/>
                     </Tooltip>
                 </Tabs>
 

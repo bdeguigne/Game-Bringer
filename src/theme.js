@@ -1,5 +1,12 @@
 import { createMuiTheme } from '@material-ui/core/styles';
-import {appColors, sideNavPaddingLeft, toolTipBoxShadow} from "./utils/styles";
+import {
+    appColors,
+    sideNavPaddingLeft,
+    toolTipBoxShadow,
+    genresNeonBoxShadow,
+    genresNeonBoxShadowHover,
+    PrimaryNeonBoxShadow, PrimaryNeonBoxShadowHover
+} from "./utils/styles";
 
 export default createMuiTheme({
     overrides: {
@@ -15,25 +22,29 @@ export default createMuiTheme({
                 padding: '0 45px',
                 backgroundClip: "padding-box",
                 textDecoration: "none",
+                boxShadow: PrimaryNeonBoxShadow,
+                border: "0.5px solid transparent",
                 "&:hover": {
-                    boxShadow: "0px 5px 20px -10px rgba(255,255,255, 0.50);"
+                    border: "0.5px solid white",
+                    boxShadow: PrimaryNeonBoxShadowHover
                 }
             },
             textSecondary: {
                 fontFamily: "Montserrat, sans-serif",
-                // Some CSS
-                backgroundColor: '#6D5DD3',
+                backgroundColor: appColors.backgroundContrast,
                 borderRadius: 10,
-                // border: 0,
                 color: 'white',
                 height: 60,
                 padding: '0 45px',
-                // border: "0.12em solid rgba(255,255,255,0)",
+                border: "0.5px solid transparent",
                 backgroundClip: "padding-box",
                 textDecoration: "none",
+                boxShadow: genresNeonBoxShadow,
                 // boxSizing: "border-box",
                 "&:hover": {
-                    backgroundColor: "#5c4faf"
+                    border: "0.5px solid white",
+                    backgroundColor: appColors.backgroundContrast,
+                    boxShadow: genresNeonBoxShadowHover
                 }
             }
 

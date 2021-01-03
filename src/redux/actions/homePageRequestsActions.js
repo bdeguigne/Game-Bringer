@@ -1,5 +1,7 @@
 import { homePageRequestsConstants } from "../constants/homePageRequestsConstants";
-import { getPopularGameRequest, getRecentlyReleasedRequest, getComingSoonGamesRequest } from "../services/homePageRequestsServices";
+import { getPopularGameRequest, getRecentlyReleasedRequest, getComingSoonGamesRequest, getBestRatedGamesRequest } from "../services/homePageRequestsServices";
+import moment from "moment";
+
 
 function getVideoTrailer(videos) {
     var videoID = null;
@@ -32,12 +34,44 @@ function getRandom(arr, n) {
     return result;
 }
 
+function findDeveloper(involved_companies) {
+    let company = null;
+    if (involved_companies) {
+        involved_companies.forEach(involved_company => {
+            if (involved_company.developer === true) {
+                company = {
+                    name: involved_company.company.name,
+                    logoID: involved_company.company.logo ? involved_company.company.logo.image_id : null
+                }
+            }
+        })
+    }
+    return company;
+}
+
+function getElapsedTime(dates, firstReleaseDateUnix) {
+    let releaseDate = null;
+    if (dates && firstReleaseDateUnix) {
+        dates.forEach(date => {
+            if (date.date === firstReleaseDateUnix) {
+                releaseDate = {
+                    elapsedTime: moment.unix(date.date).fromNow(),
+                    date: date.human,
+                }
+                return releaseDate;
+
+            }
+        })
+    }
+    return releaseDate;
+}
+
 export const getPopularGames = () => {
     return (dispatch) => {
         getPopularGameRequest()
             .then(res => res.json())
             .then(res => {
-                var popularGamesData = [];
+                const popularGamesData = [];
 
                 res.forEach(popularGame => {
                     const game = popularGame.name;
@@ -46,18 +80,7 @@ export const getPopularGames = () => {
                     const screenshotID = popularGame.screenshots ?  (popularGame.screenshots[Math.floor(Math.random() * popularGame.screenshots.length)]).image_id : null;
                     const videoID = getVideoTrailer(popularGame.videos);
 
-                    var company = null;
-                    
-                    if (popularGame.involved_companies) {
-                        popularGame.involved_companies.forEach(involved_company => {
-                            if (involved_company.developer === true) {
-                                company = {
-                                    name: involved_company.company.name,
-                                    logoID: involved_company.company.logo ? involved_company.company.logo.image_id : null
-                                }
-                            }
-                        })
-                    }
+                    const company = findDeveloper(popularGame.involved_companies);
 
                     popularGamesData.push({
                         game,
@@ -150,5 +173,41 @@ export const getComingSoonGames = () => {
                 })
             })
             .catch(error => console.log("getComingSoonGames error", error))
+    }
+}
+
+//Best rated games : this month/last 6 months/this year/all time/
+export const getBestRatedGames = (time) => {
+    return dispatch => {
+        getBestRatedGamesRequest(time, 10)
+            .then(res => res.json())
+            .then(res => {
+                const bestRatedGamesData = [];
+                console.log(res);
+                res.forEach(bestRatedGame => {
+                    const game = bestRatedGame.name;
+                    const rating = Math.round(bestRatedGame.aggregated_rating);
+                    const genres = bestRatedGame.genres;
+                    const screenshots = bestRatedGame.screenshots;
+                    const company = findDeveloper(bestRatedGame.involved_companies);
+                    const releaseDate = getElapsedTime(bestRatedGame.release_dates, bestRatedGame.first_release_date);
+                    const summary = bestRatedGame.summary;
+
+                    bestRatedGamesData.push({
+                        game,
+                        rating,
+                        genres,
+                        screenshots,
+                        company,
+                        releaseDate,
+                        summary,
+                    })
+                })
+                dispatch({
+                    type: time,
+                    games: bestRatedGamesData
+                })
+            })
+            .catch(error => console.log("getBestRatedGames ", error))
     }
 }

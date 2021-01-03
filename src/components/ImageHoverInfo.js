@@ -1,9 +1,6 @@
 import React from "react"
 import styled from "styled-components";
 
-//TODO Abstraire ce composant pour pouvoir appeler facilement un composant qui sera affiché en hover interactif
-
-//TODO Changer ce style en parametre pour pouvoir gerer ce composant sous differentes tailles / styles
 export const CardStyleContainer = styled.div`
     height: 245px;
     width: 180px;
@@ -98,8 +95,6 @@ const Image = styled.img`
         height: 265px !important;
     }
 `
-
-// TODO Cover placeholder si cover == null
 
 function ImageHoverInfo({ className, coverID, children, onMouseEnter, onMouseLeave, gameID }) {
     return (

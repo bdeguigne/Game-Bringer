@@ -1,9 +1,13 @@
-import { homePageRequestsConstants } from '../constants/homePageRequestsConstants';
+import { homePageRequestsConstants, bestRatedGames } from '../constants/homePageRequestsConstants';
 
 let defaultState = {
     popularGames: [],
     recentlyReleasedGames: [],
-    comingSoonGames: []
+    comingSoonGames: [],
+    bestRatedGamesThisMonth: [],
+    bestRatedGamesLast6Months: [],
+    bestRatedGamesThisYear: [],
+    bestRatedGamesAllTime: []
 }
 
 function homePageRequestsReducer(state = defaultState, action) {
@@ -22,6 +26,26 @@ function homePageRequestsReducer(state = defaultState, action) {
             return {
                 ...state,
                 comingSoonGames: action.games
+            }
+        case bestRatedGames.THIS_MONTH:
+            return {
+                ...state,
+                bestRatedGamesThisMonth: action.games
+            }
+        case bestRatedGames.LAST_6_MONTHS:
+            return {
+                ...state,
+                bestRatedGamesLast6Months: action.games
+            }
+        case bestRatedGames.THIS_YEAR:
+            return {
+                ...state,
+                bestRatedGamesThisYear: action.games
+            }
+        case bestRatedGames.ALL_TIME:
+            return {
+                ...state,
+                bestRatedGamesAllTime: action.games
             }
         default:
             return state

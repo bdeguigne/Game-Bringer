@@ -10,10 +10,6 @@ import VideoPlayer from "./VideoPlayer";
 import { appColors, carousel } from "../utils/styles";
 import Shine from "./Shine";
 
-//TODO Gerer animation de chargement de l'image
-//     Responsive
-//     Afficher la date de sortie
-
 const borderRadius = "16px";
 
 const Slide = styled.div`
@@ -61,7 +57,7 @@ const Legend = styled.div`
   height: 100%;
   text-align: left;
   border-radius: ${borderRadius};
-  background: linear-gradient( to bottom, rgba(0, 0, 0, 0), rgb(0, 0, 0, 0.4));
+  background: linear-gradient( to bottom,rgba(0,0,0,0.3), rgba(0,0,0,0.1));
 `
 
 const LegendBottom = styled.div`

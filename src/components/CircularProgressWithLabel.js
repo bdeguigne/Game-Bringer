@@ -12,7 +12,7 @@ const Text = styled(Typography)`
 export default function CircularProgressWithLabel(props) {
     return (
         <Box position="relative" display="inline-flex">
-            <CircularProgress size={80} variant="determinate" {...props} />
+            <CircularProgress size={props.size ? props.size : 80} variant="determinate" {...props} />
             <Box
                 top={0}
                 left={0}
@@ -37,4 +37,5 @@ CircularProgressWithLabel.propTypes = {
      * Value between 0 and 100.
      */
     value: PropTypes.number.isRequired,
+    size: PropTypes.number
 };
