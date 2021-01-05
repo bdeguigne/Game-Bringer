@@ -54,6 +54,7 @@ function ShowCarousel({ data, loadingStatus }) {
                         company={element.company}
                         videoId={element.videoID}
                         isLoading={false}
+                        releaseDate={element.releaseDate}
                     />
                 }) : (
                         Array.from({ length: 10 }, (item, index) => {

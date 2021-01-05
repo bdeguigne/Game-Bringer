@@ -1,24 +1,27 @@
-import React, {useEffect} from "react";
+import React from "react";
 import styled from "styled-components";
+import PropTypes from "prop-types";
 import {gameShowNeonBoxShadow, appColors} from "../utils/styles";
-import {DateRange} from "@material-ui/icons";
 import {Button} from "@material-ui/core";
 import CircularProgressWithLabel from "./CircularProgressWithLabel";
+import CrossFadeImages from "./CrossFadeImages";
+import {DateRange} from "@material-ui/icons";
+import GameShowcaseSkeleton from "./GameShowcaseSkeleton";
 
-
-const Center = styled.div`
-  width: 100%;
+const FullWidth = styled.div`
   display: flex;
-  justify-content: center;
+  width: 988px;
+  max-width: 100%;
+  position: relative;
 `
 
 const Container = styled.div`
-  max-width: 100%;
+  width: 100%;
   height: 450px;
   //width: 1130px;
-  border: 0.5px solid #FFFFFF;
+  //border: 0.5px solid #FFFFFF;
   border-radius: 32px;
-  box-shadow: ${gameShowNeonBoxShadow};
+    //box-shadow: ${gameShowNeonBoxShadow};
   background: ${appColors.backgroundContrast};
   display: flex;
   justify-content: space-between;
@@ -27,14 +30,9 @@ const Container = styled.div`
 const ScreenshotContainer = styled.div`
   width: 50%;
   border-radius: 32px;
+  position: relative;
 `
 
-const Screenshot = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 32px;
-`
 
 const Title = styled.h3`
   font-size: 24px;
@@ -45,6 +43,7 @@ const GameInfoContainer = styled.div`
   display: flex;
   justify-content: space-between;
   flex-direction: column;
+  border-radius: 32px;
 `
 
 const GameInfoPadding = styled.div`
@@ -66,11 +65,6 @@ const GenresContainer = styled.div `
   display: flex;
 `
 
-const Icon = styled(DateRange)`
-  width: 0.8em !important;
-  margin-right: 8px;
-`
-
 const GenreButton = styled(Button)`
   height: 35px !important;
   margin-right: 8px !important;
@@ -87,6 +81,7 @@ const Summary = styled.p`
   -webkit-box-orient: vertical;
   overflow: hidden;
 `
+
 const BottomContainer = styled.div`
   display: flex;
 `
@@ -94,11 +89,11 @@ const BottomContainer = styled.div`
 const SeeMoreContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  height: 100%;
+  //height: 100%;
   align-items: center;
 `
 
-const SeeAllGamesContainer = styled(Button)`
+const SeeAllGamesButton = styled(Button)`
   margin-left: auto !important;
   padding: 12px 24px !important;
   font-size: 14px !important;
@@ -106,80 +101,119 @@ const SeeAllGamesContainer = styled(Button)`
   border-radius: 0 !important;
   border-top-left-radius: 32px !important;
   border-bottom-right-radius: 32px !important;
-  box-shadow: 0px 0px 44px -20px ${appColors.secondary}, inset -18px -22px 32px -31px ${appColors.secondary} !important;
+  box-shadow: 0 0 44px -20px ${appColors.secondary}, inset -18px -22px 32px -31px ${appColors.secondary} !important;
   font-weight: 500 !important;
   color: white !important;
-  
+  border-bottom: none !important;
+  border-right: none !important;
+  transition: all 0.3s ease;
+
   &:hover {
-    transition: all 0.3s ease;
-    box-shadow: 0px 0px 64px -5px ${appColors.secondary}, 0px 0px 8px #FFFFFF, inset -18px -22px 32px -31px ${appColors.secondary} !important;
+    box-shadow: 0 0 64px -5px ${appColors.secondary}, 0px 0px 8px #FFFFFF, inset -18px -22px 32px -31px ${appColors.secondary} !important;
   }
 `
 
-function GameShowcase({data}) {
-    useEffect(() => {
-        console.log("IN GAMES SHOWCASE", data);
-    }, [data])
+const BottomDarker = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  border-radius: 32px;
+  background: linear-gradient( to bottom,rgba(0,0,0,0) 70%,rgba(0,0,0,0.7));
+`
+
+const Icon = styled(DateRange)`
+  margin-right: 8px;
+`
+
+function GameShowcase(props) {
+    function onLoad() {
+        props.onLoad();
+    }
 
     return (
-        <Center>
-            <Container>
-                <ScreenshotContainer>
-                    {data.screenshots && (
-                        <Screenshot src={`https://images.igdb.com/igdb/image/upload/t_screenshot_huge/${data.screenshots[0].image_id}.jpg`} />
-                    )}
-                </ScreenshotContainer>
+        <>
+        {props.isLoading ? (
+                <GameShowcaseSkeleton />
+            ) : (
+                <FullWidth>
+                    <Container>
+                        <ScreenshotContainer>
+                            {/*<Screenshot src={`https://images.igdb.com/igdb/image/upload/t_screenshot_huge/${props.data.screenshots[0].image_id}.jpg`} />*/}
+                            {props.data.screenshots && (
+                                <CrossFadeImages style={{borderRadius: 32}} images={props.data.screenshots} prefixUrl={"https://images.igdb.com/igdb/image/upload/t_screenshot_huge/"} interval={3000} onLoad={onLoad} />
+                            )}
+                            {props.darkerImage && (
+                                <BottomDarker/>
+                            )}
+                        </ScreenshotContainer>
 
-                <GameInfoContainer>
-                    <div>
-                        <GameInfoPadding>
-                            <Space height={12}>
-                                <Title>{data.game}</Title>
-                            </Space>
-                            { data.releaseDate && (
-                                <Space height={16}>
-                                    <DateContainer>
-                                        <Icon size="small"/>
-                                        <div>{data.releaseDate.date} ({data.releaseDate.elapsedTime})</div>
-                                    </DateContainer>
-                                </Space>
-                            )}
-                            {data.genres && (
-                                <Space height={18}>
-                                    <GenresContainer>
-                                        {data.genres.map((genre, i) => {
-                                            if (i < 2) {
-                                                return (
-                                                    <GenreButton color="secondary" size="small" >{genre.name}</GenreButton>
-                                                )
-                                            } else {
-                                                return null
-                                            }
-                                        })}
-                                    </GenresContainer>
-                                </Space>
-                            )}
-                            {data.summary && (
-                                <Space height={24}>
-                                    <Summary>{data.summary}</Summary>
-                                </Space>
-                            )}
-                            <SeeMoreContainer>
-                                <Button color="primary">See more</Button>
-                                <CircularProgressWithLabel value={data.rating} size={60}/>
-                            </SeeMoreContainer>
+                        <GameInfoContainer>
+                            <div>
+                                <GameInfoPadding>
+                                    <Space height={12}>
+                                        <Title>{props.data.game}</Title>
+                                    </Space>
+                                    { props.data.releaseDate && (
+                                        <Space height={16}>
+                                            <DateContainer>
+                                                <Icon  size="small"/>
+                                                <div>{props.data.releaseDate.date} ({props.data.releaseDate.elapsedTime})</div>
+                                            </DateContainer>
+                                        </Space>
+                                    )}
+                                    {props.data.genres && (
+                                        <Space height={18}>
+                                            <GenresContainer>
+                                                {props.data.genres.map((genre, i) => {
+                                                    if (i < 2) {
+                                                        return (
+                                                            <GenreButton key={i} color="secondary" size="small" >{genre.name}</GenreButton>
+                                                        )
+                                                    } else {
+                                                        return null
+                                                    }
+                                                })}
+                                            </GenresContainer>
+                                        </Space>
+                                    )}
+                                    {props.data.summary && (
+                                        <Space height={24}>
+                                            <Summary>{props.data.summary}</Summary>
+                                        </Space>
+                                    )}
+                                    <SeeMoreContainer>
+                                        <Button color="primary">See more</Button>
+                                        <CircularProgressWithLabel value={props.data.rating} size={60}/>
+                                    </SeeMoreContainer>
 
-                        </GameInfoPadding>
-                    </div>
-                    <BottomContainer>
-                        <SeeAllGamesContainer color="secondary">
-                            See all games
-                        </SeeAllGamesContainer>
-                    </BottomContainer>
-                </GameInfoContainer>
-            </Container>
-        </Center>
+                                </GameInfoPadding>
+                            </div>
+                            <BottomContainer>
+                                <SeeAllGamesButton color="secondary">
+                                    See all games
+                                </SeeAllGamesButton>
+                            </BottomContainer>
+                        </GameInfoContainer>
+                    </Container>
+                </FullWidth>
+            )}
+        </>
     );
+}
+
+GameShowcase.defaultProps = {
+    darkerImage: false,
+    isLoading: true
+}
+
+GameShowcase.propTypes = {
+    data: PropTypes.object,
+    darkerImage: PropTypes.bool,
+    isLoading: PropTypes.bool,
+    onLoad: PropTypes.func
 }
 
 export default GameShowcase;

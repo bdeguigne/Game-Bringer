@@ -100,7 +100,8 @@ function ImageHoverInfo({ className, coverID, children, onMouseEnter, onMouseLea
     return (
         <CardStyleContainer onMouseEnter={() => onMouseEnter && onMouseEnter(gameID)} onMouseLeave={() => onMouseLeave && onMouseLeave(gameID)}>
             <Wrapper>
-                <Image alt="item" src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${coverID}.jpg`} />
+                {coverID && <Image alt="item" src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${coverID}.jpg`} />
+                }
                 <ShowOnHoverContainer>
                     {children}
                 </ShowOnHoverContainer>

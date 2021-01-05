@@ -1,11 +1,10 @@
 import './App.css';
 import "./global.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import HomePage from './components/HomePage';
 import TopBar from "./components/TopBar";
-import SideNav from "./components/SideNav";
 import styled from 'styled-components';
-import { sideNavWidth, maxWidth } from './utils/styles';
+import { maxWidth } from './utils/styles';
 // REDUX
 import { connect } from "react-redux";
 import { getPopularGames, getRecentlyReleasedGames, getComingSoonGames, getBestRatedGames } from './redux/actions/homePageRequestsActions';
@@ -13,8 +12,6 @@ import {bestRatedGames} from "./redux/constants/homePageRequestsConstants"
 
 
 const Main = styled.div`
-  //margin-left: ${props => props.expanded ? sideNavWidth.expanded : sideNavWidth.normal};
-  transition: margin-left 0.5s;
 `
 
 const MainContent = styled.div `
@@ -24,7 +21,6 @@ const MainContent = styled.div `
 `
 
 function App(props) {
-    const [expanded, setExpanded] = useState(false);
 
     useEffect(() => {
         props.getPopularGames();
@@ -35,8 +31,8 @@ function App(props) {
 
     return (
         <div className="app">
-            <SideNav onExpand={(state) => setExpanded(state)} />
-            <Main expanded={expanded}>
+            {/*<SideNav onExpand={(state) => setExpanded(state)} />*/}
+            <Main>
                 <TopBar />
                 <MainContent>
                     <HomePage />

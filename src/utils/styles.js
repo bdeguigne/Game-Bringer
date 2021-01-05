@@ -15,7 +15,7 @@ export const appColors = {
     "primary": "linear-gradient(90deg, #FC5D44 0%, #FEAA45 100%);",
     "secondary": "rgb(109,93,211)",
     "secondaryTransparent": "rgba(109,93,211,0.2)",
-    "secondaryDarker": "rgb(39,35,79, 0.8)",
+    "secondaryDarker": "rgb(39,35,79, 1)",
     "backgroundColor": "#0d0e1b",
     "backgroundContrast": "#120c13",
     "hover": "rgba(254,170,69, 0.04)",

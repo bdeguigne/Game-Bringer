@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Avatar } from "@material-ui/core";
+import { Button } from "@material-ui/core";
 
 import PropTypes from 'prop-types';
 import CircularProgressWithLabel from "./CircularProgressWithLabel";
@@ -57,7 +57,7 @@ const Legend = styled.div`
   height: 100%;
   text-align: left;
   border-radius: ${borderRadius};
-  background: linear-gradient( to bottom,rgba(0,0,0,0.3), rgba(0,0,0,0.1));
+  background: linear-gradient( to bottom,rgba(0,0,0,0.2) , rgba(0,0,0,0.4) 80%);
 `
 
 const LegendBottom = styled.div`
@@ -69,17 +69,6 @@ const FlexContainer = styled.div`
   margin-bottom: 16px;
   flex-wrap: wrap;
 `
-
-const CompanyContainer = styled.div`
-  display: flex;
-  margin-bottom: 16px;
-  flex-wrap: wrap;
-  align-items: center;
-`
-
-const CompanyAvatar = styled(Avatar)`
-  margin-right: 8px;
-`;
 
 const Genre = styled(Button)`
   padding: 16px !important;
@@ -98,6 +87,12 @@ const GameName = styled.h2`
   overflow: hidden;
 `
 
+const Date = styled.div`
+  margin-bottom: 16px;
+  color: white;
+  display: flex;
+`
+
 const SeeMoreButton = styled(Button)`
   margin-top: 32px !important;
 `
@@ -107,6 +102,15 @@ const Critic = styled.div`
   transform: scale(1, 1);
   opacity: 1;
   height: 100%;
+`
+
+const CompanyName = styled.span`
+  margin-right: 4px;
+  cursor: pointer;
+  
+  &:hover {
+    text-decoration: underline;
+  }
 `
 
 const StyledSkeleton = styled(Skeleton)`
@@ -122,7 +126,7 @@ const StyledSkeleton = styled(Skeleton)`
   z-index: -10 !important;
 `
 
-function CarouselItem({ imageId, isSelected, title, genres, rate, isLoading, company, videoId }) {
+function CarouselItem({ imageId, isSelected, title, genres, rate, isLoading, company, videoId, releaseDate }) {
     const [isHover, setIsHover] = useState(false);
     const [hide, setHide] = useState(false);
 
@@ -143,7 +147,7 @@ function CarouselItem({ imageId, isSelected, title, genres, rate, isLoading, com
     if (isLoading) {
         return (
             <Slide isSelected={isSelected} onMouseEnter={onSlideHover} onMouseLeave={onSlideLeave} videoReady={!hide}>
-                <Shine active={isHover} borderColor={hide ? appColors.shine : appColors.secondaryDarker} >
+                <Shine active={isHover} borderColor={hide ? appColors.shine : appColors.secondaryDarker}>
                     <StyledSkeleton selected={isSelected} variant="rect" animation="wave" />
                 </Shine>
             </Slide>
@@ -152,13 +156,12 @@ function CarouselItem({ imageId, isSelected, title, genres, rate, isLoading, com
     else {
         return (
             <Slide isSelected={isSelected} onMouseEnter={onSlideHover} onMouseLeave={onSlideLeave} videoReady={!hide}>
-                {/* <VideoPlayer videoID={videoId} onReady={() => console.log("REady !")} /> */}
                 <Shine active={isHover && !hide} borderColor={hide ? appColors.shine : appColors.secondaryDarker} >
                     <div style={{ position: "relative", borderRadius: "45px !important" }}>
                         {isHover && (
                             <VideoPlayer className="carousel-video-player" videoID={videoId} onReady={() => setHide(true)} playtime="15" />
                         )}
-                            <Image onLoad={() => console.log("load true")} isSelected={isSelected} isHover={isHover} hide={hide} alt="slider" src={"https://images.igdb.com/igdb/image/upload/t_screenshot_huge/" + imageId + ".jpg"} />
+                            <Image isSelected={isSelected} isHover={isHover} hide={hide} alt="slider" src={"https://images.igdb.com/igdb/image/upload/t_screenshot_huge/" + imageId + ".jpg"} />
                     </div>
                 </Shine>
 
@@ -167,15 +170,14 @@ function CarouselItem({ imageId, isSelected, title, genres, rate, isLoading, com
                     <LegendBottom>
                         <div>
                             <GameName>{title}</GameName>
-                        </div>
-                        {company && (
-                            <CompanyContainer>
-                                {company.logoID && (
-                                    <CompanyAvatar src={`https://images.igdb.com/igdb/image/upload/t_logo_med/${company.logoID}.png`} />
+                            <Date>
+                                {company && (
+                                    <CompanyName>{company.name}</CompanyName>
                                 )}
-                                <p>{company.name}</p>
-                            </CompanyContainer>
-                        )}
+                                <span style={{color: "#e0e0e0"}}>{releaseDate.elapsedTime ? " - " + releaseDate.elapsedTime : " - " + releaseDate.date}</span>
+                                {/*{releaseDate.date} {releaseDate.elapsedTime !== undefined && (`(${releaseDate.elapsedTime})`)}*/}
+                            </Date>
+                        </div>
                         {genres &&
                         <FlexContainer>
                             {genres.map((genre, index) => {

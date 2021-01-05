@@ -54,9 +54,15 @@ function getElapsedTime(dates, firstReleaseDateUnix) {
     if (dates && firstReleaseDateUnix) {
         dates.forEach(date => {
             if (date.date === firstReleaseDateUnix) {
-                releaseDate = {
-                    elapsedTime: moment.unix(date.date).fromNow(),
-                    date: date.human,
+                if (date.category !== undefined && date.category === 0) {
+                    releaseDate = {
+                        elapsedTime: moment.unix(date.date).fromNow(),
+                        date: date.human,
+                    }
+                } else {
+                    releaseDate = {
+                        date: date.human
+                    }
                 }
                 return releaseDate;
 
@@ -79,17 +85,20 @@ export const getPopularGames = () => {
                     const genres = popularGame.genres;
                     const screenshotID = popularGame.screenshots ?  (popularGame.screenshots[Math.floor(Math.random() * popularGame.screenshots.length)]).image_id : null;
                     const videoID = getVideoTrailer(popularGame.videos);
-
+                    const releaseDate = getElapsedTime(popularGame.release_dates, popularGame.first_release_date);
                     const company = findDeveloper(popularGame.involved_companies);
 
-                    popularGamesData.push({
-                        game,
-                        rating,
-                        genres,
-                        screenshotID,
-                        company,
-                        videoID
-                    })
+                    if (videoID !== null || screenshotID !== null) {
+                        popularGamesData.push({
+                            game,
+                            rating,
+                            genres,
+                            screenshotID,
+                            company,
+                            releaseDate,
+                            videoID
+                        })
+                    }
                 })
 
                 dispatch({
@@ -97,7 +106,6 @@ export const getPopularGames = () => {
                     popularGames: getRandom(popularGamesData, 10)
                 })
 
-                // console.log("GET POPULAR GAMES RES", data);
             })
             .catch(error => console.log("getPopularGames error", error));
     }
@@ -183,7 +191,6 @@ export const getBestRatedGames = (time) => {
             .then(res => res.json())
             .then(res => {
                 const bestRatedGamesData = [];
-                console.log(res);
                 res.forEach(bestRatedGame => {
                     const game = bestRatedGame.name;
                     const rating = Math.round(bestRatedGame.aggregated_rating);

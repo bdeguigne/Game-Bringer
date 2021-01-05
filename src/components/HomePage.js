@@ -30,12 +30,20 @@ const HomePage = (props) => {
                 <TopRatedGames />
             </Padding>
 
+            {/*<Padding>*/}
+            {/*    {props.bestRatedGames[0] && (*/}
+            {/*        <div style={{width: "100%", height: "400px", display: "relative"}}>*/}
+            {/*            <CrossFadeImages interval={3000} images={props.bestRatedGames[0].screenshots} prefixUrl="https://images.igdb.com/igdb/image/upload/t_screenshot_huge/"/>*/}
+            {/*        </div>*/}
+            {/*    )}*/}
+            {/*</Padding>*/}
+
             <Padding>
-                <HorizontalSlider sliderName={"recent"} title="Recently released" isLoading={props.recentlyReleasedGames.length === 0 ? true : false}>
+                <HorizontalSlider sliderName={"recent"} title="Recently released" isLoading={props.recentlyReleasedGames.length === 0}>
                     {props.recentlyReleasedGames.map((game, i) => {
                         return (
                             <ImageHoverInfo key={i} coverID={game.coverID} gameID={game.game} onMouseLeave={() => setHoveredItem("")} onMouseEnter={(game) => setHoveredItem(game)}>
-                                <CardGameInfo title={game.game} genres={game.genres} videoID={game.videoID} isHovered={hoveredItem === game.game ? true : false} />
+                                <CardGameInfo title={game.game} genres={game.genres} videoID={game.videoID} isHovered={hoveredItem === game.game} />
                             </ImageHoverInfo>
                         )
                     })}
@@ -44,11 +52,11 @@ const HomePage = (props) => {
 
             <Padding>
                 {/* {props.recentlyReleasedIsRequestComplete === true && ( */}
-                <HorizontalSlider sliderName={"comingSoon"} title="Coming Soon" isLoading={props.comingSoonGames.length === 0 ? true : false}>
+                <HorizontalSlider sliderName={"comingSoon"} title="Coming Soon" isLoading={props.comingSoonGames.length === 0}>
                     {props.comingSoonGames.map((game, i) => {
                         return (
                             <ImageHoverInfo key={i} coverID={game.coverID} gameID={game.game} onMouseLeave={() => setHoveredItem("")} onMouseEnter={(game) => setHoveredItem(game)}>
-                                <CardGameInfo title={game.game} genres={game.genres} videoID={game.videoID} isHovered={hoveredItem === game.game ? true : false}/>
+                                <CardGameInfo title={game.game} genres={game.genres} videoID={game.videoID} isHovered={hoveredItem === game.game}/>
                             </ImageHoverInfo>
                         )
                     })}
@@ -64,7 +72,8 @@ function mapStateToProps(state) {
     return {
         popularGames: state.homePageRequests.popularGames,
         recentlyReleasedGames: state.homePageRequests.recentlyReleasedGames,
-        comingSoonGames: state.homePageRequests.comingSoonGames
+        comingSoonGames: state.homePageRequests.comingSoonGames,
+        bestRatedGames: state.homePageRequests.bestRatedGamesThisMonth
     }
 }
 

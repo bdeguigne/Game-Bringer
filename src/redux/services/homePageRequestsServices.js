@@ -7,7 +7,7 @@ export const getPopularGameRequest = () => {
     // const nowUnix = moment().unix();
     const last3MonthsUnix = moment().subtract(3, "months").unix();
 
-    let query = `fields name, follows, genres.name, involved_companies.developer, involved_companies.company.name, involved_companies.company.logo.image_id, aggregated_rating, screenshots.image_id, videos.video_id, videos.name, rating_count;
+    let query = `fields name, follows, genres.name, involved_companies.developer, involved_companies.company.name, involved_companies.company.logo.image_id, aggregated_rating, screenshots.image_id, videos.video_id, videos.name, rating_count, first_release_date, release_dates.human, release_dates.date, release_dates.category;
                 sort follows desc;
                 where first_release_date > ${last3MonthsUnix} & (follows > 1 | rating_count > 1);
                 limit 500;`
@@ -50,8 +50,7 @@ export const getBestRatedGamesRequest = (time, limit) => {
     } else {
         return false;
     }
-    //fields name, follows, genres.name, involved_companies.developer, involved_companies.company.name, involved_companies.company.logo.image_id, aggregated_rating, screenshots.image_id, videos.video_id, videos.name, rating_count
-    const query = `fields name, follows, aggregated_rating, first_release_date, release_dates.human, release_dates.date, genres.name, involved_companies.developer, involved_companies.company.name, involved_companies.company.logo.image_id, screenshots.image_id, summary;
+    const query = `fields name, follows, aggregated_rating, first_release_date, release_dates.human, release_dates.date, genres.name, involved_companies.developer, involved_companies.company.name, involved_companies.company.logo.image_id, screenshots.image_id, summary, release_dates.category;
                     sort aggregated_rating desc;
                     where first_release_date > ${unixDate} & aggregated_rating != null;
                     limit ${limit};`
