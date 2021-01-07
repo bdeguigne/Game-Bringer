@@ -3,11 +3,14 @@ import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import styled from "styled-components";
 import "./CrossFadeImage.css";
+import {crossFadeImagesBoxShadow} from "../utils/styles";
+import ImageLoader from "./ImageLoader";
 
 const Container = styled.div`
   width: 100%;
   height: 100%;
   position: relative;
+  box-shadow: ${ props => props.shadow ? crossFadeImagesBoxShadow : null};
 `
 
 const CrossFadeImages = props => {
@@ -18,13 +21,17 @@ const CrossFadeImages = props => {
 
     useEffect(() => {
         let interval;
-        if (props.interval !== undefined) {
+        if (props.interval !== undefined && props.active && props.images && props.images.length > 1) {
             interval = setInterval(() => setNext(true), props.interval);
+        }
+
+        if (props.interval !== undefined && !props.active) {
+            clearInterval(interval);
         }
         return () => {
             clearInterval(interval);
         };
-    }, [props.interval]);
+    }, [props.interval, props.active]);
 
     useEffect(() => {
         if (next && props.interval) {
@@ -40,7 +47,7 @@ const CrossFadeImages = props => {
     }, [props.index])
 
     useEffect(() => {
-        if (loaded === true) {
+        if (loaded === true && props.onLoad) {
             props.onLoad();
         }
     }, [loaded]);
@@ -62,12 +69,6 @@ const CrossFadeImages = props => {
         setNext(false);
     }
 
-    // function goNext() {
-    //     setNext(true);
-    //     setNextIndex(getNextIndex());
-    //     setTimeout(incrementIndex, 550);
-    // }
-
     function goToIndex(index) {
         if (index !== showedImageIndex) {
             setNext(true)
@@ -86,21 +87,35 @@ const CrossFadeImages = props => {
     }
 
     return (
-        <Container>
+        <Container style={{borderRadius : props.style.borderRadius}} shadow={props.elevation}>
             {props.images && props.images.map((image, index) => {
                 const url = props.prefixUrl + image.image_id + ".jpg"
-                if (showedImageIndex === index) {
-                    return <img onLoad={onLoad}  style={props.style} key={index} className={next ?  "crossFade fadeOut" : "crossFade active" } src={url} alt={"Slider image" + index}/>
-                }
-                else {
-                    return <img style={props.style} key={index} className={nextIndex === index ? "crossFade fadeIn" : "crossFade"} src={url} alt={"Slider image" + index} />
+                if (props.skeletonOnLoadingImages) {
+                    if (showedImageIndex === index) {
+                        return <ImageLoader onLoad={onLoad}  style={props.style} key={index} className={next ?  "crossFade fadeOut" : "crossFade active" } src={url}/>
+                    }
+                    else {
+                        return <ImageLoader style={props.style} key={index} className={nextIndex === index ? "crossFade fadeIn" : "crossFade"} src={url} />
+                    }
+                } else {
+                    if (showedImageIndex === index) {
+                        return <img onLoad={onLoad}  style={props.style} key={index} className={next ?  "crossFade fadeOut" : "crossFade active" } src={url} alt={"Slider " + index}/>
+                    }
+                    else {
+                        return <img style={props.style} key={index} className={nextIndex === index ? "crossFade fadeIn" : "crossFade"} src={url} alt={"Slider " + index} />
+                    }
                 }
             })}
-            {/*<Button style={{zIndex: 5}} color="secondary" onClick={goNext}>next</Button>*/}
-            {/*<Button style={{zIndex: 5}} color="secondary" onClick={() => goToIndex(0)}>go to 3</Button>*/}
+
         </Container>
     );
 };
+
+CrossFadeImages.defaultProps = {
+    active: false,
+    skeletonOnLoadingImages: false,
+    elevation: true
+}
 
 CrossFadeImages.propTypes = {
     images: PropTypes.array.isRequired,
@@ -108,7 +123,10 @@ CrossFadeImages.propTypes = {
     interval: PropTypes.number,
     index: PropTypes.number,
     style: PropTypes.object,
-    onLoad: PropTypes.func
+    onLoad: PropTypes.func,
+    active: PropTypes.bool,     //if false, disable automatic cross fade between image for better performance
+    skeletonOnLoadingImages: PropTypes.bool,
+    elevation: PropTypes.bool,
 };
 
 export default CrossFadeImages;

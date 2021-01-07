@@ -1,12 +1,10 @@
-import React, {useState} from "react"
+import React from "react"
 import ShowCarousel from "./ShowCarousel";
-import HorizontalSlider from "./HorizontalSlider";
-import ImageHoverInfo from "./ImageHoverInfo";
-import CardGameInfo from "./CardGameInfo";
 import TopRatedGames from "./TopRatedGames";
 import { connect } from "react-redux";
 import styled from 'styled-components';
-import { Padding } from '../utils/styles';
+import {Padding} from '../utils/styles';
+import OtherGamesSlider from "./OtherGamesSlider";
 
 const TitleContainer = styled(Padding)`
     margin-top: 16px;
@@ -14,8 +12,6 @@ const TitleContainer = styled(Padding)`
 `;
 
 const HomePage = (props) => {
-    const [hoveredItem, setHoveredItem] = useState("");
-
     return (
         <div>
             <TitleContainer>
@@ -30,40 +26,23 @@ const HomePage = (props) => {
                 <TopRatedGames />
             </Padding>
 
+            <Padding>
+                <OtherGamesSlider sliderName={"recently-released"} title={"Recently released"} data={props.recentlyReleasedGames} />
+            </Padding>
+
+            <Padding>
+                <OtherGamesSlider sliderName={"coming-soon"} title={"Coming Soon"} data={props.comingSoonGames} />
+            </Padding>
+
             {/*<Padding>*/}
-            {/*    {props.bestRatedGames[0] && (*/}
-            {/*        <div style={{width: "100%", height: "400px", display: "relative"}}>*/}
-            {/*            <CrossFadeImages interval={3000} images={props.bestRatedGames[0].screenshots} prefixUrl="https://images.igdb.com/igdb/image/upload/t_screenshot_huge/"/>*/}
-            {/*        </div>*/}
-            {/*    )}*/}
+            {/*    <div style={{position: "relative", width: "100%", height: "300px", marginTop: "150px",  border: '1px solid white'}}>*/}
+            {/*        <Shine active={true} variant={"fill"} borderColor={appColors.secondaryDarker}>*/}
+            {/*            <div>*/}
+            {/*                <p>Test</p>*/}
+            {/*            </div>*/}
+            {/*        </Shine>*/}
+            {/*    </div>*/}
             {/*</Padding>*/}
-
-            <Padding>
-                <HorizontalSlider sliderName={"recent"} title="Recently released" isLoading={props.recentlyReleasedGames.length === 0}>
-                    {props.recentlyReleasedGames.map((game, i) => {
-                        return (
-                            <ImageHoverInfo key={i} coverID={game.coverID} gameID={game.game} onMouseLeave={() => setHoveredItem("")} onMouseEnter={(game) => setHoveredItem(game)}>
-                                <CardGameInfo title={game.game} genres={game.genres} videoID={game.videoID} isHovered={hoveredItem === game.game} />
-                            </ImageHoverInfo>
-                        )
-                    })}
-                </HorizontalSlider>
-            </Padding>
-
-            <Padding>
-                {/* {props.recentlyReleasedIsRequestComplete === true && ( */}
-                <HorizontalSlider sliderName={"comingSoon"} title="Coming Soon" isLoading={props.comingSoonGames.length === 0}>
-                    {props.comingSoonGames.map((game, i) => {
-                        return (
-                            <ImageHoverInfo key={i} coverID={game.coverID} gameID={game.game} onMouseLeave={() => setHoveredItem("")} onMouseEnter={(game) => setHoveredItem(game)}>
-                                <CardGameInfo title={game.game} genres={game.genres} videoID={game.videoID} isHovered={hoveredItem === game.game}/>
-                            </ImageHoverInfo>
-                        )
-                    })}
-                </HorizontalSlider>
-                {/* )} */}
-            </Padding>
-
         </div>
     )
 }

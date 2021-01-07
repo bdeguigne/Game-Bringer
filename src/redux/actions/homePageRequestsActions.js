@@ -51,7 +51,7 @@ function findDeveloper(involved_companies) {
 
 function getElapsedTime(dates, firstReleaseDateUnix) {
     let releaseDate = null;
-    if (dates && firstReleaseDateUnix) {
+    if (dates && Array.isArray(dates) && firstReleaseDateUnix) {
         dates.forEach(date => {
             if (date.date === firstReleaseDateUnix) {
                 if (date.category !== undefined && date.category === 0) {
@@ -68,9 +68,57 @@ function getElapsedTime(dates, firstReleaseDateUnix) {
 
             }
         })
+    } else if (dates) {
+        if (dates.category !== undefined && dates.category === 0) {
+            releaseDate = {
+                elapsedTime: moment.unix(dates.date).fromNow(),
+                date: dates.human,
+            }
+        } else {
+            releaseDate = {
+                date: dates.human
+            }
+        }
+        return releaseDate;
     }
     return releaseDate;
 }
+
+const grabGameData = (games) => {
+    let storedIds = [];
+    let gamesData = [];
+
+    games.forEach(game => {
+        if (game.game) {
+
+            const gameID = game.game.id;
+
+            //Check if the game is not already added
+            if (gameID && !storedIds.includes(gameID)) {
+                const gameName = game.game.name;
+                const coverID = game.game.cover ? game.game.cover.image_id : null;
+                const genres = game.game.genres;
+                const screenshots = game.game.screenshots;
+                const releasedDate = getElapsedTime({date: game.date, category: game.category, human: game.human});
+                const rating = Math.round(game.game.aggregated_rating);
+
+                gamesData.push({
+                    gameName,
+                    coverID,
+                    genres,
+                    screenshots,
+                    releasedDate,
+                    rating
+                })
+                storedIds.push(gameID);
+            }
+        }
+
+    })
+
+    return gamesData;
+}
+
 
 export const getPopularGames = () => {
     return (dispatch) => {
@@ -78,7 +126,7 @@ export const getPopularGames = () => {
             .then(res => res.json())
             .then(res => {
                 const popularGamesData = [];
-
+                // console.log("POPULAR RES ", res);
                 res.forEach(popularGame => {
                     const game = popularGame.name;
                     const rating = Math.round(popularGame.aggregated_rating);
@@ -87,6 +135,8 @@ export const getPopularGames = () => {
                     const videoID = getVideoTrailer(popularGame.videos);
                     const releaseDate = getElapsedTime(popularGame.release_dates, popularGame.first_release_date);
                     const company = findDeveloper(popularGame.involved_companies);
+                    const screenshots = popularGame.screenshots;
+                    const summary = popularGame.summary;
 
                     if (videoID !== null || screenshotID !== null) {
                         popularGamesData.push({
@@ -96,7 +146,9 @@ export const getPopularGames = () => {
                             screenshotID,
                             company,
                             releaseDate,
-                            videoID
+                            videoID,
+                            screenshots,
+                            summary
                         })
                     }
                 })
@@ -111,33 +163,14 @@ export const getPopularGames = () => {
     }
 }
 
+
 export const getRecentlyReleasedGames = () => {
     return dispatch => {
         getRecentlyReleasedRequest(30)
             .then(res => res.json())
             .then(res => {
-                // Checking if the game is not already added
-                var storedIds = []
-                var games = [];
+                let games = grabGameData(res);
 
-                res.forEach(recentGame => {
-                    const gameID = recentGame.game.id;
-
-                    if (!storedIds.includes(gameID)) {
-                        const videoID = getVideoTrailer(recentGame.game.videos);
-                        const game = recentGame.game.name;
-                        const coverID = recentGame.game.cover ? recentGame.game.cover.image_id : null;
-                        const genres = recentGame.game.genres;
-
-                        games.push({
-                            game,
-                            coverID,
-                            genres,
-                            videoID
-                        })
-                        storedIds.push(gameID);
-                    }
-                })
                 dispatch({
                     type: homePageRequestsConstants.SET_RECENTLY_RELEASED_GAMES,
                     games
@@ -152,28 +185,7 @@ export const getComingSoonGames = () => {
         getComingSoonGamesRequest(30)
             .then(res => res.json())
             .then(res => {
-                // Checking if the game is not already added
-                var storedIds = []
-                var games = []
-
-                res.forEach(comingSoonGame => {
-                    const gameID = comingSoonGame.game.id;
-
-                    if (!storedIds.includes(gameID)) {
-                        const videoID = getVideoTrailer(comingSoonGame.game.videos);
-                        const game = comingSoonGame.game.name;
-                        const coverID = comingSoonGame.game.cover ? comingSoonGame.game.cover.image_id : null;
-                        const genres = comingSoonGame.game.genres;
-
-                        games.push({
-                            game,
-                            coverID,
-                            genres,
-                            videoID
-                        })
-                        storedIds.push(gameID);
-                    }
-                })
+                let games = grabGameData(res);
 
                 dispatch({
                     type: homePageRequestsConstants.SET_COMING_SOON_GAMES,

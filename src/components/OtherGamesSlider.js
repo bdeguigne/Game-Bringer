@@ -1,0 +1,37 @@
+import React, {useState} from 'react';
+import PropTypes from 'prop-types';
+import SimpleCard from "./SimpleCard";
+import HorizontalSlider from "./HorizontalSlider";
+
+const OtherGamesSlider = props => {
+    const [sliderLoaded, setSliderLoaded] = useState(false);
+    const [removeSkeleton, setRemoveSkeleton] = useState(false);
+
+    const sliderOnLoad = () => {
+        if (sliderLoaded === false) {
+            setSliderLoaded(true);
+            setTimeout(() => {
+                setRemoveSkeleton(true);
+            }, 500)
+        }
+    }
+
+    return (
+        <HorizontalSlider sliderName={props.sliderName} title={props.title} isLoading={props.data.length === 0} imageLoaded={sliderLoaded} removeSkeleton={removeSkeleton} >
+            {props.data.map((game, i) => {
+                    return (
+                        <SimpleCard onLoad={sliderOnLoad} key={i} coverID={game.coverID} game={game} />
+                    )
+                })
+            }
+        </HorizontalSlider>
+    );
+};
+
+OtherGamesSlider.propTypes = {
+    sliderName: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    data : PropTypes.array.isRequired
+};
+
+export default OtherGamesSlider;

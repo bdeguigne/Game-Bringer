@@ -129,6 +129,7 @@ const Icon = styled(DateRange)`
 `
 
 function GameShowcase(props) {
+
     function onLoad() {
         props.onLoad();
     }
@@ -143,7 +144,7 @@ function GameShowcase(props) {
                         <ScreenshotContainer>
                             {/*<Screenshot src={`https://images.igdb.com/igdb/image/upload/t_screenshot_huge/${props.data.screenshots[0].image_id}.jpg`} />*/}
                             {props.data.screenshots && (
-                                <CrossFadeImages style={{borderRadius: 32}} images={props.data.screenshots} prefixUrl={"https://images.igdb.com/igdb/image/upload/t_screenshot_huge/"} interval={3000} onLoad={onLoad} />
+                                <CrossFadeImages active={props.showed} style={{borderRadius: 32}} images={props.data.screenshots} prefixUrl={"https://images.igdb.com/igdb/image/upload/t_screenshot_huge/"} interval={3000} onLoad={onLoad} />
                             )}
                             {props.darkerImage && (
                                 <BottomDarker/>
@@ -206,14 +207,16 @@ function GameShowcase(props) {
 
 GameShowcase.defaultProps = {
     darkerImage: false,
-    isLoading: true
+    isLoading: true,
+    showed: false
 }
 
 GameShowcase.propTypes = {
     data: PropTypes.object,
     darkerImage: PropTypes.bool,
     isLoading: PropTypes.bool,
-    onLoad: PropTypes.func
+    onLoad: PropTypes.func,
+    showed: PropTypes.bool
 }
 
 export default GameShowcase;

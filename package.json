@@ -1,5 +1,4 @@
 {
-  "proxy": "https://api.igdb.com",
   "name": "game-bringer",
   "version": "0.1.0",
   "private": true,

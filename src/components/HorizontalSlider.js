@@ -14,62 +14,78 @@ const Container = styled.div`
 `
 
 const Header = styled.div`
-    display: flex;
-    justify-content: space-between;
+  display: flex;
+  justify-content: space-between;
 `;
 
 const Title = styled.h3`
-    margin-top: 32px;
-    margin-bottom: 16px;
+  margin-top: 32px;
+  margin-bottom: 16px;
 `;
 
 const ArrowContainer = styled.div`
-    display: flex;
-    align-items: flex-end;
+  display: flex;
+  align-items: flex-end;
 `;
 
-const Slider = styled.div`
-    overflow-x: hidden;
-    user-select: none;
-    height: 225px;
-    padding-top: 16px;
 
-    @media only screen and (min-width: 768px) {
-        /* Desktop only */
-        height: 285px;
-    }
-`;
-
-const Slide = styled.div`
-    display: flex;
+const SliderContainer = styled.div`
+  height: 245px;
+  position: relative;
+  padding-top: 16px;
 `
 
+const Slide = styled.div`
+  display: flex;
+  width: 90%;
+  //opacity: ${props => props.hide ? 0 : 1};
+  //transition: opacity,transform 0.5s ease-in-out !important;
+`
+
+const Slider = styled.div`
+  overflow-x: hidden;
+  user-select: none;
+  //height: 225px;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 16px 0;
+  opacity: ${props => props.hide ? 0 : 1};
+  transition: opacity 0.5s !important;
+  @media only screen and (min-width: 768px) {
+    /* Desktop only */
+    height: 285px;
+  }
+`;
+
+
 const Arrow = styled(IconButton)`
-    width: 50px;
-    height: 50px;
-    margin-left: 4px !important;
-    margin-right: 4px !important;
+  width: 50px;
+  height: 50px;
+  margin-left: 4px !important;
+  margin-right: 4px !important;
 `
 
 const CardStyleSkeleton = styled(Skeleton)`
-    height: 245px !important;
-    width: 180px;
-    border-radius: 8px;
-    display: flex;
-    width: 100%;
-    overflow-y: hidden;
-    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.527);
-    transition: all ease 500ms;
-    background-color: ${SkeletonColor} !important;
+  height: 245px !important;
+  //width: 180px;
+  border-radius: 8px;
+  display: flex;
+  width: 100%;
+  overflow-y: hidden;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.527);
+  transition: all ease 500ms;
+  background-color: ${SkeletonColor} !important;
 
-    &:hover {
-        box-shadow: 0px 7px 16px rgba(0, 0, 0, 0.527);
-        transform: translateY(-10px);
-    }
+  &:hover {
+    box-shadow: 0px 7px 16px rgba(0, 0, 0, 0.527);
+    transform: translateY(-10px);
+  }
 
-    @media only screen and (min-width: 768px) {
-        height: 265px !important;
-    }
+  @media only screen and (min-width: 768px) {
+    height: 265px !important;
+  }
 `
 
 const sliderConfiguration = {
@@ -100,29 +116,35 @@ const sliderConfiguration = {
     animationDuration: 500
 };
 
-const HorizontalSlider = ({ sliderName, title, children, isLoading, menuExpanded }) => {
-    const ref = React.useRef();
-
+const HorizontalSlider = ({ sliderName, title, children, isLoading, imageLoaded, removeSkeleton }) => {
     const [slider] = useState(new Glide(`#${sliderName}`, sliderConfiguration));
+    const [sliderSkeleton] = useState(new Glide(`#${sliderName}-skeleton`, sliderConfiguration));
 
     useEffect(() => {
-        slider.mount();
+        if (removeSkeleton === false) {
+            sliderSkeleton.mount();
+        }
 
-        slider.on('run.before', (evt) => {
-            const scrollSteps = slider.settings.perView;
-            evt.steps = evt.direction === '>' ? -scrollSteps : scrollSteps;
-            // ... do something cool here
-        })
-
-        // return () => slider.destroy()
-
-    }, [slider, ref, sliderName])
+    }, [sliderSkeleton, sliderName, removeSkeleton])
 
     useEffect(() => {
         if (isLoading === false) {
             slider.mount();
+
+            slider.on('run.before', (evt) => {
+                const scrollSteps = slider.settings.perView;
+                evt.steps = evt.direction === '>' ? -scrollSteps : scrollSteps;
+                // ... do something cool here
+            })
+
         }
     }, [isLoading, slider])
+
+    useEffect(() => {
+        if (removeSkeleton === true)
+            sliderSkeleton.destroy();
+    }, [removeSkeleton, sliderSkeleton]);
+
 
     return (
         <Container>
@@ -138,24 +160,28 @@ const HorizontalSlider = ({ sliderName, title, children, isLoading, menuExpanded
                     </Arrow>
                 </ArrowContainer>
             </Header>
-            <Slider id={sliderName}>
-                <div className="glide__track" data-glide-el="track">
-
-                    {isLoading === true && (
-                        <Slide className="glide__slides">
-                            {Array.from({ length: 8 }, (item, index) => {
-                                return <CardStyleSkeleton key={index} variant="rect" animation="wave" />
-                            })}
-                        </Slide>
-                    )}
-
-                    {isLoading === false && (
-                        <Slide className="glide__slides">
-                            { children}
-                        </Slide>
-                    )}
-                </div>
-            </Slider>
+            <SliderContainer >
+                {isLoading === false && (
+                    <Slider id={sliderName}  hide={!imageLoaded}>
+                        <div className="glide__track" data-glide-el="track">
+                            <Slide className="glide__slides">
+                                { children }
+                            </Slide>
+                        </div>
+                    </Slider>
+                )}
+                {!removeSkeleton && (
+                    <Slider id={`${sliderName}-skeleton`} hide={imageLoaded}>
+                        <div className="glide__track" data-glide-el="track">
+                            <Slide className="glide__slides" >
+                                {Array.from({ length: 5 }, (item, index) => {
+                                    return <CardStyleSkeleton key={index} variant="rect" animation="wave" />
+                                })}
+                            </Slide>
+                        </div>
+                    </Slider>
+                )}
+            </SliderContainer>
         </Container >
     )
 }

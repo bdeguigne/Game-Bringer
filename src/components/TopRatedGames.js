@@ -45,13 +45,7 @@ const Slide = styled.div`
   display: flex;
 `
 
-const sliderConfiguration = {
-    type: "carousel",
-    startAt: 0,
-    animationTimingFunc: "ease-in-out",
-    perView: 1,
-    focusAt: 0,
-}
+
 
 const ArrowsContainer = styled.div`
   position: absolute;
@@ -85,14 +79,29 @@ const LoadingContainer = styled.div`
   z-index: 3;
 `
 
+const sliderConfiguration = {
+    type: "carousel",
+    startAt: 0,
+    animationTimingFunc: "ease-in-out",
+    perView: 1,
+    focusAt: 0,
+}
+
 function TopRatedGames({games}) {
+
     const [slider] = useState(new Glide(`#topRatedSlider`, sliderConfiguration));
     const [sliderLoaded, setSliderLoaded] = useState(false);
     const [hideSkeleton, setHideSkeleton] = useState(false);
     const [removeSkeleton, setRemoveSkeleton] = useState(false);
+    const [currentIndex, setCurrentIndex] = useState(0);
 
     useEffect(() => {
         if (games.length > 0 && sliderLoaded === false) {
+            slider.on(['mount.after', 'run'], (evt) => {
+                const currentIndex = slider.index;
+                setCurrentIndex(currentIndex);
+            })
+
             slider.mount();
             setSliderLoaded(true);
         }
@@ -120,7 +129,7 @@ function TopRatedGames({games}) {
                         <Slide className="glide__slides">
                             {games.length > 0 && games.map((game, index) => {
                                     return (
-                                        <GameShowcase key={index} data={game} darkerImage={true} isLoading={false} onLoad={() => !hideSkeleton && setHideSkeleton(true)}/>
+                                        <GameShowcase showed={currentIndex === index} key={index} data={game} darkerImage={true} isLoading={false} onLoad={() => !hideSkeleton && setHideSkeleton(true)}/>
                                     )
                                 }
                             )}

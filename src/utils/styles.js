@@ -63,6 +63,10 @@ export const gameShowNeonBoxShadow = `0px 0px 64px -24px ${appColors.secondary},
 export const SkeletonColor = appColors[900];
 export const toolTipBoxShadow = `0px 0px 0.5rem -4px #fff, 0 0 2rem 0px ${appColors.secondary}, inset 12px -20px 2rem -45px ${appColors.secondary}, 0 0 4rem -39px ${appColors.secondary};`
 
+/* CrossFade Component */
+
+export const crossFadeImagesBoxShadow = `0px 0px 0.5rem -6px #000, 0 0 2rem -29px ${appColors.secondary}, 0 0 4rem -36px ${appColors.secondary};`
+
 /* Buttons */
 
 /* Primary Button */
@@ -79,7 +83,7 @@ export const Padding = styled.div`
 
     @media only screen and (min-width: 768px) {
         /* For desktop */
-        padding-left: 80px;
-        padding-right : 80px;
+        padding-left: ${props => props.type === "slider" ? 0 : "80px"};
+        padding-right : ${props => props.type === "slider" ? "96px" : "80px"};
     }
 `

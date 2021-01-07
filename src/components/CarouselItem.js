@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button } from "@material-ui/core";
+import {Button, Fade, Tooltip} from "@material-ui/core";
 
 import PropTypes from 'prop-types';
 import CircularProgressWithLabel from "./CircularProgressWithLabel";
@@ -9,10 +9,12 @@ import { SkeletonColor } from '../utils/styles';
 import VideoPlayer from "./VideoPlayer";
 import { appColors, carousel } from "../utils/styles";
 import Shine from "./Shine";
+import FloatingGameDetails from "./FloatingGameDetails";
 
 const borderRadius = "16px";
 
 const Slide = styled.div`
+  user-select: none;
   height: 363px !important;
   position: relative;
   cursor: pointer;
@@ -22,7 +24,8 @@ const Slide = styled.div`
   border-radius: ${borderRadius};
   transform: ${props => props.isSelected ? "scale(1, 1)" : "scale(0.7, 0.7)"};
   box-shadow: ${props => props.isSelected ? (props.videoReady ? carousel.selectedBoxShadow : carousel.hoveredNeonBoxShadow) : carousel.boxShadow}
-  //border: ${carousel.border};
+    //border: ${carousel.border};
+
   overflow: hidden;
 `
 
@@ -31,7 +34,7 @@ const Image = styled.img`
   left: 0;
   top: 0;
   height: 357.5px !important;
-  display: block;
+  display: none;
   object-fit: cover;
   border-radius: ${borderRadius};
   transition: all 500ms ease;
@@ -50,7 +53,7 @@ const Legend = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: baseline;
-  bottom: 0px;
+  bottom: 0;
   opacity: ${props => props.isSelected && !props.hide ? 1 : 0};
   padding: 24px;
   width: 100%;
@@ -107,7 +110,7 @@ const Critic = styled.div`
 const CompanyName = styled.span`
   margin-right: 4px;
   cursor: pointer;
-  
+
   &:hover {
     text-decoration: underline;
   }
@@ -126,9 +129,27 @@ const StyledSkeleton = styled(Skeleton)`
   z-index: -10 !important;
 `
 
-function CarouselItem({ imageId, isSelected, title, genres, rate, isLoading, company, videoId, releaseDate }) {
+const SkeletonContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  transition: opacity 0.5s;
+  opacity: ${props => props.hide ? 0 : 1};
+`
+
+const ScreenshotSkeleton = styled(Skeleton)`
+  background-color: ${SkeletonColor} !important;
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 32px;
+`
+
+function CarouselItem({ imageId, isSelected, title, genres, rate, isLoading, company, videoId, releaseDate, screenshots, summary }) {
     const [isHover, setIsHover] = useState(false);
     const [hide, setHide] = useState(false);
+    const [imageLoaded, setImageLoaded] = useState(false);
 
     const onSlideHover = () => {
         if (isSelected === true && videoId != null) {
@@ -147,7 +168,7 @@ function CarouselItem({ imageId, isSelected, title, genres, rate, isLoading, com
     if (isLoading) {
         return (
             <Slide isSelected={isSelected} onMouseEnter={onSlideHover} onMouseLeave={onSlideLeave} videoReady={!hide}>
-                <Shine active={isHover} borderColor={hide ? appColors.shine : appColors.secondaryDarker}>
+                <Shine active={isHover} borderColor={hide ? appColors.shine : appColors.secondaryDarker} childrenStyle={{top: "0.75%", left: "0.75%", height: "98.5%", width: "98.5%"}}>
                     <StyledSkeleton selected={isSelected} variant="rect" animation="wave" />
                 </Shine>
             </Slide>
@@ -155,14 +176,22 @@ function CarouselItem({ imageId, isSelected, title, genres, rate, isLoading, com
     }
     else {
         return (
+            <Tooltip title={
+                <FloatingGameDetails title={title} date={releaseDate.date} elapsedTime={releaseDate.elapsedTime} genres={genres} screenshots={screenshots} summary={summary}/>
+            } placement={"right"} TransitionComponent={Fade} arrow={true} disableHoverListener={!isSelected}>
+
             <Slide isSelected={isSelected} onMouseEnter={onSlideHover} onMouseLeave={onSlideLeave} videoReady={!hide}>
-                <Shine active={isHover && !hide} borderColor={hide ? appColors.shine : appColors.secondaryDarker} >
+                <Shine active={isHover && !hide} borderColor={hide ? appColors.shine : appColors.secondaryDarker} childrenStyle={{top: "0.75%", left: "0.75%", height: "98.5%", width: "98.5%"}}>
                     <div style={{ position: "relative", borderRadius: "45px !important" }}>
                         {isHover && (
                             <VideoPlayer className="carousel-video-player" videoID={videoId} onReady={() => setHide(true)} playtime="15" />
                         )}
-                            <Image isSelected={isSelected} isHover={isHover} hide={hide} alt="slider" src={"https://images.igdb.com/igdb/image/upload/t_screenshot_huge/" + imageId + ".jpg"} />
+                            <Image onLoad={() => setImageLoaded(true)} isSelected={isSelected} isHover={isHover} hide={imageLoaded ? hide : true} alt="slider" src={"https://images.igdb.com/igdb/image/upload/t_screenshot_huge/" + imageId + ".jpg"} />
+
                     </div>
+                    <SkeletonContainer hide={imageLoaded}>
+                        <ScreenshotSkeleton variant="rect" animation={imageLoaded ? false : "wave"} style={{borderRadius: "16px"}}/>
+                    </SkeletonContainer>
                 </Shine>
 
 
@@ -172,9 +201,9 @@ function CarouselItem({ imageId, isSelected, title, genres, rate, isLoading, com
                             <GameName>{title}</GameName>
                             <Date>
                                 {company && (
-                                    <CompanyName>{company.name}</CompanyName>
+                                    <CompanyName>{company.name} - </CompanyName>
                                 )}
-                                <span style={{color: "#e0e0e0"}}>{releaseDate.elapsedTime ? " - " + releaseDate.elapsedTime : " - " + releaseDate.date}</span>
+                                <span style={{color: "#e0e0e0"}}>{releaseDate.elapsedTime ? releaseDate.elapsedTime : releaseDate.date}</span>
                                 {/*{releaseDate.date} {releaseDate.elapsedTime !== undefined && (`(${releaseDate.elapsedTime})`)}*/}
                             </Date>
                         </div>
@@ -203,6 +232,7 @@ function CarouselItem({ imageId, isSelected, title, genres, rate, isLoading, com
                 </Legend>
 
             </Slide>
+            </Tooltip>
         )
     }
 }
@@ -212,7 +242,9 @@ CarouselItem.prototype = {
     isSelected: PropTypes.bool,
     title: PropTypes.string,
     category: PropTypes.string,
-    rate: PropTypes.number
+    rate: PropTypes.number,
+    screenshots: PropTypes.array,
+    summary: PropTypes.string
 }
 
 export default CarouselItem;
