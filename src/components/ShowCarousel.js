@@ -62,14 +62,15 @@ function ShowCarousel({ data, loadingStatus }) {
                 infiniteLoop
                 showThumbs={false}
                 interval={5000}
-                // autoPlay={data.length === 10}
-                autoPlay={false}
+                autoPlay={width >= 768 ? data.length === 10 : false}
                 onChange={updateCurrentSlide}
                 centerSlidePercentage={width >= 768 ? 40 : 100}
                 onClickItem={updateCurrentSlide}
                 showStatus={false}
                 showArrows={false}
                 showIndicators={false}
+                emulateTouch={false}
+                swipeScrollTolerance={125}
                 selectedItem={currentSlide}
             >
                 {data.length === 10 ? data.map((element, i) => {

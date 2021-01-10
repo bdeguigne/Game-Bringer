@@ -11,11 +11,8 @@ import { getPopularGames, getRecentlyReleasedGames, getComingSoonGames, getBestR
 import {bestRatedGames} from "./redux/constants/homePageRequestsConstants"
 
 
-const Main = styled.div`
-`
-
 const MainContent = styled.div `
-  margin: 0px auto;
+  margin: 0 auto;
   width: ${maxWidth};
   max-width: 100%;
 `
@@ -31,13 +28,12 @@ function App(props) {
 
     return (
         <div className="app">
-            {/*<SideNav onExpand={(state) => setExpanded(state)} />*/}
-            <Main>
+            <div>
                 <TopBar />
                 <MainContent>
                     <HomePage />
                 </MainContent>
-            </Main>
+            </div>
         </div>
     );
 }
@@ -49,7 +45,7 @@ const actionCreators = {
     getBestRatedGames
 }
 
-function mapStateToProps(state) {
+function mapStateToProps() {
     return {}
 }
 

@@ -37,26 +37,62 @@ const Slider = styled.div`
   //height: 225px;
   //padding-top: 16px;
   width: 100%;
-  height: 450px;
+  height: 620px;
   position: relative;
+
+  @media only screen and (min-width: 768px) {
+    height: 450px;
+  }
 `
 
 const Slide = styled.div`
   display: flex;
 `
 
-
-
 const ArrowsContainer = styled.div`
   position: absolute;
-  bottom: 0;
-  left: 35%;
+  top: 0;
+  right: 0;
   z-index: 3;
-  padding: 32px;
+  padding: 16px;
+  width: fit-content;
+display: flex;
+  
+  @media only screen and (min-width: 768px) {
+    top: initial;
+    bottom: 0;
+    left: 30%;
+    padding: 32px;
+  }
+
+`
+
+const RoundedArrowIconContainer = styled.div`
+  
+  background: ${appColors.backgroundColor};
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  padding: 12px 14px;
+  align-items: center;
+  margin-left: 4px;
+
+  @media only screen and (min-width: 768px) {
+    background: none;
+    padding: 0 8px;
+  }
 `
 
 const Icon = styled(ArrowIcon)`
-  font-size: 2.5rem;
+  font-size: 1.0rem;
+  color: white;
+  margin-left: ${props => props.left ? "0" : "4px"};
+  margin-right: ${props => props.right ? "0" : "4px"};
+
+  @media only screen and (min-width: 768px) {
+    font-size: 2.5rem;
+    color: ${appColors.secondaryDarker};
+  }
 `
 
 const LoadingContainer = styled.div`
@@ -125,8 +161,12 @@ function TopRatedGames({games}) {
                             )}
                         </Slide>
                         <ArrowsContainer>
-                            <Icon onClick={() => slider.go("<")} className="icon-arrow-left"/>
-                            <Icon onClick={() => slider.go(">")} className="icon-arrow-right"/>
+                            <RoundedArrowIconContainer>
+                                <Icon onClick={() => slider.go("<")} className="icon-arrow-left" left={true}/>
+                            </RoundedArrowIconContainer>
+                            <RoundedArrowIconContainer>
+                                <Icon onClick={() => slider.go(">")} className="icon-arrow-right" right={true}/>
+                            </RoundedArrowIconContainer>
                         </ArrowsContainer>
                     </div>
                     {!removeSkeleton && (
@@ -136,6 +176,9 @@ function TopRatedGames({games}) {
                     )}
                 </Slider>
             </SliderWrapper>
+            {/*{games.length > 0 && (*/}
+            {/*    <GameShowcase showed={true} data={games[0]} darkerImage={true} isLoading={false} onLoad={() => !hideSkeleton && setHideSkeleton(true)}/>*/}
+            {/*)}*/}
         </Container>
     );
 }

@@ -1,25 +1,20 @@
 import React from 'react';
 import styled from "styled-components";
 import {Skeleton} from "@material-ui/lab";
-import {appColors, gameShowNeonBoxShadow, SkeletonColor} from "../utils/styles";
-
-const FullWidth = styled.div`
-  display: flex;
-  width: 988px;
-  max-width: 100%;
-`
-
-const ScreenshotContainer = styled.div`
-  width: 50%;
-  border-radius: 32px;
-  position: relative;
-`
+import {SkeletonColor} from "../utils/styles";
+import {FullWidthContainer, Container, ScreenshotContainer, GameInfoContainer} from "./GameShowcase";
 
 const ScreenshotSkeleton = styled(Skeleton)`
   background-color: ${SkeletonColor} !important;
   width: 100% !important;
   height: 100% !important;
-  border-radius: 32px;
+  border-radius: 0;
+
+  @media only screen and (min-width: 768px) {
+    width: 50%;
+    height: 100%;
+    border-radius: 32px;
+  }
 `
 
 const TextSkeleton = styled(Skeleton)`
@@ -36,26 +31,6 @@ const GenreSkeleton = styled(TextSkeleton)`
 `
 const GameInfoPadding = styled.div`
   padding: 24px;
-`
-
-const Container = styled.div`
-  width: 100%;
-  height: 450px;
-  //width: 1130px;
-  //border: 0.5px solid #FFFFFF;
-  border-radius: 32px;
-    //box-shadow: ${gameShowNeonBoxShadow};
-  background: ${appColors.backgroundContrast};
-  display: flex;
-  justify-content: space-between;
-`
-
-const GameInfoContainer = styled.div`
-  width: 50%;
-  display: flex;
-  justify-content: space-between;
-  flex-direction: column;
-  border-radius: 32px;
 `
 
 const Space = styled.div`
@@ -75,7 +50,7 @@ const GenresContainer = styled.div `
 
 const GameShowcaseSkeleton = () => {
     return (
-        <FullWidth>
+        <FullWidthContainer>
             <Container>
                 <ScreenshotContainer>
                     <ScreenshotSkeleton variant="rect"/>
@@ -104,7 +79,7 @@ const GameShowcaseSkeleton = () => {
                     </GameInfoPadding>
                 </GameInfoContainer>
             </Container>
-        </FullWidth>
+        </FullWidthContainer>
     );
 };
 

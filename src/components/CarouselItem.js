@@ -19,11 +19,11 @@ const Slide = styled.div`
   position: relative;
   cursor: pointer;
   transition: all 500ms ease;
-  margin-left: 0;
-  margin-right: 0;
+  margin-left: 8px;
+  margin-right: 8px;
 
   border-radius: ${borderRadius};
-  transform: ${props => props.isSelected ? "scale(1, 1)" : "scale(0.7, 0.7)"};
+  transform: none;
   box-shadow: ${props => props.isSelected ? (props.videoReady ? carousel.selectedBoxShadow : props.isDesktop ? carousel.hoveredNeonBoxShadow : carousel.hoveredNeonBoxShadowMobile) : carousel.boxShadow}
     //border: ${carousel.border};
 
@@ -35,6 +35,8 @@ const Slide = styled.div`
     margin-right: ${props => props.isSelected ? '-100px !important' : '0px'};
 
     height: 363px !important;
+
+    transform: ${props => props.isSelected ? "scale(1, 1)" : "scale(0.7, 0.7)"};
   }
 `
 

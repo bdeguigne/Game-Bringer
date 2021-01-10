@@ -38,16 +38,6 @@ const HomePage = (props) => {
             <Padding>
                 <OtherGamesSlider sliderName={"coming-soon"} title={"Coming Soon"} data={props.comingSoonGames} />
             </Padding>
-
-            {/*<Padding>*/}
-            {/*    <div style={{position: "relative", width: "100%", height: "300px", marginTop: "150px",  border: '1px solid white'}}>*/}
-            {/*        <Shine active={true} variant={"fill"} borderColor={appColors.secondaryDarker}>*/}
-            {/*            <div>*/}
-            {/*                <p>Test</p>*/}
-            {/*            </div>*/}
-            {/*        </Shine>*/}
-            {/*    </div>*/}
-            {/*</Padding>*/}
         </div>
     )
 }
