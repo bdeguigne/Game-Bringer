@@ -102,6 +102,7 @@ export default createMuiTheme({
                 boxShadow: toolTipBoxShadow
             },
             tooltipArrow: {
+                borderRadius: "16px",
                 padding: "0",
                 boxShadow: "0px 0px 0.7rem -4px #fff, 0 0 2rem -20px rgb(109,93,211), inset 12px -20px 2rem -45px rgb(109,93,211), 0 0 4rem -39px rgb(109,93,211)"
             },

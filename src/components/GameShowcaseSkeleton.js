@@ -15,7 +15,6 @@ const ScreenshotContainer = styled.div`
   position: relative;
 `
 
-
 const ScreenshotSkeleton = styled(Skeleton)`
   background-color: ${SkeletonColor} !important;
   width: 100% !important;
@@ -74,7 +73,7 @@ const GenresContainer = styled.div `
   display: flex;
 `
 
-const GameShowcaseSkeleton = props => {
+const GameShowcaseSkeleton = () => {
     return (
         <FullWidth>
             <Container>

@@ -16,8 +16,8 @@ export const appColors = {
     "secondary": "rgb(109,93,211)",
     "secondaryTransparent": "rgba(109,93,211,0.2)",
     "secondaryDarker": "rgb(39,35,79, 1)",
-    "backgroundColor": "#0d0e1b",
-    "backgroundContrast": "#120c13",
+    "backgroundColor": "#0f101f",
+    "backgroundContrast": "#08080f",
     "hover": "rgba(254,170,69, 0.04)",
     "primarySimple": "rgb(254,170,69)",
     "shine": "#fff"
@@ -32,6 +32,7 @@ export const maxWidth = "1152px";
 
 export const carousel = {
     hoveredNeonBoxShadow: `0 0 0.5rem ${appColors.secondary}, 0 0 2rem -21px ${appColors.secondary}, inset 12px -20px 2rem -24px ${appColors.secondary}, 0 0 4rem -15px ${appColors.secondary};`,
+    hoveredNeonBoxShadowMobile: `0 0 0.5rem ${appColors.secondary}, 0 0 2rem -14px ${appColors.secondary}, inset 12px -24px 2rem -24px ${appColors.secondary}, 0 0 4rem -45px ${appColors.secondary};`,
     hoveredBoxShadow : `12px 6px 14px -3px ${selectedShadowColor}, -12px 6px 14px -3px ${selectedShadowColor};`,
     selectedBoxShadow: "0px 0px 20px 4px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.19);",
     boxShadow : `0 10px 20px ${shadowColor}, 0 6px 6px ${shadowColor};`,
@@ -52,7 +53,7 @@ export const sideNavIndicatorBoxShadow = `rgb(255 255 255) 0px 0px 20px 0px, ${a
 
 /* Top Bar */
 export const barBoxShadow = "0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)";
-export const topBarNeonBoxShadow = `0 0 0.5rem #fff, 0 0 2rem -21px ${appColors.secondary}, inset 12px -20px 2rem -24px ${appColors.secondary}, 0 0 4rem -15px ${appColors.secondary};`
+export const topBarNeonBoxShadow = `0 0 0.5rem #fff, 0 0 2rem -21px ${appColors.secondary}, inset 0px -20px 2rem -24px ${appColors.secondary}, 0 0 4rem -15px ${appColors.secondary};`
 export const topBarNeonBoxShadowSoft = `0 0 20px -11px #fff, 0 0 0rem -12px ${appColors.secondary}, inset 0px -7px 3rem -31px ${appColors.secondary}, 0px 0px 5rem -22px ${appColors.secondary};`;
 export const topBarNeonBorder = "2px solid #fff;";
 
@@ -77,6 +78,9 @@ export const PrimaryNeonBoxShadowHover = `0px 0px 64px -15px ${appColors.primary
 export const genresNeonBoxShadow = `0px 0px 64px -20px ${appColors.secondary}, 0px 0px 8px -4px #FFFFFF, inset 0px 0px 32px -15px ${appColors.secondary}`
 export const genresNeonBoxShadowHover = `0px 0px 64px 0px ${appColors.secondary}, 0px 0px 21px -4px #FFFFFF, inset 0px 0px 32px -15px ${appColors.secondary};`
 
+
+/* Others */
+
 export const Padding = styled.div`
     padding-left: 16px;
     padding-right : 16px;
@@ -86,4 +90,25 @@ export const Padding = styled.div`
         padding-left: ${props => props.type === "slider" ? 0 : "80px"};
         padding-right : ${props => props.type === "slider" ? "96px" : "80px"};
     }
+`
+
+export const SectionTitle = styled.h2`
+  font-size: 19px;
+  text-transform: uppercase;
+  font-weight: normal;
+  margin-bottom: 24px;
+`
+
+export const ArrowIcon = styled.span`
+  cursor: pointer;
+  font-size: 2.0rem;
+  transition: text-shadow, color 0.3s;
+  color: ${appColors.secondaryDarker};
+  margin-left: 8px;
+  margin-right: 8px;
+
+  &:hover {
+    color: white;
+    text-shadow: 0 0 1rem #fff, 0 0 2rem ${appColors.secondary}, 0 0 4rem ${appColors.secondary}, 0 0 6rem ${appColors.secondary};
+  }
 `

@@ -4,11 +4,11 @@ import GameShowcase from "./GameShowcase";
 
 import styled from "styled-components";
 import Glide from "@glidejs/glide";
-import {appColors, gameShowNeonBoxShadow} from "../utils/styles";
+import {appColors, gameShowNeonBoxShadow, SectionTitle, ArrowIcon} from "../utils/styles";
 
 const Container = styled.div`
-  margin-top: 16px;
-  margin-bottom: 16px;
+  margin-top: 0;
+  margin-bottom: 48px;
   border-radius: 32px;
 `
 
@@ -17,10 +17,10 @@ const Header = styled.div`
   justify-content: space-between;
 `
 
-const Title = styled.h3`
-  margin-top: 32px;
-  margin-bottom: 48px;
-`;
+// const Title = styled.h3`
+//   margin-top: 32px;
+//   margin-bottom: 48px;
+// `;
 
 const SliderWrapper = styled.div`
   transition: box-shadow,border 1s;
@@ -55,18 +55,8 @@ const ArrowsContainer = styled.div`
   padding: 32px;
 `
 
-const Icon = styled.span`
-  cursor: pointer;
+const Icon = styled(ArrowIcon)`
   font-size: 2.5rem;
-  transition: text-shadow, color 0.3s;
-  color: ${appColors.secondaryDarker};
-  margin-left: 8px;
-  margin-right: 8px;
-
-  &:hover {
-    color: white;
-    text-shadow: 0rem 0rem 1rem #fff, 0 0 2rem ${appColors.secondary}, 0 0 4rem ${appColors.secondary}, 0 0 6rem ${appColors.secondary};
-  }
 `
 
 const LoadingContainer = styled.div`
@@ -97,7 +87,7 @@ function TopRatedGames({games}) {
 
     useEffect(() => {
         if (games.length > 0 && sliderLoaded === false) {
-            slider.on(['mount.after', 'run'], (evt) => {
+            slider.on(['mount.after', 'run'], () => {
                 const currentIndex = slider.index;
                 setCurrentIndex(currentIndex);
             })
@@ -119,9 +109,9 @@ function TopRatedGames({games}) {
     return (
         <Container>
             <Header>
-                <Title>
+                <SectionTitle>
                     Top Rated Games
-                </Title>
+                </SectionTitle>
             </Header>
             <SliderWrapper isLoading={!hideSkeleton}>
                 <Slider id="topRatedSlider">

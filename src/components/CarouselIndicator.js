@@ -5,6 +5,21 @@ import { CircularProgress } from '@material-ui/core';
 import styled from 'styled-components';
 import {appColors, carousel} from '../utils/styles'
 
+const ArrowContainer = styled.div`
+  display: none;
+  //
+  @media only screen and (min-width: 768px) {
+    display: block;
+  }
+`
+
+const Container = styled.div`
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+`
+
 const ArrowButton = styled(IconButton)`
   margin-left: 16px !important;
   margin-right: 16px !important;
@@ -49,19 +64,17 @@ function CarouselIndicator({ itemCount, onClick, selectedIndex, setSelectedIndex
     }
 
     const isActive = (selectedIndex, i) => {
-        if (selectedIndex === i) {
-            return true
-        } else {
-            return false
-        }
+        return selectedIndex === i;
     }
 
     if (loadingStatus === null) {
         return (
-            <div>
-                <ArrowButton size="medium" onClick={leftArrowHandler}>
-                    <ArrowBackIos />
-                </ArrowButton>
+            <Container>
+                <ArrowContainer>
+                    <ArrowButton size="medium" onClick={leftArrowHandler}>
+                        <ArrowBackIos />
+                    </ArrowButton>
+                </ArrowContainer>
                 {Array.from(Array(itemCount), (e, i) => {
                     return (
                         <Indicator key={i} onClick={() => handler(i)} isselected={isActive(selectedIndex, i).toString()}>
@@ -69,10 +82,12 @@ function CarouselIndicator({ itemCount, onClick, selectedIndex, setSelectedIndex
                         </Indicator>
                     )
                 })}
-                <ArrowButton size="medium" onClick={rightArrowHandler}>
-                    <ArrowForwardIos />
-                </ArrowButton>
-            </div>
+                <ArrowContainer>
+                    <ArrowButton size="medium" onClick={rightArrowHandler}>
+                        <ArrowForwardIos />
+                    </ArrowButton>
+                </ArrowContainer>
+            </Container>
         )
     } else {
         return (

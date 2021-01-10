@@ -17,10 +17,12 @@ const Title = styled.h4`
 const Icon = styled(DateRange)`
   margin-right: 4px;
   width: 16px !important;
+  color: #BDBDBD;
 `
 
 const Date = styled.span`
   font-size: 10px;
+  color: #BDBDBD;
 `
 
 const SumaryContainer = styled.div`

@@ -35,7 +35,7 @@ const ScreenshotContainer = styled.div`
 
 
 const Title = styled.h3`
-  font-size: 24px;
+  font-size: 21px;
 `
 
 const GameInfoContainer = styled.div`

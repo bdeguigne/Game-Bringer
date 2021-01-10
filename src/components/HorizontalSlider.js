@@ -5,22 +5,22 @@ import { ArrowBackIos, ArrowForwardIos } from "@material-ui/icons"
 import Skeleton from '@material-ui/lab/Skeleton';
 import styled from 'styled-components';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import { SkeletonColor } from "../utils/styles";
+import {SectionTitle, SkeletonColor} from "../utils/styles";
 import { connect } from 'react-redux';
 
 const Container = styled.div`
   margin-top: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 48px;
 `
 
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
 `;
 
-const Title = styled.h3`
-  margin-top: 32px;
-  margin-bottom: 16px;
+const Title = styled(SectionTitle)`
+  margin-bottom: 0;
 `;
 
 const ArrowContainer = styled.div`
@@ -79,7 +79,7 @@ const CardStyleSkeleton = styled(Skeleton)`
   background-color: ${SkeletonColor} !important;
 
   &:hover {
-    box-shadow: 0px 7px 16px rgba(0, 0, 0, 0.527);
+    box-shadow: 0 7px 16px rgba(0, 0, 0, 0.527);
     transform: translateY(-10px);
   }
 

@@ -1,56 +1,59 @@
 /* This file allows to change the styles of the third party components */
 
 .carousel__dot--selected {
-  background-color: yellow;
+    background-color: yellow;
 }
 
 .carousel__slider--horizontal {
-  border-radius: 40px;
+    border-radius: 40px;
 }
 
 .carousel .slide {
-  background: none !important;
+    background: none !important;
 }
 
 .slider-wrapper.axis-horizontal {
-  /* NEW */
-    padding: 54px 50px;
+    /* NEW */
+    padding: 24px 16px;
 
     overflow: hidden !important;
-  max-width: 1200px;
-  /* width: 75% !important; */
-  width: 100% !important;
+    max-width: 1200px;
+    /* width: 75% !important; */
+    width: 100% !important;
+
+
 }
 
 .carousel li.slide.selected {
-  z-index: 10 !important;
+    z-index: 10 !important;
 }
 
 .carousel-video-player {
-  position: static !important;
+    position: static !important;
     border-radius: 45px;
 }
 
 .carousel-video-player div {
-  position: absolute;
+    object-fit: cover;
+    position: absolute;
     /*width: 632px !important;*/
-    height: 357px !important;
+    height: 483px !important;
 }
 
 .carousel .slide iframe {
-  margin: 0 !important;
-  width: 100% !important;
-  border-radius: 16px !important;
+    margin: 0 !important;
+    width: 100% !important;
+    border-radius: 16px !important;
 }
 
 .card-slider-video {
-  display: flex !important;
+    display: flex !important;
     height: 100% !important;
     width: 100% !important;
 }
 
 .MuiTab-labelIcon .MuiTab-wrapper > *:first-child {
-    margin-bottom: 0px !important;
+    margin-bottom: 0 !important;
     margin-right: 24px;
 }
 .MuiTooltip-tooltip.MuiTooltip-tooltipPlacementRight {
@@ -59,6 +62,18 @@
 
 .MuiTab-textColorInherit.Mui-selected {
     color: var(--primary-color-simple);
+}
+
+@media only screen and (min-width: 768px) {
+
+    /* For desktop */
+    .slider-wrapper.axis-horizontal {
+        padding: 55px 50px;
+    }
+
+    .carousel-video-player div {
+        height: 357px !important;
+    }
 }
 
 

@@ -3,19 +3,24 @@ import ShowCarousel from "./ShowCarousel";
 import TopRatedGames from "./TopRatedGames";
 import { connect } from "react-redux";
 import styled from 'styled-components';
-import {Padding} from '../utils/styles';
+import {Padding, SectionTitle} from '../utils/styles';
 import OtherGamesSlider from "./OtherGamesSlider";
 
 const TitleContainer = styled(Padding)`
     margin-top: 16px;
     padding-top: 34px;
+    font-size: 21px;
 `;
+
+const Title = styled(SectionTitle)`
+  margin-bottom: 0;
+`
 
 const HomePage = (props) => {
     return (
         <div>
             <TitleContainer>
-                <h2>Popular games right now</h2>
+                <Title>Popular games right now</Title>
             </TitleContainer>
 
             <div>
