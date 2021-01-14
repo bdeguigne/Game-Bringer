@@ -164,6 +164,13 @@ const Icon = styled(DateRange)`
   margin-right: 8px;
 `
 
+const PlaceholderImage = styled.img`
+  width: 100%;
+  height: 100%;
+  border-radius: 32px;
+  object-fit: cover;
+`
+
 function GameShowcase(props) {
     const {width} = useWindowDimensions();
 
@@ -180,8 +187,10 @@ function GameShowcase(props) {
                     <Container>
                         <ScreenshotContainer>
                             {/*<Screenshot src={`https://images.igdb.com/igdb/image/upload/t_screenshot_huge/${props.data.screenshots[0].image_id}.jpg`} />*/}
-                            {props.data.screenshots && (
+                            {props.data.screenshots ? (
                                 <CrossFadeImages active={props.showed} style={{borderRadius: width >= 738 ? 32 : 0}} images={props.data.screenshots} prefixUrl={"https://images.igdb.com/igdb/image/upload/t_screenshot_huge/"} interval={3000} onLoad={onLoad} />
+                            ) : (
+                                <PlaceholderImage src={process.env.PUBLIC_URL + "/assets/placeholder-big.png"} alt="Placeholder"/>
                             )}
                             {props.darkerImage && (
                                 <BottomDarker/>

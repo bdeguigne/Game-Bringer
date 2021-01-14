@@ -76,6 +76,7 @@ function ShowCarousel({ data, loadingStatus }) {
                 {data.length === 10 ? data.map((element, i) => {
                     return <CarouselItem
                         key={i}
+                        id={element.id}
                         isSelected={currentSlide === i}
                         imageId={element.screenshotID}
                         title={element.game}
@@ -87,6 +88,7 @@ function ShowCarousel({ data, loadingStatus }) {
                         releaseDate={element.releaseDate}
                         screenshots={element.screenshots}
                         summary={element.summary}
+                        onClick={(id) => console.log("IN SHOW CAROUSEL", id)}
                     />
                 }) : (
                         Array.from({ length: 10 }, (item, index) => {

@@ -95,6 +95,7 @@ const grabGameData = (games) => {
 
             //Check if the game is not already added
             if (gameID && !storedIds.includes(gameID)) {
+                const id = game.game.id;
                 const gameName = game.game.name;
                 const coverID = game.game.cover ? game.game.cover.image_id : null;
                 const genres = game.game.genres;
@@ -108,7 +109,8 @@ const grabGameData = (games) => {
                     genres,
                     screenshots,
                     releasedDate,
-                    rating
+                    rating,
+                    id
                 })
                 storedIds.push(gameID);
             }
@@ -128,6 +130,7 @@ export const getPopularGames = () => {
                 const popularGamesData = [];
                 // console.log("POPULAR RES ", res);
                 res.forEach(popularGame => {
+                    const id = popularGame.id;
                     const game = popularGame.name;
                     const rating = Math.round(popularGame.aggregated_rating);
                     const genres = popularGame.genres;
@@ -148,7 +151,8 @@ export const getPopularGames = () => {
                             releaseDate,
                             videoID,
                             screenshots,
-                            summary
+                            summary,
+                            id
                         })
                     }
                 })
@@ -204,6 +208,7 @@ export const getBestRatedGames = (time) => {
             .then(res => {
                 const bestRatedGamesData = [];
                 res.forEach(bestRatedGame => {
+                    const id = bestRatedGame.id;
                     const game = bestRatedGame.name;
                     const rating = Math.round(bestRatedGame.aggregated_rating);
                     const genres = bestRatedGame.genres;
@@ -220,6 +225,7 @@ export const getBestRatedGames = (time) => {
                         company,
                         releaseDate,
                         summary,
+                        id
                     })
                 })
                 dispatch({

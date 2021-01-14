@@ -91,7 +91,11 @@ function SimpleCard({ coverID, onLoad, game }) {
 
             <CardStyleContainer >
                 <Wrapper>
-                    {coverID && <Image onLoad={onLoad} alt="item" src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${coverID}.jpg`} />}
+                    {coverID ?
+                        <Image onLoad={onLoad} alt="item" src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${coverID}.jpg`} />
+                        :
+                        <Image src={process.env.PUBLIC_URL + "/assets/placeholder-cover.png"}/>
+                    }
                 </Wrapper>
             </CardStyleContainer>
         </HoverInfo>

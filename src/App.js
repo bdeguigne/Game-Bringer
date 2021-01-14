@@ -5,10 +5,13 @@ import HomePage from './components/HomePage';
 import TopBar from "./components/TopBar";
 import styled from 'styled-components';
 import { maxWidth } from './utils/styles';
+import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
+
 // REDUX
 import { connect } from "react-redux";
 import { getPopularGames, getRecentlyReleasedGames, getComingSoonGames, getBestRatedGames } from './redux/actions/homePageRequestsActions';
 import {bestRatedGames} from "./redux/constants/homePageRequestsConstants"
+import GameDetails from "./components/GameDetails";
 
 
 const MainContent = styled.div `
@@ -27,14 +30,23 @@ function App(props) {
     }, [props])
 
     return (
-        <div className="app">
-            <div>
-                <TopBar />
-                <MainContent>
-                    <HomePage />
-                </MainContent>
+        <Router>
+            <div className="app">
+                <div>
+                    <TopBar />
+                    <MainContent>
+                        <Switch>
+                            <Route path="/">
+                                <HomePage />
+                            </Route>
+                            <Route path="/:id">
+                                <GameDetails />
+                            </Route>
+                        </Switch>
+                    </MainContent>
+                </div>
             </div>
-        </div>
+        </Router>
     );
 }
 

@@ -185,7 +185,7 @@ const ScreenshotSkeleton = styled(Skeleton)`
   border-radius: 32px;
 `
 
-function CarouselItem({ imageId, isSelected, title, genres, rate, isLoading, company, videoId, releaseDate, screenshots, summary }) {
+function CarouselItem({ imageId, isSelected, title, genres, rate, isLoading, company, videoId, releaseDate, screenshots, summary, id, onClick }) {
     const [isHover, setIsHover] = useState(false);
     const [hide, setHide] = useState(false);
     const [imageLoaded, setImageLoaded] = useState(false);
@@ -201,6 +201,12 @@ function CarouselItem({ imageId, isSelected, title, genres, rate, isLoading, com
         if (isSelected === true) {
             setIsHover(false);
             setHide(false);
+        }
+    }
+
+    const onClickItem = () => {
+        if (isSelected === true) {
+            onClick(id);
         }
     }
 
@@ -220,7 +226,7 @@ function CarouselItem({ imageId, isSelected, title, genres, rate, isLoading, com
                 <FloatingGameDetails title={title} date={releaseDate.date} elapsedTime={releaseDate.elapsedTime} genres={genres} screenshots={screenshots} summary={summary}/>
             } placement={"right"} TransitionComponent={Fade} arrow={true} disableHoverListener={!isSelected} disableTouchListener={true} >
 
-                <Slide isSelected={isSelected} onMouseEnter={onSlideHover} onMouseLeave={onSlideLeave} videoReady={!hide}>
+                <Slide isSelected={isSelected} onMouseEnter={onSlideHover} onMouseLeave={onSlideLeave} videoReady={!hide} onClick={onClickItem}>
                     <Shine active={isHover && !hide && width >= 768 } borderColor={hide ? appColors.shine : appColors.secondaryDarker} childrenStyle={{top: "0.75%", left: "0.75%", height: "98.5%", width: "98.5%"}}>
                         <div style={{ position: "relative", borderRadius: "45px !important" }}>
                             {isHover && width >= 768 && (
