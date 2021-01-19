@@ -1,0 +1,5 @@
+export const filtersConstants = {
+    GET_GENRES: "FILTERS_GET_GENRES",
+    GET_MODES: "FILTERS_GET_MODES",
+    GET_PERSPECTIVE: "FILTERS_GET_PERSPECTIVE"
+}

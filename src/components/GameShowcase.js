@@ -8,6 +8,7 @@ import CrossFadeImages from "./CrossFadeImages";
 import {DateRange} from "@material-ui/icons";
 import GameShowcaseSkeleton from "./GameShowcaseSkeleton";
 import useWindowDimensions from "../utils/useWindowDimensions";
+import {withRouter} from "react-router-dom"
 
 export const FullWidthContainer = styled.div`
   display: flex;
@@ -178,6 +179,11 @@ function GameShowcase(props) {
         props.onLoad();
     }
 
+    function seeMore() {
+        let urlTitle = props.data.game.split(' ').join('_');
+        props.history.push("/" + props.data.id + "/" + urlTitle);
+    }
+
     return (
         <>
             {props.isLoading ? (
@@ -235,7 +241,7 @@ function GameShowcase(props) {
                                             )}
                                         </div>
                                         <SeeMoreContainer>
-                                            <Button color="primary">See more</Button>
+                                            <Button color="primary" onClick={seeMore}>See more</Button>
                                             <CircularProgressWithLabel value={props.data.rating} size={60}/>
                                         </SeeMoreContainer>
                                     </div>
@@ -270,4 +276,4 @@ GameShowcase.propTypes = {
     showed: PropTypes.bool
 }
 
-export default GameShowcase;
+export default withRouter(GameShowcase);

@@ -1,20 +1,19 @@
 import './App.css';
 import "./global.css";
 import React, { useEffect } from "react";
-import HomePage from './components/HomePage';
 import TopBar from "./components/TopBar";
 import styled from 'styled-components';
 import { maxWidth } from './utils/styles';
-import {BrowserRouter as Router, Switch, Route} from "react-router-dom";
-
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { routes } from "./routes"
 // REDUX
 import { connect } from "react-redux";
 import { getPopularGames, getRecentlyReleasedGames, getComingSoonGames, getBestRatedGames } from './redux/actions/homePageRequestsActions';
-import {bestRatedGames} from "./redux/constants/homePageRequestsConstants"
-import GameDetails from "./components/GameDetails";
+import { getFilters } from './redux/actions/filtersActions';
+import { bestRatedGames } from "./redux/constants/homePageRequestsConstants"
 
 
-const MainContent = styled.div `
+const MainContent = styled.div`
   margin: 0 auto;
   width: ${maxWidth};
   max-width: 100%;
@@ -27,6 +26,7 @@ function App(props) {
         props.getRecentlyReleasedGames();
         props.getComingSoonGames();
         props.getBestRatedGames(bestRatedGames.THIS_MONTH);
+        props.getFilters();
     }, [props])
 
     return (
@@ -36,12 +36,12 @@ function App(props) {
                     <TopBar />
                     <MainContent>
                         <Switch>
-                            <Route path="/">
-                                <HomePage />
-                            </Route>
-                            <Route path="/:id">
-                                <GameDetails />
-                            </Route>
+                            {routes.map((route, i) => {
+                                return (
+                                    <Route key={i} path={route.path} render={() => <route.component />} />
+                                )
+                            }
+                            )}
                         </Switch>
                     </MainContent>
                 </div>
@@ -54,7 +54,8 @@ const actionCreators = {
     getPopularGames,
     getRecentlyReleasedGames,
     getComingSoonGames,
-    getBestRatedGames
+    getBestRatedGames,
+    getFilters
 }
 
 function mapStateToProps() {

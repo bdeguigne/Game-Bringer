@@ -64,6 +64,10 @@
     color: var(--primary-color-simple);
 }
 
+/* .MuiCheckbox-colorPrimary.Mui-checked {
+    color: var(--primary-color-simple) !important;
+} */
+
 @media only screen and (min-width: 768px) {
 
     /* For desktop */

@@ -206,7 +206,7 @@ function CarouselItem({ imageId, isSelected, title, genres, rate, isLoading, com
 
     const onClickItem = () => {
         if (isSelected === true) {
-            onClick(id);
+            onClick(id, title);
         }
     }
 

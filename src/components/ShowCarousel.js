@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import PropTypes from 'prop-types';
 import useWindowDimensions from "../utils/useWindowDimensions";
-
 import { Carousel } from 'react-responsive-carousel';
 import CarouselItem from "./CarouselItem";
-
 import CarouselIndicator from "./CarouselIndicator";
 import styled from 'styled-components';
 import {appColors, ArrowIcon} from "../utils/styles";
+
+import {withRouter} from "react-router-dom"
 
 const Container = styled.div`
     position: relative;
@@ -45,7 +45,7 @@ const WhiteArrowIcon = styled(ArrowIcon)`
   margin-right: ${props => props.right ? "0" : "4px"};
 `
 
-function ShowCarousel({ data, loadingStatus }) {
+function ShowCarousel({ data, loadingStatus, history }) {
     const [currentSlide, setCurrentSlide] = useState(0);
     const {width} = useWindowDimensions();
 
@@ -53,6 +53,11 @@ function ShowCarousel({ data, loadingStatus }) {
         if (currentSlide !== index) {
             setCurrentSlide(index);
         }
+    }
+
+    const onClickItem = (id, title) => {
+        let urlTitle = title.split(' ').join('_');
+        history.push("/" + id + "/" + urlTitle);
     }
 
     return (
@@ -88,7 +93,7 @@ function ShowCarousel({ data, loadingStatus }) {
                         releaseDate={element.releaseDate}
                         screenshots={element.screenshots}
                         summary={element.summary}
-                        onClick={(id) => console.log("IN SHOW CAROUSEL", id)}
+                        onClick={onClickItem}
                     />
                 }) : (
                         Array.from({ length: 10 }, (item, index) => {
@@ -125,4 +130,4 @@ ShowCarousel.prototype = {
     games: PropTypes.array.isRequired
 }
 
-export default ShowCarousel;
+export default withRouter(ShowCarousel);

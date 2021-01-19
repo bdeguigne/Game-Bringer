@@ -1,15 +1,15 @@
-import { uiConstants } from "../constants/uiConstants";
+import { uiConstants, RouteIndex } from "../constants/uiConstants";
 
 let defaultState = {
-    menuExpanded: false
+    index: RouteIndex.HOMEPAGE
 }
 
 function UIReducer(state = defaultState, action) {
     switch (action.type) {
-        case uiConstants.EXPANDED_MENU_STATE:
+        case uiConstants.ROUTE_INDEX_STATE:
             return {
                 ...state,
-                menuExpanded: !state.menuExpanded
+                index: action.index
             }
         default:
             return state

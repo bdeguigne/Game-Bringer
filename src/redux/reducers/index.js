@@ -1,10 +1,12 @@
 import homePageRequests from "./homePageRequestsReducer";
 import uiReducer from "./uiReducer"; 
+import filtersReducer from './filtersReducer';
 import {combineReducers} from "redux";
 
 const reducers = combineReducers({
     homePageRequests,
-    uiReducer
+    uiReducer,
+    filtersReducer
 })
 
 export default reducers;

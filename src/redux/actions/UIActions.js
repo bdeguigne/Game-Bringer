@@ -1,9 +1,10 @@
 import {uiConstants} from "../constants/uiConstants";
 
-export const expandMenuState = () => {
+export const setRouteIndex = (index) => {
     return dispatch => {
         dispatch({
-            type: uiConstants.EXPANDED_MENU_STATE
+            index,
+            type: uiConstants.ROUTE_INDEX_STATE
         })
     }
 }

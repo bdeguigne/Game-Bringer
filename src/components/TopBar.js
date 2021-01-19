@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import SearchBar from "./SearchBar";
-import { Avatar, IconButton, Tooltip } from "@material-ui/core";
-import { NotificationsOutlined } from "@material-ui/icons";
+import { Tabs } from "@material-ui/core";
 import styled from "styled-components";
-import {appColors, Padding, topBarNeonBorder, topBarNeonBoxShadow, maxWidth} from "../utils/styles";
+import { appColors, Padding, topBarNeonBorder, topBarNeonBoxShadow, maxWidth } from "../utils/styles";
+import { withRouter } from "react-router-dom";
+import { compose } from "redux";
+import { connect } from "react-redux";
 
-const Container = styled(Padding)`
+const Container = styled.div`
   min-height: 50px;
     //border-bottom: 1px solid ${appColors[700]};
   border-bottom: ${topBarNeonBorder};
@@ -24,32 +26,82 @@ const Center = styled.div`
   margin: 0 auto;
 `
 
+const Wrapper = styled(Padding)`
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+`
+
 const RightLayout = styled.div`
   display: flex;
+  //border: 1px solid white;
 `;
 
-const Icon = styled(IconButton)`
-  margin-left: 16px !important;
+const TabsIcon = styled.span`
+  padding: 0 8px;
+  margin-left: 12px;
+  margin-right: 12px;
+  cursor: pointer;
+  width: 21px;
+  font-size: 21px;
+  
+  transition: color, text-shadow 0.3s;
+  color: ${props => props.active ? appColors.primarySimple : appColors.secondaryDarker}; 
+  text-shadow: ${props => props.active ? `0 0 2px rgba(255, 255, 255, 0.25), 0 0 16px ${appColors.primarySimple};` : "none"}; ;
+  
+  &:hover {
+    color: ${props => props.active ? appColors.primarySimple : appColors.secondary};
+  }
 `;
 
-function TopBar() {
-    return (
-        <Container>
-            <Center>
-                <SearchBar />
-                <RightLayout>
-                    <Tooltip title="Notifications">
-                        <Icon size="medium">
-                            <NotificationsOutlined />
-                        </Icon>
-                    </Tooltip>
-                    <Icon size="small">
-                        <Avatar alt="user" src="https://avatars.dicebear.com/4.5/api/bottts/abcdef.svg" />
-                    </Icon>
-                </RightLayout>
-            </Center>
-        </Container>
-    )
+function TopBar(props) {
+	const [tabValue, setTabValue] = useState(props.tabIndex);
+
+	useEffect(() => {
+		setTabValue(props.tabIndex);
+	}, [props.tabIndex]);
+
+
+
+	function exploreIconClick() {
+		setTabValue(0);
+		props.history.push("/");
+	}
+
+	function searchIconClick() {
+		setTabValue(1);
+		props.history.push("/search");
+	}
+
+	function reviewsIconClick() {
+		setTabValue(2);
+	}
+
+	return (
+		<Container>
+			<Center>
+				<Wrapper>
+					<SearchBar />
+					<RightLayout>
+						<Tabs value={tabValue}>
+							<TabsIcon active={tabValue === 0} className={"icon-compass"} onClick={exploreIconClick} />
+							<TabsIcon active={tabValue === 1} className={"icon-search-plus"} onClick={searchIconClick} />
+							<TabsIcon active={tabValue === 2} className={"icon-thumbs-up"} onClick={reviewsIconClick} />
+						</Tabs>
+					</RightLayout>
+				</Wrapper>
+			</Center>
+		</Container>
+	)
 }
 
-export default TopBar;
+function mapStateToProps(state) {
+	return {
+		tabIndex: state.uiReducer.index
+	}
+}
+
+export default compose(
+	withRouter,
+	connect(mapStateToProps)
+)(TopBar)

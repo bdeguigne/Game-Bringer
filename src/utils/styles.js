@@ -16,11 +16,14 @@ export const appColors = {
     "secondary": "rgb(109,93,211)",
     "secondaryTransparent": "rgba(109,93,211,0.2)",
     "secondaryDarker": "rgb(39,35,79, 1)",
-    "backgroundColor": "#0f101f",
+    "backgroundColor": "#0d0e1b",
     "backgroundContrast": "#08080f",
     "hover": "rgba(254,170,69, 0.04)",
     "primarySimple": "rgb(254,170,69)",
-    "shine": "#fff"
+    "shine": "#fff",
+
+    /* Advanced Search */
+    "searchResultItemBackground": "#1E141F"
 };
 
 /* Carousel */
@@ -78,6 +81,11 @@ export const PrimaryNeonBoxShadowHover = `0px 0px 64px -15px ${appColors.primary
 export const genresNeonBoxShadow = `0px 0px 64px -20px ${appColors.secondary}, 0px 0px 8px -4px #FFFFFF, inset 0px 0px 32px -15px ${appColors.secondary}`
 export const genresNeonBoxShadowHover = `0px 0px 64px 0px ${appColors.secondary}, 0px 0px 21px -4px #FFFFFF, inset 0px 0px 32px -15px ${appColors.secondary};`
 
+
+/* Advanced Search */
+
+export const resultItemBoxShadow = "0px 4px 4px rgba(0, 0, 0, 0.25);"
+export const advancedSearchPadding = "4px 6px 4px 6px";
 
 /* Others */
 

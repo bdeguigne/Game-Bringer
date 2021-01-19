@@ -3,7 +3,7 @@ import styled from "styled-components";
 import {gameShowNeonBoxShadow} from "../utils/styles";
 import {Tooltip, Fade} from "@material-ui/core";
 import FloatingGameDetails from "./FloatingGameDetails";
-
+import {withRouter} from "react-router-dom"
 
 const Image = styled.img`
   //box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.527);
@@ -83,13 +83,19 @@ const HoverInfo = styled(Tooltip)`
   padding: 0 !important;
 `
 
-function SimpleCard({ coverID, onLoad, game }) {
+function SimpleCard({ coverID, onLoad, game, history }) {
+
+    const onClick = () => {
+        let urlTitle = game.gameName.split(' ').join('_');
+        history.push("/" + game.id + "/" + urlTitle);
+    }
+
     return (
         <HoverInfo title={
             <FloatingGameDetails title={game.gameName} date={game.releasedDate.date} elapsedTime={game.releasedDate.elapsedTime} screenshots={game.screenshots} genres={game.genres}/>
         } placement={"right"} TransitionComponent={Fade} arrow={true}>
 
-            <CardStyleContainer >
+            <CardStyleContainer onClick={onClick}>
                 <Wrapper>
                     {coverID ?
                         <Image onLoad={onLoad} alt="item" src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${coverID}.jpg`} />
@@ -102,4 +108,4 @@ function SimpleCard({ coverID, onLoad, game }) {
     )
 }
 
-export default SimpleCard;
+export default withRouter(SimpleCard);

@@ -1,14 +1,22 @@
 import { createMuiTheme } from '@material-ui/core/styles';
 import {
     appColors,
-    sideNavPaddingLeft,
     toolTipBoxShadow,
     genresNeonBoxShadow,
     genresNeonBoxShadowHover,
-    PrimaryNeonBoxShadow, PrimaryNeonBoxShadowHover
+    PrimaryNeonBoxShadow, PrimaryNeonBoxShadowHover,
 } from "./utils/styles";
 
 export default createMuiTheme({
+    palette: {
+        type: "dark",
+        primary: {
+            main: appColors.primarySimple,
+        },
+        secondary: {
+            main: appColors.secondary
+        }
+    },
     overrides: {
         // Style sheet name ⚛️
         MuiButton: {
@@ -50,6 +58,9 @@ export default createMuiTheme({
 
         },
         MuiChip: {
+            colorPrimary: {
+                borderRadius: "8px",
+            },
             clickableColorPrimary: {
                 fontFamily: "Montserrat, sans-serif",
                 color: "white",
@@ -74,6 +85,10 @@ export default createMuiTheme({
             caption: {
                 fontFamily: "Montserrat, sans-serif",
                 color: "white",
+            },
+            body1: {
+                fontFamily: "Montserrat, sans-serif",
+                fontSize: "12px"
             }
         },
         typography: {
@@ -98,7 +113,7 @@ export default createMuiTheme({
         MuiTooltip: {
             tooltip: {
                 fontFamily: "Montserrat, sans-serif",
-                backgroundColor: appColors.backgroundContrast ,
+                backgroundColor: appColors.backgroundContrast,
                 boxShadow: toolTipBoxShadow
             },
             tooltipArrow: {
@@ -111,9 +126,7 @@ export default createMuiTheme({
             }
         },
         MuiTabs: {
-            root: {
-                width: "100%",
-            },
+
             flexContainer: {
                 paddingTop: "16px",
                 paddingBottom: "16px",
@@ -121,15 +134,14 @@ export default createMuiTheme({
             indicator: {
                 // width: "100%",
                 backgroundColor: appColors.primarySimple,
-                boxShadow: "rgb(255 255 255) 0px 0px 20px 0px, rgb(254,170,69) 0px 0px 20px 1px;"
+                boxShadow: "rgb(255 255 255) 0px 0px 20px 0px, rgb(254,170,69) 0px 0px 5px 0px;"
             }
         },
         MuiTab: {
             root: {
                 fontFamily: "Montserrat, sans-serif",
-                minWidth: 0,
                 // borderRadius: 10,
-                padding: `12px 0px 12px ${sideNavPaddingLeft} !important`,
+                // padding: `12px 0px 12px ${sideNavPaddingLeft} !important`,
                 textTransform: "inherit",
                 fontSize: "1rem",
                 transition: "0.3s ease",
@@ -152,6 +164,29 @@ export default createMuiTheme({
                 color: appColors["600"],
             }
 
-        }
+        },
+        MuiOutlinedInput: {
+            input: {
+                padding: "12.5px 14px"
+            }
+        },
+        MuiCheckbox: {
+            colorPrimary: {
+                color: appColors.primarySimple,
+                "&$checked": {
+                    color: appColors.primarySimple,
+                }
+            },
+            colorSecondary: {
+                "&$checked": {
+                    color: appColors.secondary,
+                }
+            },
+        },
+        MuiFormControlLabel: {
+            root: {
+                padding: 0
+            }
+        },
     }
 });

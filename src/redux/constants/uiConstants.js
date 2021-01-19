@@ -1,3 +1,9 @@
 export const uiConstants = {
-    EXPANDED_MENU_STATE: "UI_EXPANDED_MENU_STATE"
+    ROUTE_INDEX_STATE: "ROUTE_INDEX_STATE"
+}
+
+export const RouteIndex = {
+    HOMEPAGE: 0,
+    SEARCH: 1,
+    REVIEWS: 2
 }
