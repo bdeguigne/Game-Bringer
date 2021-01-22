@@ -1,7 +1,7 @@
 import {doRequest} from './request';
 
 export const getFilterRequest = () => {
-    let query = `query genres "Genres" {
+    const query = `query genres "Genres" {
         fields name, created_at, slug;
         sort created_at asc;
         limit 500;
@@ -17,4 +17,12 @@ export const getFilterRequest = () => {
     };`
 
     return doRequest("/multiquery", query);
+}
+
+export const searchByNameRequest = (endpoint, searchEntry) => {
+    const query = `fields name,slug;
+                    where name ~ *"${searchEntry}"*;
+                    limit 500;`
+
+    return doRequest(endpoint, query);
 }

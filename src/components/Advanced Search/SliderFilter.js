@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types';
 import { Slider, TextField } from '@material-ui/core';
 import styled from 'styled-components';
-import {advancedSearchPadding} from '../../utils/styles'
+import { advancedSearchPadding } from '../../utils/styles'
 
 const Container = styled.div`
 padding: ${advancedSearchPadding};
@@ -11,7 +11,6 @@ padding: ${advancedSearchPadding};
 const SliderContainer = styled.div`
     padding-left: 6px;
     padding-right: 6px;
-    
 `
 
 const TextFieldsContainer = styled.div`
@@ -25,8 +24,10 @@ const TextFieldWithMargin = styled(TextField)`
 `
 
 function SliderFilter(props) {
-    const [inputValue, setInputValue] = useState(props.value);
-    const [sliderValue, setSliderValue] = useState(props.value);
+    const [inputValue, setInputValue] = useState([0, 100]);
+    const [sliderValue, setSliderValue] = useState([0, 100]);
+    const [isFocusTextFields, setIsFocusTextFields] = useState(false);
+    const [isDefaultSet, setIsDefaultSet] = useState(false);
 
     const handleSliderChange = (event, newValue) => {
         setSliderValue(newValue);
@@ -34,31 +35,28 @@ function SliderFilter(props) {
     };
 
     useEffect(() => {
-        if (!isNaN(inputValue[0]) && !isNaN(inputValue[1]) && (inputValue[0] !== "" &&  inputValue[1] !== "")) {
+        if (!isNaN(inputValue[0]) && !isNaN(inputValue[1]) && (inputValue[0] !== "" && inputValue[1] !== "")) {
             if ((inputValue[0] >= 0 && inputValue[0] <= 100) &&
                 (inputValue[1] >= 0 && inputValue[1] <= 100)) {
                 setSliderValue(inputValue);
+                if (isFocusTextFields) {
+                    sendSliderValue(inputValue);
+                }
             }
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [inputValue])
 
-    useEffect(() => {
-        let results = {
-            title: props.title,
-            data: {
-                minimum: sliderValue[0],
-                maximum: sliderValue[1]
-            }
-        }
-        if (props.onChange) {
-            props.onChange(results);
-        }
-    }, [sliderValue, props])
 
     useEffect(() => {
-        setSliderValue(props.value);
-        setInputValue(props.value);
-    }, [props.value])
+        if (props.value && props.value[0] !== "" && isDefaultSet === false) {
+            let min = parseInt(props.value[0]);
+            let max = parseInt(props.value[1]);
+            setSliderValue([min, max]);
+            setInputValue([min, max]);
+            setIsDefaultSet(true);
+        }
+    }, [props.value, isDefaultSet])
 
     const onChange = (type, evt) => {
         let items = [...inputValue];
@@ -81,6 +79,22 @@ function SliderFilter(props) {
         setInputValue(items);
     }
 
+    const sendSliderValue = (inputValue) => {
+        let results = {
+            title: props.title,
+            type: "slider",
+            slug: props.title.toLowerCase(),
+            replace: true,
+            data: {
+                minimum: inputValue[0],
+                maximum: inputValue[1]
+            }
+        }
+        if (props.onChange) {
+            props.onChange(results);
+        }
+    }
+
     return (
         <Container>
             <SliderContainer>
@@ -89,24 +103,38 @@ function SliderFilter(props) {
                     onChange={handleSliderChange}
                     valueLabelDisplay="auto"
                     aria-labelledby="range-slider"
+                    onChangeCommitted={() => sendSliderValue(sliderValue)}
                 />
             </SliderContainer>
             <TextFieldsContainer>
-                <TextFieldWithMargin marginright={"4px"} variant="outlined" type="number" value={inputValue[0]} onChange={(text) => onChange("min", text)} label="Minimum" />
-                <TextFieldWithMargin marginright={"0"} variant="outlined" type="number" value={inputValue[1]} onChange={(text) => onChange("max", text)} label="Maximum" />
+                <TextFieldWithMargin
+                    marginright={"4px"}
+                    variant="outlined"
+                    type="number"
+                    value={inputValue[0]}
+                    onChange={(text) => onChange("min", text)}
+                    label="Minimum" 
+                    onFocus={() => setIsFocusTextFields(true)}
+                    onBlur={() => setIsFocusTextFields(false)}
+                />
+                <TextFieldWithMargin
+                    marginright={"0"}
+                    variant="outlined"
+                    type="number"
+                    value={inputValue[1]}
+                    onChange={(text) => onChange("max", text)} label="Maximum"
+                    onFocus={() => setIsFocusTextFields(true)}
+                    onBlur={() => setIsFocusTextFields(false)}
+                />
             </TextFieldsContainer>
         </Container>
     )
 }
 
-SliderFilter.defaultProps = {
-    value: [0, 100]
-}
-
 SliderFilter.propTypes = {
     title: PropTypes.string.isRequired,
     onChange: PropTypes.func,
-    value: PropTypes.array
+    value: PropTypes.array,
 }
 
 export default SliderFilter

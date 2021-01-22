@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Checkbox, FormControlLabel } from '@material-ui/core';
@@ -16,12 +16,11 @@ const Container = styled.div`
 `
 
 const SmallCheckBox = styled(Checkbox)`
-    /* padding: 0px 8px 0x 8px !important; */
     opacity: ${props => props.opacity ? props.opacity : 1};
 `
 
 function CheckboxFilter(props) {
-    const [isActiveByUrl] = useState(props.active)
+    // const [isActiveByUrl] = useState(props.active)
     const [checked, setChecked] = useState(props.active)
     const [exclude, setExclude] = useState(false)
 
@@ -30,28 +29,42 @@ function CheckboxFilter(props) {
     let slug = props.slug;
     let onChange = props.onChange;
 
-    useEffect(() => {
+    const sendChange = (data) => {
         let results = {
             title,
             type: "checkbox",
             slug: title.toLowerCase(),
-            data: {
-                label,
-                slug,
-                checked,
-                exclude
-            }
+            data: data
         }
-        if (onChange && !isActiveByUrl) {
+
+        if (onChange) {
             onChange(results)
         }
-    }, [checked, exclude, title, label, slug])
+    }
 
     const handleChangeChecked = (evt) => {
         let state = evt.target.checked;
+
         setChecked(state);
+
+        if (checked === true && state === false) {
+            sendChange({
+                label,
+                slug,
+                checked: false,
+                remove: true,
+                exclude
+            })
+        } else {
+            sendChange({
+                label,
+                slug,
+                checked: true,
+                exclude
+            })
+        }
+
         if (exclude === true) {
-            
             setExclude(false);
         }
     }
@@ -61,6 +74,7 @@ function CheckboxFilter(props) {
         setExclude(state);
         if (checked === true) {
             setChecked(false);
+
         }
     }
 

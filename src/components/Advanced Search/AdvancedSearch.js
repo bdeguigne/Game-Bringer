@@ -88,10 +88,11 @@ const AdvancedSearch = (props) => {
     }, [props]);
 
     const onFiltersChange = (activatedFilters) => {
-        console.log("ON FILTERS CHANGE", activatedFilters);
         
         const url = props.match.path + "?" + generateParams(activatedFilters);
         props.history.replace(url);
+
+        // console.log("FIND RATINGS", findValueFromQuery(activatedFilters, "ratings").split(","));
     }
 
     const searchInputClick = () => {

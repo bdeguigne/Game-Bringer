@@ -1,4 +1,4 @@
-import { SearchbarFilter } from "./SearchbarFilter";
+import TextFieldFilter from "./TextFieldFilter";
 import SliderFilter from "./SliderFilter";
 
 export function filters(genres, modes, perspectives) {
@@ -81,8 +81,13 @@ export function filters(genres, modes, perspectives) {
                 },
                 {
                     type: "component",
-                    component: SearchbarFilter,
-                    props: { label: "Other platforms", placeholder: "Select platforms" }
+                    component: TextFieldFilter,
+                    props: { 
+                        label: "Other platforms", 
+                        placeholder: "Select platforms", 
+                        slug: "platform", 
+                        exclude: ["win", "switch", "ps5", "ps4", "series-x", "xboxone"],
+                        endpoint: "/platforms"  }
                 }
             ]
         },
@@ -90,11 +95,6 @@ export function filters(genres, modes, perspectives) {
             title: "Genres",
             maxChildren: 5,
             children: renderedGenres
-        },
-        {
-            title: "Years",
-            collapse: false,
-            children: []
         },
         {
             title: "Modes",
@@ -112,24 +112,27 @@ export function filters(genres, modes, perspectives) {
             children: [
                 {
                     type: "component",
-                    component: SearchbarFilter,
-                    props: { label: "Companies", placeholder: "Select companies" }
+                    component: TextFieldFilter,
+                    props: { label: "Companies", placeholder: "Select companies", slug: "companies", endpoint: "/companies" }
                 }
             ]
         },
         {
             title: "Game engine",
+            slug: "game-engine",
             collapse: false,
             children: [
                 {
                     type: "component",
-                    component: SearchbarFilter,
-                    props: { label: "Game engine", placeholder: "Select game engines" }
+                    component: TextFieldFilter,
+                    props: { label: "Game engine", placeholder: "Select game engines", slug: "game-engine", endpoint: "/game_engines"  }
                 }
             ]
         },
     ]
 }
+
+// Utils function
 
 export function getFiltersWithQuery(query) {
     let result = {};
@@ -143,6 +146,7 @@ export function getFiltersWithQuery(query) {
 export const findValueFromQuery = (queryArray, findValue) => {
     let term = "";
 
+
     if (queryArray) {
         Object.entries(queryArray).forEach(
             ([key, value]) => {
@@ -154,16 +158,23 @@ export const findValueFromQuery = (queryArray, findValue) => {
     return term;
 }
 
-export const addAndGroupElem = (toAdd, type, data) => {
+export const addAndGroupElem = (toAdd, type, data, replace) => {
     let isNew = true;
-    // console.log("TOO ADD", toAdd);
 
     if (toAdd !== null) {
         Object.entries(toAdd).forEach(
             ([key, value]) => {
                 if (key === type) {
-                    // console.log("EXIST", key, type);
-                    toAdd[type] = toAdd[type] + "," + data;
+                    if (replace === true) {
+                        toAdd[type] = data;
+                    } else {
+                        let separator = ",";
+
+                        if (!toAdd || toAdd[type] === "") {
+                            separator = "";
+                        }
+                        toAdd[type] = toAdd[type] + separator + data;
+                    }
                     isNew = false;
                 }
             })
@@ -172,7 +183,6 @@ export const addAndGroupElem = (toAdd, type, data) => {
             toAdd[type] = data;
         }
     } else {
-        // console.log("LENGTH 0");
         toAdd = { [type]: data };
     }
     return toAdd;
@@ -191,11 +201,9 @@ export const isFiltersExist = (toCheck, type, data) => {
         Object.entries(toCheck).forEach(
             ([key, value]) => {
                 if (key === type) {
-                    // console.log(`${key} === ${type}`)
                     let filters = value.split(",");
                     filters.forEach(filter => {
                         if (filter === data) {
-                            // console.log(`FIND : ${filter} === ${data}`)
                             isExist = true;
                         }
                     })
@@ -207,19 +215,16 @@ export const isFiltersExist = (toCheck, type, data) => {
 
 export const replaceTerm = (toReplace, replaceValue) => {
     let hasTerm = false;
-    console.log("VALUE ===", replaceValue);
 
     if (toReplace) {
         Object.entries(toReplace).forEach(
             ([key, value]) => {
                 if (key === "term") {
-                    console.log(`${key} === term`, replaceValue)
                     hasTerm = true;
                     toReplace["term"] = replaceValue;
                 }
             })
             if (hasTerm === false) {
-                console.log(`${hasTerm} === false`)
                 toReplace["term"] = replaceValue;
 
                 return toReplace;
@@ -228,13 +233,23 @@ export const replaceTerm = (toReplace, replaceValue) => {
     }
 
     if (hasTerm === false) {
-        console.log(`${hasTerm} === false`)
         toReplace = {"term": replaceValue};
-        // toReplace =  {"term" : replaceValue};
     }
 
-    
-
-    console.log("REPLACE", toReplace);
     return toReplace;
+}
+
+export const removeTerm = (toRemove, title, filters) => {
+
+    if (toRemove) {
+        let splitFilters = filters[title].split(",");
+    
+        splitFilters = splitFilters.filter(item => {
+            return item !== toRemove.slug
+        })
+
+        filters[title] = splitFilters.join(",")
+
+        return filters;
+    }
 }

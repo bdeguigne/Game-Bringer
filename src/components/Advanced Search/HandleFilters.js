@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import styled from "styled-components";
 import Collapsable from './Collapsable';
-import { filters, addAndGroupElem, isFiltersExist, replaceTerm } from './filters';
+import { filters, addAndGroupElem, isFiltersExist, replaceTerm, findValueFromQuery, removeTerm } from './filters';
 import CheckboxFilter from './CheckboxFilter';
 import { connect } from 'react-redux';
 import { appColors } from "../../utils/styles";
@@ -30,16 +30,21 @@ function HandleFilters(props) {
     const [activatedFilters, setActivatedFilters] = useState(null)
 
     const addActivatedFilters = (filter) => {
+        let replace = false;
+
+        if (filter.replace) {
+            replace = filter.replace
+        }
         
-        const res = addAndGroupElem(activatedFilters, filter.type, filter.data);
+        const res = addAndGroupElem(activatedFilters, filter.type, filter.data, replace);
 
         setActivatedFilters(res);
         onChange()
     }
 
-    const removeActivatedFilters = (toRemoved) => {
-        // const updatedFilter = activatedFilters.filter(filter => filter.data !== toRemoved);
-        // setActivatedFilters(updatedFilter);
+    const removeActivatedFilters = (toRemoved, titleSlug) => {
+        setActivatedFilters(removeTerm(toRemoved, titleSlug, activatedFilters))
+        onChange();
     }
 
     const onChange = useCallback(
@@ -54,7 +59,6 @@ function HandleFilters(props) {
 
     useEffect(() => {
         if (props.queryFilters && Object.keys(props.queryFilters).length !== 0  && !activatedFilters) {
-            console.log("GET QUERY FILTERS", props.queryFilters);
             setActivatedFilters(props.queryFilters);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -80,10 +84,23 @@ function HandleFilters(props) {
                         type: data.slug,
                         data: data.data.slug
                     })
-                } else {
-                    // console.log("FALSE", data.data.slug);
-                    removeActivatedFilters(data.data.slug);
+                } else if (data.data.remove && data.data.remove === true) {
+                    removeActivatedFilters(data.data, data.slug)
                 }
+                break;
+            case "slider":
+                addActivatedFilters({
+                    type: data.slug,
+                    replace: true,
+                    data: `${data.data.minimum},${data.data.maximum}`
+                })
+                break;
+            case "textField":
+                addActivatedFilters({
+                    type: data.slug,
+                    replace: true,
+                    data: `${data.data}`
+                })
                 break;
             default:
                 break;
@@ -92,7 +109,7 @@ function HandleFilters(props) {
 
     function isFilterActive(title, label) {
         // console.log("is filter ACTIVE", activatedFilters, title, label);
-            return isFiltersExist(activatedFilters, title, label)
+        return isFiltersExist(activatedFilters, title, label)
     }
 
     const renderFilters = (child, filter, index) => {
@@ -100,7 +117,7 @@ function HandleFilters(props) {
             case "checkbox":
                 return <CheckboxFilter key={index} onChange={onChangeFilter} label={child.label} title={filter.title} slug={child.slug} active={isFilterActive(filter.title.toLowerCase(), child.slug)} />
             case "component":
-                return <child.component key={index} onChange={onChangeFilter} title={filter.title} {...child.props} />
+                return <child.component key={index} onChange={onChangeFilter} title={filter.title} value={findValueFromQuery(activatedFilters, filter.slug || filter.title.toLowerCase()).split(",")} {...child.props} />
             case "divider":
                 return <Divider key={index} />
             default:

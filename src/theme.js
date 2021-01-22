@@ -188,5 +188,15 @@ export default createMuiTheme({
                 padding: 0
             }
         },
+        MuiSlider: {
+          valueLabel: {
+              fontFamily: "Montserrat, sans-serif",
+          }  
+        },
+        MuiFormLabel: {
+            root: {
+                fontFamily: "Montserrat, sans-serif",
+            }
+        }
     }
 });

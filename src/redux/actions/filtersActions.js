@@ -1,4 +1,4 @@
-import { getFilterRequest } from '../services/filtersService';
+import { getFilterRequest, searchByNameRequest } from '../services/filtersService';
 import { filtersConstants } from '../constants/filtersConstants'
 
 export const getFilters = () => {
@@ -36,6 +36,27 @@ export const getFilters = () => {
                     data: perspective
                 })
 
+            })
+            .catch(error => console.log("getFilters error", error))
+    }
+}
+
+export const searchByName = (endpoint, searchEntry, slug) => {
+    return (dispatch) => {
+        dispatch({
+            type: filtersConstants.TEXTFIELDS_RES_REQUEST
+        })
+        searchByNameRequest(endpoint, searchEntry)
+            .then(res => res.json())
+            .then(res => {
+                console.log("SEARCH BY NAME RES", slug);
+
+                dispatch({
+                    type: filtersConstants.SET_TEXTFIELDS_SEARCH_RES,
+                    res: {
+                        [slug]: res
+                    }
+                })
             })
             .catch(error => console.log("getFilters error", error))
     }
