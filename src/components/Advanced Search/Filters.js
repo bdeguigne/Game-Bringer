@@ -45,6 +45,7 @@ export function filters(genres, modes, perspectives) {
         },
         {
             title: "Platform",
+            collapse: false,
             children: [
                 {
                     type: "checkbox",

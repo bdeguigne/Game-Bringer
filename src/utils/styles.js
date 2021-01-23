@@ -23,7 +23,8 @@ export const appColors = {
     "shine": "#fff",
 
     /* Advanced Search */
-    "searchResultItemBackground": "#1E141F"
+    "searchResultItemBackground": "#1E141F",
+    "filtersBackgroundColor": "#141529"
 };
 
 /* Carousel */

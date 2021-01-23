@@ -1,4 +1,5 @@
 import { createMuiTheme } from '@material-ui/core/styles';
+// import type from '@material-ui/lab/themeAugmentation';
 import {
     appColors,
     toolTipBoxShadow,
@@ -197,6 +198,35 @@ export default createMuiTheme({
             root: {
                 fontFamily: "Montserrat, sans-serif",
             }
+        },
+        MuiTreeItem:{
+            root: {
+                border: `1px solid ${appColors.filtersBackgroundColor}`,
+                "&$selected > .MuiTreeItem-content .MuiTreeItem-label": {
+                    backgroundColor: appColors.secondaryDarker + "!important"
+                },
+               
+            },
+            content: {
+                position: "relative"
+            },
+            label: {
+                background: appColors.filtersBackgroundColor,
+                padding: "4px 4px 4px 6px !important",
+                "&:hover":{
+                    backgroundColor: appColors.secondaryTransparent + "!important"
+                },
+            },
+            iconContainer: {
+                position: "absolute",
+                right: 0,
+                zIndex: 3
+            },
+            group: {
+                marginLeft: 0,
+            },
+            
         }
+
     }
 });
