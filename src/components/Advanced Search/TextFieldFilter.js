@@ -29,10 +29,6 @@ const TextFieldFilter = (props) => {
             props.exclude.forEach(exclude => {
                 if (exclude === element) {
                     isExclude = true;
-                    // if (!excludeData.find(excludeElem => excludeElem === exclude)) {
-                    //     console.log("AAAHAHAHAHAHA", excludeData);
-                    //     setExcludeData(data => [...data, element]);
-                    // }
                 }
             })
         }
@@ -42,7 +38,7 @@ const TextFieldFilter = (props) => {
 
     const onInputChange = (evt, value, reason) => {
         if (props.searchResults.length === 0) {
-            props.searchByName(props.endpoint, "", props.slug);
+            props.searchByName(props.endpoint, "", props.slug, props.exclude);
         }
     }
 
@@ -58,7 +54,7 @@ const TextFieldFilter = (props) => {
 
     const onOpen = () => {
         if (props.searchResults.length === 0) {
-            props.searchByName(props.endpoint, "", props.slug);
+            props.searchByName(props.endpoint, "", props.slug, props.exclude);
         } else {
             let isExist = false;
             props.searchResults.forEach(element => {
@@ -67,7 +63,7 @@ const TextFieldFilter = (props) => {
                 }
             });
             if (!isExist) {
-                props.searchByName(props.endpoint, "", props.slug);
+                props.searchByName(props.endpoint, "", props.slug, props.exclude);
             }
         }
     }
@@ -184,8 +180,8 @@ TextFieldFilter.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
-    isRequest: state.filtersReducer.searchResult.isRequest,
-    searchResults: state.filtersReducer.searchResult.res
+    isRequest: state.filtersReducer.textFieldSearchResult.isRequest,
+    searchResults: state.filtersReducer.textFieldSearchResult.res
 })
 
 const mapDispatchToProps = {

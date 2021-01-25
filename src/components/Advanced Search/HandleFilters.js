@@ -55,8 +55,10 @@ function HandleFilters(props) {
     const [loadedFilters, setLoadedFilters] = useState([]);
     const [collapseIds, setCollapseIds] = useState([]);
 
-    const addActivatedFilters = (filter) => {
+    const addActivatedFilters = (data) => {
         let replace = false;
+
+        const filter = data.front;
 
         if (filter.replace) {
             replace = filter.replace
@@ -85,14 +87,14 @@ function HandleFilters(props) {
 
     useEffect(() => {
         if (props.queryFilters && Object.keys(props.queryFilters).length !== 0 && !activatedFilters) {
-            setActivatedFilters(props.queryFilters);
+            setActivatedFilters({front: props.queryFilters});
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.queryFilters])
 
     useEffect(() => {
         if (props.term !== "") {
-            setActivatedFilters(replaceTerm(activatedFilters, props.term))
+            setActivatedFilters(replaceTerm(activatedFilters.front, props.term))
             onChange();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -107,8 +109,10 @@ function HandleFilters(props) {
             case "checkbox":
                 if (data.data.checked === true) {
                     addActivatedFilters({
-                        type: data.slug,
-                        data: data.data.slug
+                        front: {
+                            type: data.slug,
+                            data: data.data.slug,
+                        }
                     })
                 } else if (data.data.remove && data.data.remove === true) {
                     removeActivatedFilters(data.data, data.slug)
@@ -116,16 +120,20 @@ function HandleFilters(props) {
                 break;
             case "slider":
                 addActivatedFilters({
-                    type: data.slug,
-                    replace: true,
-                    data: `${data.data.minimum},${data.data.maximum}`
+                    front: {
+                        type: data.slug,
+                        replace: true,
+                        data: `${data.data.minimum},${data.data.maximum}`
+                    }
                 })
                 break;
             case "textField":
                 addActivatedFilters({
-                    type: data.slug,
-                    replace: true,
-                    data: `${data.data}`
+                    front: {
+                        type: data.slug,
+                        replace: true,
+                        data: `${data.data}`
+                    }
                 })
                 break;
             default:
@@ -134,16 +142,15 @@ function HandleFilters(props) {
     }
 
     function isFilterActive(title, label) {
-        // console.log("is filter ACTIVE", activatedFilters, title, label);
-        return isFiltersExist(activatedFilters, title, label)
+        return isFiltersExist(activatedFilters?.front, title, label)
     }
 
     const renderFilters = (child, filter, index) => {
         switch (child.type) {
             case "checkbox":
-                return <CheckboxFilter key={index} onChange={onChangeFilter} label={child.label} title={filter.title} slug={child.slug} active={isFilterActive(filter.title.toLowerCase(), child.slug)} />
+                return <CheckboxFilter key={index} onChange={onChangeFilter} label={child.label} title={filter.title} titleSlug={filter.slug} slug={child.slug} active={isFilterActive(filter.slug || filter.title.toLowerCase(), child.slug)} />
             case "component":
-                return <child.component key={index} onChange={onChangeFilter} title={filter.title} value={findValueFromQuery(activatedFilters, filter.slug || filter.title.toLowerCase()).split(",")} {...child.props} />
+                return <child.component key={index} onChange={onChangeFilter} title={filter.title} value={findValueFromQuery(activatedFilters?.front, filter.slug || filter.title.toLowerCase()).split(",")} {...child.props} />
             case "divider":
                 return <Divider key={index} />
             default:
@@ -152,8 +159,6 @@ function HandleFilters(props) {
     }
 
     const onSeeAllClick = (index) => {
-        console.log("On See all ", index);
-
         setExpand([...expand, {
             index,
             state: true
@@ -182,7 +187,7 @@ function HandleFilters(props) {
                 if (filter.collapse === false) {
                     isCollapse = false
                 }
-                if (activatedFilters && activatedFilters[filter.slug || filter.title.toLowerCase()] && activatedFilters[filter.slug || filter.title.toLowerCase()] !== "") {
+                if (activatedFilters && activatedFilters.front && activatedFilters.front[filter.slug || filter.title.toLowerCase()] && activatedFilters.front[filter.slug || filter.title.toLowerCase()] !== "") {
                     isCollapse = true;
                 }
                 if (isCollapse === true) {

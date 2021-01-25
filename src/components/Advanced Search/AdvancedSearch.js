@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { appColors } from "../../utils/styles";
 import { InputBase } from "@material-ui/core";
 import { setRouteIndex } from "../../redux/actions/UIActions";
+import { search } from '../../redux/actions/filtersActions';
 import TermChip from "./TermChip";
 import { RouteIndex } from "../../redux/constants/uiConstants";
 import SearchResultCard from "./SearchResultCard";
@@ -57,10 +58,16 @@ const SearchIcon = styled.span`
     font-size: 24px;
 `
 
+const Row = styled.div`
+    display: flex;
+    width: 100%;
+`
 
 const ResultContainer = styled.div`
   margin-top: 24px;
   display: flex;
+  flex-direction: column;
+  width: 100%;
 `
 
 const AdvancedSearch = (props) => {
@@ -71,16 +78,12 @@ const AdvancedSearch = (props) => {
 
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
-        // console.log("QUERY PARAMS", queryParams);
-
         setQueryFilters(getFiltersWithQuery(queryParams));
-
-        // console.log("SEARCH TERM", findValueFromQuery(queryFilters));
 
         if (searchValue === "") {
             setSearchValue(findValueFromQuery(queryFilters, "term"));
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location])
 
     useEffect(() => {
@@ -88,11 +91,12 @@ const AdvancedSearch = (props) => {
     }, [props]);
 
     const onFiltersChange = (activatedFilters) => {
-        
-        const url = props.match.path + "?" + generateParams(activatedFilters);
-        props.history.replace(url);
+        // console.log("ACTIVATED FILTERS", activatedFilters);
+        props.search(activatedFilters.front);
 
-        // console.log("FIND RATINGS", findValueFromQuery(activatedFilters, "ratings").split(","));
+        const url = props.match.path + "?" + generateParams(activatedFilters.front);
+
+        props.history.replace(url);
     }
 
     const searchInputClick = () => {
@@ -107,92 +111,56 @@ const AdvancedSearch = (props) => {
         }
     }
 
+    // useEffect(() => {
+    //     console.log("IN REACT", props.searchResult)
+    // }, [props.searchResult])
+
     return (
         <Padding>
             <SearchContainer>
                 <SearchBar>
-                    <SearchInput 
+                    <SearchInput
                         placeholder={"Search and discover new games"}
-                        onChange={(evt) => setSearchValue(evt.target.value)} 
+                        onChange={(evt) => setSearchValue(evt.target.value)}
                         value={searchValue}
                         onKeyPress={onKeyPressed}
                     />
                     <SearchButtonContainer onClick={searchInputClick}>
-                        <SearchIcon className="icon-search"/>
+                        <SearchIcon className="icon-search" />
                     </SearchButtonContainer>
                 </SearchBar>
             </SearchContainer>
             <TermChip term={findValueFromQuery(queryFilters, "term")} />
-            <ResultContainer>
-                <SearchResultCard
-                    game={"Marvel's Spider-Man: Miles Morales"}
-                    developer={"Activision"}
-                    date={{ elapsedTime: "2 months ago", date: "Dec 11, 2020" }}
-                    platforms={[
-                        {
-                            "id": 6,
-                            "name": "PC (Microsoft Windows)",
-                            "platform_logo": {
-                                "id": 203,
-                                "image_id": "irwvwpl023f8y19tidgq"
-                            }
-                        },
-                        {
-                            "id": 48,
-                            "name": "PlayStation 4",
-                            "platform_logo": {
-                                "id": 231,
-                                "image_id": "pl6f"
-                            }
-                        },
-                        {
-                            "id": 49,
-                            "name": "Xbox One",
-                            "platform_logo": {
-                                "id": 329,
-                                "image_id": "pl95"
-                            }
-                        },
-                        {
-                            "id": 167,
-                            "name": "PlayStation 5",
-                            "platform_logo": {
-                                "id": 463,
-                                "image_id": "plcv"
-                            }
-                        },
-                        {
-                            "id": 169,
-                            "name": "Xbox Series",
-                            "platform_logo": {
-                                "id": 561,
-                                "image_id": "plfl"
-                            }
-                        },
-                        {
-                            "id": 170,
-                            "name": "Google Stadia",
-                            "platform_logo": {
-                                "id": 328,
-                                "image_id": "pl94"
-                            }
-                        }
-                    ]}
-                    coverId={"co2dwe"}
-                    rating={83}
-                />
+            <Row>
+                <ResultContainer>
+                    {props.searchResult && props.searchResult.map(res => {
+                        return (
+                            <SearchResultCard
+                                game={res.name}
+                                developer={res.company?.name}
+                                date={res.releaseDate}
+                                platforms={res.platforms}
+                                coverId={res.coverID}
+                                rating={res.rating}
+                            />
+                        )
+                    })}
+                </ResultContainer>
                 <HandleFilters queryFilters={queryFilters} onChange={onFiltersChange} term={searchTerm} />
-            </ResultContainer>
+            </Row>
         </Padding>
     );
 }
 
 const actionCreators = {
-    setRouteIndex
+    setRouteIndex,
+    search
 }
 
 function mapStateToProps(state) {
-    return {};
+    return {
+        searchResult: state.filtersReducer.searchResult
+    };
 }
 
 export default compose(

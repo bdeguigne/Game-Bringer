@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from "styled-components";
-import {appColors, resultItemBoxShadow} from "../../utils/styles";
-import {Tooltip, ButtonBase} from "@material-ui/core";
+import { appColors, resultItemBoxShadow } from "../../utils/styles";
+import { Tooltip, ButtonBase } from "@material-ui/core";
 import CircularProgressWithLabel from "../CircularProgressWithLabel";
 
 const Container = styled.div`
@@ -55,7 +55,7 @@ const LeftContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  //width: 60%;
+  width: 50%;
 `
 
 const Game = styled.div`
@@ -99,59 +99,67 @@ const DateContainer = styled.div`
 
 
 const SearchResultCard = props => {
-    return (
+  return (
 
-        <Container>
-            <RippleEffect>
-                <CoverContainer>
-                    <Cover alt={"Result game cover"} src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${props.coverId}.jpg`}/>
-                </CoverContainer>
-                <Content>
-                    <LeftContent>
-                        <div>
-                            <Game>
-                                {props.game}
-                            </Game>
-                            <Developer>
-                                {props.developer}
-                            </Developer>
-                        </div>
-                        <PlatformsContainer>
-                            {props.platforms.map((platform, i) => {
-                                return (
-                                    <Tooltip key={i} title={platform.name}>
-                                        <PlatformLogo  alt={"platform logo"} src={`https://images.igdb.com/igdb/image/upload/t_logo_med/${platform.platform_logo.image_id}.png`} />
-                                    </Tooltip>
-                                )
-                            })}
-                        </PlatformsContainer>
-                    </LeftContent>
+    <Container>
+      <RippleEffect>
+        {props.coverId && (
+          <CoverContainer>
+            <Cover alt={"Result game cover"} src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${props.coverId}.jpg`} />
+          </CoverContainer>
+        )}
+        <Content>
+          <LeftContent>
+            <div>
+              <Game>
+                {props.game}
+              </Game>
+              <Developer>
+                {props.developer}
+              </Developer>
+            </div>
+            <PlatformsContainer>
+              {props.platforms && props.platforms.map((platform, i) => {
+                if (platform.platform_logo) {
+                  return (
+                    <Tooltip key={i} title={platform.name}>
+                      <PlatformLogo alt={"platform logo"} src={`https://images.igdb.com/igdb/image/upload/t_logo_med/${platform.platform_logo.image_id}.png`} />
+                    </Tooltip>
+                  )
+                } else {
+                  return null
+                }
+              })}
+            </PlatformsContainer>
+          </LeftContent>
 
-                    <ContentCenter>
-                        <DateContainer>
-                            <div>{props.date.date}</div>
-                            <div>({props.date.elapsedTime})</div>
-                        </DateContainer>
-                    </ContentCenter>
+          {props.date && (
+            <ContentCenter>
+              <DateContainer>
+                <div>{props.date.date}</div>
+                <div>({props.date.elapsedTime})</div>
+              </DateContainer>
+            </ContentCenter>
+          )}
 
-                    <ContentCenter>
-                        <CircularProgressWithLabel value={props.rating} size={60}/>
-                    </ContentCenter>
-                </Content>
+          <ContentCenter>
+            <CircularProgressWithLabel value={props.rating} size={60} />
+          </ContentCenter>
+        </Content>
 
-            </RippleEffect>
-        </Container>
+      </RippleEffect>
+    </Container>
 
-    );
+  );
 };
 
 SearchResultCard.propTypes = {
-    game: PropTypes.string,
-    developer: PropTypes.string,
-    platforms: PropTypes.array,
-    date: PropTypes.object,
-    rating: PropTypes.number,
-    coverId: PropTypes.string
+  game: PropTypes.string,
+  developer: PropTypes.string,
+  platforms: PropTypes.array,
+  date: PropTypes.object,
+  rating: PropTypes.number,
+  coverId: PropTypes.string
 };
 
 export default SearchResultCard;

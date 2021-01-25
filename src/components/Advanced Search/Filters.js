@@ -36,15 +36,20 @@ export function filters(genres, modes, perspectives) {
     return [
         {
             title: "Ratings",
+            slug: "rating",
             children: [
                 {
                     type: "component",
-                    component: SliderFilter
+                    component: SliderFilter,
+                    props: {
+                        slug: "rating"
+                    }
                 },
             ],
         },
         {
             title: "Platform",
+            slug: "platforms",
             collapse: false,
             children: [
                 {
@@ -86,7 +91,7 @@ export function filters(genres, modes, perspectives) {
                     props: { 
                         label: "Other platforms", 
                         placeholder: "Select platforms", 
-                        slug: "platform", 
+                        slug: "platforms", 
                         exclude: ["win", "switch", "ps5", "ps4", "series-x", "xboxone"],
                         endpoint: "/platforms"  }
                 }
@@ -99,11 +104,13 @@ export function filters(genres, modes, perspectives) {
         },
         {
             title: "Modes",
+            slug: "game_modes",
             collapse: false,
             children: renderedModes
         },
         {
             title: "Perspectives",
+            slug: "player_perspectives",
             collapse: false,
             children: renderedPerspectives
         },
@@ -120,13 +127,13 @@ export function filters(genres, modes, perspectives) {
         },
         {
             title: "Game engine",
-            slug: "game-engine",
+            slug: "game_engines",
             collapse: false,
             children: [
                 {
                     type: "component",
                     component: TextFieldFilter,
-                    props: { label: "Game engine", placeholder: "Select game engines", slug: "game-engine", endpoint: "/game_engines"  }
+                    props: { label: "Game engine", placeholder: "Select game engines", slug: "game_engines", endpoint: "/game_engines"  }
                 }
             ]
         },
@@ -161,30 +168,37 @@ export const findValueFromQuery = (queryArray, findValue) => {
 
 export const addAndGroupElem = (toAdd, type, data, replace) => {
     let isNew = true;
+    
 
     if (toAdd !== null) {
-        Object.entries(toAdd).forEach(
+        Object.entries(toAdd.front).forEach(
             ([key, value]) => {
                 if (key === type) {
                     if (replace === true) {
-                        toAdd[type] = data;
+                        toAdd.front[type] = data
                     } else {
                         let separator = ",";
 
-                        if (!toAdd || toAdd[type] === "") {
+                        if (!toAdd || toAdd.front[type] === "") {
                             separator = "";
                         }
-                        toAdd[type] = toAdd[type] + separator + data;
+                        // toAdd[type] = toAdd[type] + separator + data;
+                        toAdd.front[type] = toAdd.front[type] + separator + data;
+                        
                     }
                     isNew = false;
                 }
             })
 
         if (isNew === true) {
-            toAdd[type] = data;
+            toAdd.front[type] = data;
+            // add.front[type] = data;
         }
     } else {
-        toAdd = { [type]: data };
+        toAdd = {
+            front: { [type]: data }
+        }
+        // toAdd = { [type]: data };
     }
     return toAdd;
 }
@@ -197,7 +211,7 @@ export const generateParams = (filtersArray) => {
 
 export const isFiltersExist = (toCheck, type, data) => {
     let isExist = false;
-    
+
     if (toCheck) {
         Object.entries(toCheck).forEach(
             ([key, value]) => {
@@ -242,15 +256,17 @@ export const replaceTerm = (toReplace, replaceValue) => {
 
 export const removeTerm = (toRemove, title, filters) => {
 
-    if (toRemove) {
-        let splitFilters = filters[title].split(",");
+
+    if (toRemove && filters) {
+        let splitFilters = filters.front[title].split(",");
     
         splitFilters = splitFilters.filter(item => {
             return item !== toRemove.slug
         })
 
-        filters[title] = splitFilters.join(",")
+        filters.front[title] = splitFilters.join(",")
 
         return filters;
     }
+
 }

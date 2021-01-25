@@ -220,7 +220,7 @@ export default createMuiTheme({
             iconContainer: {
                 position: "absolute",
                 right: 0,
-                zIndex: 3
+                zIndex: 1
             },
             group: {
                 marginLeft: 0,

@@ -83,7 +83,7 @@ function SliderFilter(props) {
         let results = {
             title: props.title,
             type: "slider",
-            slug: props.title.toLowerCase(),
+            slug: props.slug,
             replace: true,
             data: {
                 minimum: inputValue[0],
@@ -135,6 +135,7 @@ SliderFilter.propTypes = {
     title: PropTypes.string.isRequired,
     onChange: PropTypes.func,
     value: PropTypes.array,
+    slug: PropTypes.string
 }
 
 export default SliderFilter

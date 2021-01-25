@@ -4,10 +4,11 @@ let defaultState = {
     genres: [],
     modes: [],
     perspectives: [],
-    searchResult: {
+    textFieldSearchResult: {
         isRequest: false,
         res: []
-    }
+    },
+    searchResult: []
 }
 
 function filtersReducer(state = defaultState, action) {
@@ -30,18 +31,23 @@ function filtersReducer(state = defaultState, action) {
         case filtersConstants.SET_TEXTFIELDS_SEARCH_RES:
             return {
                 ...state,
-                searchResult: {
-                    res: [...state.searchResult.res, action.res],
+                textFieldSearchResult: {
+                    res: [...state.textFieldSearchResult.res, action.res],
                     isRequest: false
                 }
             }
         case filtersConstants.TEXTFIELDS_RES_REQUEST:
             return {
                 ...state,
-                searchResult: {
-                    ...state.searchResult,
+                textFieldSearchResult: {
+                    ...state.textFieldSearchResult,
                     isRequest: true
                 }
+            }
+        case filtersConstants.SET_SEARCH_RESULTS:
+            return {
+                ...state,
+                searchResult: action.data
             }
         default:
             return state

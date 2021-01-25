@@ -33,7 +33,7 @@ function CheckboxFilter(props) {
         let results = {
             title,
             type: "checkbox",
-            slug: title.toLowerCase(),
+            slug: props.titleSlug || title.toLowerCase(),
             data: data
         }
 
@@ -112,7 +112,8 @@ CheckboxFilter.propTypes = {
     label: PropTypes.string.isRequired,
     onChange: PropTypes.func,
     slug: PropTypes.string.isRequired,
-    active: PropTypes.bool.isRequired
+    active: PropTypes.bool.isRequired,
+    titleSlug: PropTypes.string,
 }
 
 export default CheckboxFilter
