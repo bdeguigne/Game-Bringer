@@ -73,8 +73,8 @@ const PlatformsContainer = styled.div`
 `
 
 const PlatformLogo = styled.img`
-  width: 25px;
-  height: 25px;
+  width: 17px;
+  height: 17px;
   object-fit: cover;
   margin-right: 8px;
   filter: grayscale();
@@ -103,11 +103,13 @@ const SearchResultCard = props => {
 
     <Container>
       <RippleEffect>
-        {props.coverId && (
-          <CoverContainer>
+        <CoverContainer>
+          {props.coverId ? (
             <Cover alt={"Result game cover"} src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${props.coverId}.jpg`} />
-          </CoverContainer>
-        )}
+          ) : (
+              <Cover alt={"Result game cover"} src={process.env.PUBLIC_URL + "/assets/placeholder-cover.png"} />
+            )}
+        </CoverContainer>
         <Content>
           <LeftContent>
             <div>
@@ -137,7 +139,9 @@ const SearchResultCard = props => {
             <ContentCenter>
               <DateContainer>
                 <div>{props.date.date}</div>
-                <div>({props.date.elapsedTime})</div>
+                {props.date.elapsedTime && (
+                  <div>({props.date.elapsedTime})</div>
+                )}
               </DateContainer>
             </ContentCenter>
           )}

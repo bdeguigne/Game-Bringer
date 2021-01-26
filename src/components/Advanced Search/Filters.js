@@ -14,14 +14,16 @@ export function filters(genres, modes, perspectives) {
         renderedGenres.push({
             type: "checkbox",
             label: genre.name,
-            slug: genre.slug
+            slug: genre.slug,
+            id: genre.id
         })
     });
     modes.forEach(mode => {
         renderedModes.push({
             type: "checkbox",
             label: mode.name,
-            slug: mode.slug
+            slug: mode.slug,
+            id: mode.id
         })
     });
 
@@ -29,7 +31,8 @@ export function filters(genres, modes, perspectives) {
         renderedPerspectives.push({
             type: "checkbox",
             label: perspective.name,
-            slug: perspective.slug
+            slug: perspective.slug,
+            id: perspective.id
         })
     });
 
@@ -55,32 +58,38 @@ export function filters(genres, modes, perspectives) {
                 {
                     type: "checkbox",
                     label: "PC (Microsoft Windows)",
-                    slug: "win"
+                    slug: "win",
+                    id: 6,
                 },
                 {
                     type: "checkbox",
                     label: "Nintendo Switch",
-                    slug: "switch"
+                    slug: "switch",
+                    id: 130
                 },
                 {
                     type: "checkbox",
                     label: "Playstation 5",
-                    slug: "ps5"
+                    slug: "ps5",
+                    id: 167
                 },
                 {
                     type: "checkbox",
                     label: "Playstation 4",
-                    slug: "ps4"
+                    slug: "ps4",
+                    id: 48
                 },
                 {
                     type: "checkbox",
                     label: "Xbox Series",
-                    slug: "series-x"
+                    slug: "series-x",
+                    id: 169
                 },
                 {
                     type: "checkbox",
                     label: "Xbox One",
-                    slug: "xboxone"
+                    slug: "xboxone",
+                    id: 49
                 },
                 {
                     type: "divider"
@@ -92,7 +101,7 @@ export function filters(genres, modes, perspectives) {
                         label: "Other platforms", 
                         placeholder: "Select platforms", 
                         slug: "platforms", 
-                        exclude: ["win", "switch", "ps5", "ps4", "series-x", "xboxone"],
+                        exclude: ["6", "130", "167", "48", "169", "49"],
                         endpoint: "/platforms"  }
                 }
             ]
@@ -212,6 +221,7 @@ export const generateParams = (filtersArray) => {
 export const isFiltersExist = (toCheck, type, data) => {
     let isExist = false;
 
+    
     if (toCheck) {
         Object.entries(toCheck).forEach(
             ([key, value]) => {
@@ -224,23 +234,26 @@ export const isFiltersExist = (toCheck, type, data) => {
                     })
                 }
             })
-    }
+        }
+        // console.log("IS FILTER EXISTS", toCheck)
     return isExist;
 }
 
 export const replaceTerm = (toReplace, replaceValue) => {
     let hasTerm = false;
 
-    if (toReplace) {
-        Object.entries(toReplace).forEach(
+    console.log("REPLACE", toReplace, replaceValue)
+
+    if (toReplace?.front) {
+        Object.entries(toReplace.front).forEach(
             ([key, value]) => {
                 if (key === "term") {
                     hasTerm = true;
-                    toReplace["term"] = replaceValue;
+                    toReplace.front["term"] = replaceValue;
                 }
             })
             if (hasTerm === false) {
-                toReplace["term"] = replaceValue;
+                toReplace.front["term"] = replaceValue;
 
                 return toReplace;
                 // toReplace =  {"term" : replaceValue};
@@ -248,8 +261,12 @@ export const replaceTerm = (toReplace, replaceValue) => {
     }
 
     if (hasTerm === false) {
-        toReplace = {"term": replaceValue};
+        toReplace = {
+            front: {"term": replaceValue}
+        };
     }
+
+    console.log("TOO REPLACE", toReplace)
 
     return toReplace;
 }

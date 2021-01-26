@@ -33,6 +33,7 @@ const TextFieldFilter = (props) => {
             })
         }
 
+        console.log("ISS", isExclude, props.exclude, element);
         return isExclude;
     }
 
@@ -46,7 +47,7 @@ const TextFieldFilter = (props) => {
         setValue(value)
         const options = Array.prototype.map.call(value,
             function (item) {
-                return item.slug;
+                return item.id;
             }).join(",");
 
         sendChange(options);
@@ -97,7 +98,7 @@ const TextFieldFilter = (props) => {
                 if (correctDefault === false) {
                     props.value.forEach(query => {
                         result.forEach(element => {
-                            if (element.slug === query && !isExclude(query)) {
+                            if (element.id === parseInt(query) && !isExclude(query)) {
                                 correctData.push(element);
                             }
                         })

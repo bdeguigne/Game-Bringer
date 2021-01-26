@@ -91,7 +91,7 @@ const AdvancedSearch = (props) => {
     }, [props]);
 
     const onFiltersChange = (activatedFilters) => {
-        // console.log("ACTIVATED FILTERS", activatedFilters);
+        console.log("ACTIVATED FILTERS", activatedFilters);
         props.search(activatedFilters.front);
 
         const url = props.match.path + "?" + generateParams(activatedFilters.front);
@@ -133,9 +133,10 @@ const AdvancedSearch = (props) => {
             <TermChip term={findValueFromQuery(queryFilters, "term")} />
             <Row>
                 <ResultContainer>
-                    {props.searchResult && props.searchResult.map(res => {
+                    {props.searchResult && props.searchResult.map((res, i) => {
                         return (
                             <SearchResultCard
+                                key={i}
                                 game={res.name}
                                 developer={res.company?.name}
                                 date={res.releaseDate}

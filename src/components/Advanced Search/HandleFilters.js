@@ -94,7 +94,7 @@ function HandleFilters(props) {
 
     useEffect(() => {
         if (props.term !== "") {
-            setActivatedFilters(replaceTerm(activatedFilters.front, props.term))
+            setActivatedFilters(replaceTerm(activatedFilters, props.term))
             onChange();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -148,7 +148,7 @@ function HandleFilters(props) {
     const renderFilters = (child, filter, index) => {
         switch (child.type) {
             case "checkbox":
-                return <CheckboxFilter key={index} onChange={onChangeFilter} label={child.label} title={filter.title} titleSlug={filter.slug} slug={child.slug} active={isFilterActive(filter.slug || filter.title.toLowerCase(), child.slug)} />
+                return <CheckboxFilter key={index} onChange={onChangeFilter} label={child.label} title={filter.title} titleSlug={filter.slug} slug={child.slug} id={child.id} active={isFilterActive(filter.slug || filter.title.toLowerCase(), child.id?.toString())} />
             case "component":
                 return <child.component key={index} onChange={onChangeFilter} title={filter.title} value={findValueFromQuery(activatedFilters?.front, filter.slug || filter.title.toLowerCase()).split(",")} {...child.props} />
             case "divider":
@@ -202,32 +202,7 @@ function HandleFilters(props) {
 
     return (
         <FiltersContainer>
-            {/* {filters(props.genres, props.modes, props.perspectives).map((filter, filterIndex) => {
-                return (
-                    <Collapsable
-                        key={filterIndex}
-                        index={filterIndex}
-                        title={filter.title}
-                        showAll={!filter.maxChildren}
-                        onSeeAllClick={onSeeAllClick}
-                        collapse={filter.collapse !== undefined ? filter.collapse : true}
-                    >
-                        {filter.children && filter.children.map((child, childIndex) => {
-                            if (filter.maxChildren) {
-                                if (childIndex < renderedChildrenCount(filterIndex, filter)) {
-                                    return renderFilters(child, filter, childIndex)
-                                } else {
-                                    return null;
-                                }
-                            } else {
-                                return renderFilters(child, filter, childIndex)
-                            }
-
-                        })}
-                    </Collapsable>
-                )
-            })} */}
-            {collapseIds.length > 0 && (
+        {collapseIds.length > 0 && (
                 <LargeTreeView
                     defaultCollapseIcon={<ExpandMore />}
                     defaultExpandIcon={<ChevronLeft />}
