@@ -12,6 +12,7 @@ import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { TreeItem, TreeView } from '@material-ui/lab';
 import { ExpandMore, ChevronLeft } from '@material-ui/icons';
+import { correctIds } from '../../redux/actions/filtersActions'
 
 const FiltersContainer = styled.div`
     width: 238px;
@@ -45,8 +46,16 @@ const SeeAllContainer = styled.div`
     width: 100%;
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     user-select: none;
     font-size: 12px;
+`
+
+const DoubleArrowIcon = styled.span`
+    font-size: 14px !important;
+    margin-left: 4px;
+    transform: rotate(-90deg);
+    color: ${appColors.primarySimple};
 `
 
 function HandleFilters(props) {
@@ -54,6 +63,9 @@ function HandleFilters(props) {
     const [activatedFilters, setActivatedFilters] = useState(null);
     const [loadedFilters, setLoadedFilters] = useState([]);
     const [collapseIds, setCollapseIds] = useState([]);
+    const [expandIds, setExpandIds] = useState([]);
+    const [correctChipIds, setCorrectChipIds] = useState(false);
+    const [isFiltersLoaded, setIsFiltersLoaded] = useState(false);
 
     const addActivatedFilters = (data) => {
         let replace = false;
@@ -64,14 +76,14 @@ function HandleFilters(props) {
             replace = filter.replace
         }
 
-        const res = addAndGroupElem(activatedFilters, filter.type, filter.data, replace);
+        const res = addAndGroupElem(activatedFilters, filter.type, filter.data, filter.label, replace);
 
         setActivatedFilters(res);
         onChange()
     }
 
     const removeActivatedFilters = (toRemoved, titleSlug) => {
-        setActivatedFilters(removeTerm(toRemoved, titleSlug, activatedFilters))
+        setActivatedFilters(removeTerm(toRemoved.slug, toRemoved.label, titleSlug, activatedFilters))
         onChange();
     }
 
@@ -87,8 +99,11 @@ function HandleFilters(props) {
 
     useEffect(() => {
         if (props.queryFilters && Object.keys(props.queryFilters).length !== 0 && !activatedFilters) {
-            setActivatedFilters({front: props.queryFilters});
-        }
+            setActivatedFilters(
+                { front: props.queryFilters, chip: JSON.parse(JSON.stringify(props.queryFilters)) },
+            );
+        } 
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.queryFilters])
 
@@ -112,6 +127,7 @@ function HandleFilters(props) {
                         front: {
                             type: data.slug,
                             data: data.data.slug,
+                            label: data.data.label
                         }
                     })
                 } else if (data.data.remove && data.data.remove === true) {
@@ -132,7 +148,8 @@ function HandleFilters(props) {
                     front: {
                         type: data.slug,
                         replace: true,
-                        data: `${data.data}`
+                        data: `${data.data}`,
+                        label: data.label
                     }
                 })
                 break;
@@ -148,9 +165,9 @@ function HandleFilters(props) {
     const renderFilters = (child, filter, index) => {
         switch (child.type) {
             case "checkbox":
-                return <CheckboxFilter key={index} onChange={onChangeFilter} label={child.label} title={filter.title} titleSlug={filter.slug} slug={child.slug} id={child.id} active={isFilterActive(filter.slug || filter.title.toLowerCase(), child.id?.toString())} />
+                return <CheckboxFilter key={index} onChange={onChangeFilter} label={child.label} title={filter.title} titleSlug={filter.slug || filter.title.toLowerCase()} slug={child.slug} id={child.id} active={isFilterActive(filter.slug || filter.title.toLowerCase(), child.id?.toString())} activatedFilters={props.activatedFilters} refresh={props.refreshFilters}/>
             case "component":
-                return <child.component key={index} onChange={onChangeFilter} title={filter.title} value={findValueFromQuery(activatedFilters?.front, filter.slug || filter.title.toLowerCase()).split(",")} {...child.props} />
+                return <child.component key={index} onChange={onChangeFilter} title={filter.title} value={findValueFromQuery(activatedFilters?.front, filter.slug || filter.title.toLowerCase()).split(",")} valueLabel={props.isCorrectSet ? findValueFromQuery(activatedFilters?.chip, filter.slug || filter.title.toLowerCase()).split(",") : []} activatedFilters={props.activatedFilters} refresh={props.refreshFilters} {...child.props} />
             case "divider":
                 return <Divider key={index} />
             default:
@@ -176,10 +193,51 @@ function HandleFilters(props) {
         return count;
     }
 
+    const correctChipIdsOnStart = (filtersData) => {
+        if (filtersData.length > 0 && activatedFilters && !correctChipIds) {
+            const needRequestIds = [];
+
+            Object.keys(activatedFilters.chip).forEach(key => {
+                const replaceFiltersArray = [];
+
+                filtersData.forEach(filter => {
+                    if ((filter.slug || filter.title.toLowerCase()) === key) {
+                        switch (key) {
+                            case "ratings":
+                                break;
+                            default:
+                                let chipValue = activatedFilters.chip[key].split(",");
+
+                                chipValue.forEach(chipId => {
+                                    filter.children.forEach(child => {
+                                        if (child.id === parseInt(chipId)) {
+                                            replaceFiltersArray.push(child.label)
+                                            chipValue = chipValue.filter(item => item !== chipId)
+                                        }
+                                    })
+                                })
+                                if (chipValue.length > 0) {
+                                    needRequestIds.push({ ids: chipValue, slug: key })
+                                }
+
+                                activatedFilters.chip[key] = replaceFiltersArray.concat(chipValue).join(",")
+
+                        }
+                        setActivatedFilters(activatedFilters);
+                        onChange()
+                        setCorrectChipIds(true);
+                    }
+                })
+            })
+            props.correctIds(needRequestIds);
+        }
+    }
+
     useEffect(() => {
-        if (props.genres && props.modes && props.perspectives) {
+        if (isFiltersLoaded) {
             const filtersData = filters(props.genres, props.modes, props.perspectives);
             const ids = [];
+
 
             filtersData.forEach((filter, index) => {
                 let isCollapse = true;
@@ -196,17 +254,42 @@ function HandleFilters(props) {
             })
 
             setCollapseIds(ids);
+            setExpandIds(ids);
             setLoadedFilters(filtersData);
         }
-    }, [props.genres, props.modes, props.perspectives, activatedFilters])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isFiltersLoaded, activatedFilters])
+
+    useEffect(() => {
+        if (isFiltersLoaded) {
+            if (activatedFilters) {
+                correctChipIdsOnStart(loadedFilters);
+            } else {
+                setCorrectChipIds(true)
+            }
+        }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isFiltersLoaded, loadedFilters, activatedFilters])
+
+    useEffect(() => {
+        if (props.genres.length > 0 && props.modes.length > 0 && props.perspectives.length > 0) {
+            setIsFiltersLoaded(true)
+        }
+    }, [props.genres, props.modes, props.perspectives])
+
+    // useEffect(() => {
+    //     // setActivatedFilters(props.activatedFilters)
+    // }, [props.refresh, props.activatedFilters])
 
     return (
         <FiltersContainer>
-        {collapseIds.length > 0 && (
+            {collapseIds.length > 0 && (
                 <LargeTreeView
                     defaultCollapseIcon={<ExpandMore />}
                     defaultExpandIcon={<ChevronLeft />}
                     defaultExpanded={collapseIds}
+                    onNodeToggle={(evt, value) => setExpandIds(value)}
                 >
                     {loadedFilters.map((filter, filterIndex) => {
                         return (
@@ -225,9 +308,10 @@ function HandleFilters(props) {
 
                                     })}
                                 </TreeItem>
-                                {filter.maxChildren && (
+                                {filter.maxChildren && expandIds.includes(filterIndex.toString()) && !expand.find(elem => elem.index === filterIndex) && (
                                     <SeeAllContainer>
                                         <SeeAllButton onClick={() => onSeeAllClick(filterIndex)}>See all</SeeAllButton>
+                                        <DoubleArrowIcon className="icon-double-arrow" />
                                     </SeeAllContainer>
                                 )}
 
@@ -243,7 +327,12 @@ function HandleFilters(props) {
 HandleFilters.propTypes = {
     queryFilters: PropTypes.object,
     onChange: PropTypes.func,
-    term: PropTypes.string
+    term: PropTypes.string,
+    refresh: PropTypes.number
+}
+
+const actionCreators = {
+    correctIds
 }
 
 function mapStateToProps(state) {
@@ -251,10 +340,13 @@ function mapStateToProps(state) {
         genres: state.filtersReducer.genres,
         modes: state.filtersReducer.modes,
         perspectives: state.filtersReducer.perspectives,
+        isCorrectSet: state.uiReducer.isCorrectIds,
+        activatedFilters: state.uiReducer.activatedFilters,
+        refreshFilters: state.uiReducer.refreshFilters
     };
 }
 
 export default compose(
     withRouter,
-    connect(mapStateToProps)
+    connect(mapStateToProps, actionCreators)
 )(HandleFilters);

@@ -146,9 +146,11 @@ const SearchResultCard = props => {
             </ContentCenter>
           )}
 
-          <ContentCenter>
-            <CircularProgressWithLabel value={props.rating} size={60} />
-          </ContentCenter>
+          {!isNaN(props.rating) && (
+            <ContentCenter>
+              <CircularProgressWithLabel value={props.rating} size={60} />
+            </ContentCenter>
+          )}
         </Content>
 
       </RippleEffect>

@@ -3,15 +3,15 @@ import { connect } from 'react-redux';
 import styled from "styled-components";
 import { appColors } from "../../utils/styles";
 import { InputBase } from "@material-ui/core";
-import { setRouteIndex } from "../../redux/actions/UIActions";
+import { setRouteIndex, setIsCorrectIds, setActivatedFiltersAction } from "../../redux/actions/UIActions";
 import { search } from '../../redux/actions/filtersActions';
-import TermChip from "./TermChip";
+import TermChip from "./ChipFilters";
 import { RouteIndex } from "../../redux/constants/uiConstants";
 import SearchResultCard from "./SearchResultCard";
 import { Padding } from '../../utils/styles';
 import HandleFilters from './HandleFilters';
 import { useLocation, withRouter } from "react-router-dom";
-import { generateParams, getFiltersWithQuery, findValueFromQuery } from './filters'
+import { generateParams, getFiltersWithQuery, findValueFromQuery, replace } from './filters'
 import { compose } from 'redux';
 
 const SearchContainer = styled.div`
@@ -64,7 +64,7 @@ const Row = styled.div`
 `
 
 const ResultContainer = styled.div`
-  margin-top: 24px;
+  /* margin-top: 24px; */
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -75,6 +75,8 @@ const AdvancedSearch = (props) => {
     const [queryFilters, setQueryFilters] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [searchValue, setSearchValue] = useState("");
+    const [activatedFilters, setActivatedFilters] = useState({})
+    const [refresh, setRefresh] = useState(0);
 
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
@@ -91,7 +93,11 @@ const AdvancedSearch = (props) => {
     }, [props]);
 
     const onFiltersChange = (activatedFilters) => {
-        console.log("ACTIVATED FILTERS", activatedFilters);
+        console.log("ON FILTERS CHANGE", activatedFilters);
+        setRefresh(prev => prev + 1);
+        
+        setActivatedFilters(activatedFilters);
+        props.setActivatedFiltersAction(activatedFilters);
         props.search(activatedFilters.front);
 
         const url = props.match.path + "?" + generateParams(activatedFilters.front);
@@ -110,6 +116,47 @@ const AdvancedSearch = (props) => {
             evt.preventDefault();
         }
     }
+
+    useEffect(() => {
+        if (props.correctIds.length > 0) {
+            const alreadyCorrectIds = [];
+
+            Object.keys(activatedFilters.chip).forEach(filterKey => {
+                props.correctIds.forEach(correctData => {
+                    if (filterKey === correctData.name) {
+                        let isCompany = false;
+
+                        if (correctData.name === "companies") {
+                            isCompany = true;
+                        }
+
+                        let filterValue = activatedFilters.chip[filterKey].split(",");
+
+                        filterValue.forEach(value => {
+                            correctData.result.forEach(data => {
+                                const id = isCompany ? data.company.id : data.id;
+                                if (!alreadyCorrectIds.includes(id) && id === parseInt(value)) {
+                                    isCompany ? filterValue.push(data.company.name) : filterValue.push(data.name)
+                                    filterValue = filterValue.filter(item => parseInt(item) !== id)
+                                    alreadyCorrectIds.push(id);
+                                }
+                            })
+                        })
+
+                        const correctFilters = filterValue.join(",");
+                        
+
+                        activatedFilters.chip = replace(activatedFilters.chip, filterKey, correctFilters);
+
+                    }
+                })
+            })
+            console.log("EEEND", activatedFilters)
+            props.setIsCorrectIds(true);
+            onFiltersChange(activatedFilters);
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.correctIds, activatedFilters])
 
     // useEffect(() => {
     //     console.log("IN REACT", props.searchResult)
@@ -130,7 +177,7 @@ const AdvancedSearch = (props) => {
                     </SearchButtonContainer>
                 </SearchBar>
             </SearchContainer>
-            <TermChip term={findValueFromQuery(queryFilters, "term")} />
+            <TermChip activatedFilters={activatedFilters} onChangeFilters={onFiltersChange}/>
             <Row>
                 <ResultContainer>
                     {props.searchResult && props.searchResult.map((res, i) => {
@@ -147,7 +194,7 @@ const AdvancedSearch = (props) => {
                         )
                     })}
                 </ResultContainer>
-                <HandleFilters queryFilters={queryFilters} onChange={onFiltersChange} term={searchTerm} />
+                <HandleFilters queryFilters={queryFilters} onChange={onFiltersChange} term={searchTerm} refresh={refresh} />
             </Row>
         </Padding>
     );
@@ -155,12 +202,15 @@ const AdvancedSearch = (props) => {
 
 const actionCreators = {
     setRouteIndex,
-    search
+    search,
+    setIsCorrectIds,
+    setActivatedFiltersAction
 }
 
 function mapStateToProps(state) {
     return {
-        searchResult: state.filtersReducer.searchResult
+        searchResult: state.filtersReducer.searchResult,
+        correctIds: state.filtersReducer.correctIds
     };
 }
 

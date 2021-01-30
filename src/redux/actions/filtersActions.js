@@ -1,6 +1,7 @@
-import { getFilterRequest, searchByNameRequest, searchRequest } from '../services/filtersService';
+import { getFilterRequest, searchByNameRequest, searchRequest, correctIdsRequest } from '../services/filtersService';
 import { filtersConstants } from '../constants/filtersConstants'
 import { findDeveloper, getElapsedTime } from '../../utils/requestFormat';
+import moment from 'moment';
 
 export const getFilters = () => {
     return (dispatch) => {
@@ -50,7 +51,7 @@ export const searchByName = (endpoint, searchEntry, slug, exclude) => {
         searchByNameRequest(endpoint, searchEntry, exclude)
             .then(res => res.json())
             .then(res => {
-                console.log("SEARCH BY NAME RES", slug);
+                // console.log("SEARCH BY NAME RES", slug);
 
                 dispatch({
                     type: filtersConstants.SET_TEXTFIELDS_SEARCH_RES,
@@ -63,6 +64,48 @@ export const searchByName = (endpoint, searchEntry, slug, exclude) => {
     }
 }
 
+export const correctIds = (needRequestArray) => {
+    const genQuery = () => {
+        console.log("REDUX ", needRequestArray)
+        const queryData = []
+
+        needRequestArray.forEach(filter => {
+            if (filter.slug === "companies") {
+                queryData.push({
+                    endpoint: "involved_companies",
+                    name: filter.slug,
+                    fields: "company.name",
+                    condition: `company = (${filter.ids.join(",")})`
+                })
+            } else {
+                queryData.push({
+                    endpoint: `${filter.slug}`,
+                    name: filter.slug,
+                    fields: "name",
+                    condition: `id = (${filter.ids.join(",")})`
+                })
+            }
+        })
+
+        return queryData;
+    }
+
+    return (dispatch) => {
+        const queryData = genQuery();
+        console.log("QUERY GEN", queryData);
+        correctIdsRequest(queryData)
+            .then(res => res.json())
+            .then(res => {
+                console.log("CORRECT IDS RES", res);
+                dispatch({
+                    type: filtersConstants.SET_CORRECT_IDS,
+                    data: res
+                })
+            })
+            .catch(err => console.log("error CorrectIds", err))
+    }
+}
+
 export const search = (filters) => {
     function generateFilterQuery() {
 
@@ -70,7 +113,7 @@ export const search = (filters) => {
 
         if (filters) {
             Object.keys(filters).forEach(key => {
-                console.log("OBJ", key);
+                // console.log("OBJ", key);
 
                 switch (key) {
                     case "term":
@@ -80,17 +123,28 @@ export const search = (filters) => {
                     case "rating":
                         const [min, max] = filters[key].split(",");
 
-                        const formatFiltersRates = `aggregated_rating >= ${min} & aggregated_rating <= ${max}`;
+                        const formatFiltersRates = `aggregated_rating >= ${min} & aggregated_rating <= ${max} & aggregated_rating != null`;
                         filtersQueryArray.push(formatFiltersRates);
                         break
                     case "companies":
                         const formatFiltersCompanies = "involved_companies.company = (" + filters[key].split(",").map(filter => `${filter}`).join(',') + ")";
                         filtersQueryArray.push(formatFiltersCompanies);
                         break;
+                    case "year":
+                        const years = filters[key].split(",");
+                        const datesQuery = []
+
+                        years.forEach(year => {
+                            const unixYear = moment({ year }).format("X");
+                            const unixYearEnd = moment({ year }).add(1, 'y').format("X");
+                            const dateQuery = `first_release_date >= ${unixYear} & first_release_date <= ${unixYearEnd}`;
+                            datesQuery.push(dateQuery);
+                        })
+                        filtersQueryArray.push(datesQuery.join(" | "));
+                        break;
                     default:
                         if (filters[key] !== "") {
                             const formatFilters = key + " = [" + filters[key].split(",").map(filter => `${filter}`).join(',') + "]";
-                            console.log("ELSE", formatFilters);
                             filtersQueryArray.push(formatFilters);
                         }
                 }

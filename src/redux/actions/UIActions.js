@@ -8,3 +8,21 @@ export const setRouteIndex = (index) => {
         })
     }
 }
+
+export const setIsCorrectIds = (state) => {
+    return dispatch => {
+        dispatch({
+            type: uiConstants.FILTERS_CORRECT_IDS,
+            state
+        })
+    }
+}
+
+export const setActivatedFiltersAction = (activatedFilters) => {
+    return dispatch => {
+        dispatch({
+            type: uiConstants.SET_ACTIVATED_FILTERS,
+            activatedFilters
+        })
+    }
+}

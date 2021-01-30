@@ -8,7 +8,8 @@ let defaultState = {
         isRequest: false,
         res: []
     },
-    searchResult: []
+    searchResult: [],
+    correctIds: []
 }
 
 function filtersReducer(state = defaultState, action) {
@@ -48,6 +49,11 @@ function filtersReducer(state = defaultState, action) {
             return {
                 ...state,
                 searchResult: action.data
+            }
+        case filtersConstants.SET_CORRECT_IDS:
+            return {
+                ...state,
+                correctIds: action.data
             }
         default:
             return state

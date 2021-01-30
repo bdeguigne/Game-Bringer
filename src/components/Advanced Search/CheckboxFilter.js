@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Checkbox, FormControlLabel } from '@material-ui/core';
 import { advancedSearchPadding, appColors } from '../../utils/styles';
+import { isFiltersExist } from './filters';
 
 const Container = styled.div`
     display: flex;
@@ -26,7 +27,6 @@ function CheckboxFilter(props) {
 
     let title = props.title;
     let label = props.label;
-    let slug = props.slug;
     let id = props.id.toString();
     let onChange = props.onChange;
 
@@ -79,9 +79,10 @@ function CheckboxFilter(props) {
         }
     }
 
-    // useEffect(() => {
-    //     console.log("IDDD", props.id);
-    // }, [props.id])
+    useEffect(() => {
+        let isExist = isFiltersExist(props.activatedFilters.chip, props.titleSlug, props.label);
+        setChecked(isExist);
+    }, [props.refresh])
 
     return (
         <Container checked={checked || exclude}>
@@ -119,7 +120,9 @@ CheckboxFilter.propTypes = {
     slug: PropTypes.string.isRequired,
     active: PropTypes.bool.isRequired,
     titleSlug: PropTypes.string,
-    id: PropTypes.number
+    id: PropTypes.number,
+    activatedFilters: PropTypes.object,
+    refresh: PropTypes.number
 }
 
 export default CheckboxFilter

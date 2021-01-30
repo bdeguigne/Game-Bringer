@@ -10,6 +10,7 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 //REDUX
 import { searchByName } from '../../redux/actions/filtersActions';
+import { Refresh } from '@material-ui/icons'
 
 const Container = styled.div`
     padding: ${advancedSearchPadding};
@@ -18,22 +19,23 @@ const Container = styled.div`
 const TextFieldFilter = (props) => {
     const [suggestionsData, setSuggestionsData] = useState([]);
     const [value, setValue] = useState([]);
-    const [defaultSet, setDefaultSet] = useState(false);
+    // const [defaultSet, setDefaultSet] = useState(false);
     const [correctDefault, setcorrectDefault] = useState(false);
     const [excludeData, setExcludeData] = useState([]);
+    const [excludeDataLabel, setExcludeDataLabel] = useState([]);
 
     const isExclude = (element) => {
         let isExclude = false;
 
-        if (props.exclude) {
-            props.exclude.forEach(exclude => {
+
+        if (props.excludeLabel) {
+            props.excludeLabel.forEach(exclude => {
                 if (exclude === element) {
                     isExclude = true;
                 }
             })
         }
 
-        console.log("ISS", isExclude, props.exclude, element);
         return isExclude;
     }
 
@@ -50,7 +52,12 @@ const TextFieldFilter = (props) => {
                 return item.id;
             }).join(",");
 
-        sendChange(options);
+        const labels = Array.prototype.map.call(value,
+            function (item) {
+                return item.name;
+            }).join(",");
+
+        sendChange(options, labels);
     }
 
     const onOpen = () => {
@@ -69,9 +76,10 @@ const TextFieldFilter = (props) => {
         }
     }
 
-    const sendChange = (data) => {
+    const sendChange = (data, label) => {
         let separator = ",";
         let excludeComma = excludeData.join(",");
+        let excludeCommaLabel = excludeDataLabel.join(",");
         if (data === "" || excludeData.length === 0) {
             separator = "";
         }
@@ -80,25 +88,26 @@ const TextFieldFilter = (props) => {
             title: props.title,
             slug: props.slug,
             type: "textField",
-            data: data.concat(separator + excludeComma)
+            data: data.concat(separator + excludeComma),
+            label: label.concat(separator + excludeCommaLabel),
         }
         if (props.onChange) {
             props.onChange(results);
         }
+
     }
 
     useEffect(() => {
-
         props.searchResults.forEach(element => {
             let result = element[props.slug];
             if (result) {
                 var correctData = [];
                 setSuggestionsData(result);
 
-                if (correctDefault === false) {
-                    props.value.forEach(query => {
+                if (correctDefault === false && props.isCorrectSet) {
+                    props.valueLabel.forEach(query => {
                         result.forEach(element => {
-                            if (element.id === parseInt(query) && !isExclude(query)) {
+                            if (element.name === query) {
                                 correctData.push(element);
                             }
                         })
@@ -112,35 +121,71 @@ const TextFieldFilter = (props) => {
     }, [props.searchResults, props.slug])
 
     useEffect(() => {
-        if (defaultSet === false) {
-            props.value.forEach(element => {
-                if (element !== "") {
-                    !isExclude(element) && setValue(value => [...value, { name: element, id: element }])
-                }
-            });
+        // if (defaultSet === false) {
+        //     props.valueLabel.forEach(element => {
+        //         if (element !== "") {
+        //             !isExclude(element) && setValue(value => [...value, { name: element, id: element }])
+        //         }
+        //     });
 
-            setDefaultSet(true)
-
-        }
-
-        if (props.exclude) {
+        //     setDefaultSet(true)
+        // }
+        if (props.exclude && props.excludeLabel) {
             let excludeValue = [];
+            let excludeLabel = [];
             props.value.forEach(element => {
-                props.exclude.forEach(excludeElement => {
+                props.exclude.forEach((excludeElement, index) => {
                     if (excludeElement === element) {
                         excludeValue.push(element)
+                        excludeLabel.push(props.excludeLabel[index])
                     }
                 })
             })
 
             setExcludeData(excludeValue);
+            setExcludeDataLabel(excludeLabel);
         }
 
-    }, [props.value, defaultSet, props.exclude])
+    }, [props.value, props.exclude])
 
-    // useEffect(() => {
-    //     console.log("EXCLUDE DATA", excludeData);
-    // }, [excludeData])
+    useEffect(() => {
+        if (props.valueLabel && props.valueLabel.join(",") && props.isCorrectSet && correctDefault === false) {
+            let correct = props.valueLabel.filter(value => !isExclude(value))
+            setValue(correct)
+        }
+    }, [props.valueLabel, props.isCorrectSet])
+
+    useEffect(() => {
+        // setValue(props.activatedFilters.front[props.slug].split(","));
+        // console.log("REFRESH TEXT FIELDS", props.activatedFilters, props.value)
+        // console.log("REFRESH TEXT FIELDS", props.activatedFilters, props.valueLabel, suggestionsData);
+        let change = false
+        var correctData = [];
+
+        if (props.value.join(",") === "") {
+            correctData = [];
+            change = true;
+        }
+
+        if (suggestionsData && props.valueLabel) {
+            // console.log("VALUELABL", props.valueLabel)
+            suggestionsData.forEach(element => {
+                if (element) {
+                    props.valueLabel.forEach(query => {
+                        if (element.name === query) {
+                            change = true;
+                            correctData.push(element);
+                        }
+                    })
+                }
+            });
+            // console.log("CORRECT DATA", correctData, change);
+
+            if (change === true) {
+                setValue(correctData);
+            }
+        }
+    }, [props.refresh])
 
     return (
         <Container>
@@ -148,7 +193,7 @@ const TextFieldFilter = (props) => {
                 multiple
                 options={suggestionsData}
                 getOptionLabel={(option) => option.name || option}
-                getOptionSelected={(option, value) => option.name === value.name}
+                getOptionSelected={(option, value) => (option.name === value.name) || option === value}
                 loading={props.isRequest}
                 limitTags={1}
                 loadingText={<CircularProgress />}
@@ -175,14 +220,19 @@ TextFieldFilter.propTypes = {
     label: PropTypes.string.isRequired,
     placeholder: PropTypes.string.isRequired,
     value: PropTypes.array,
+    valueLabel: PropTypes.array,
     slug: PropTypes.string,
     endpoint: PropTypes.string,
-    exclude: PropTypes.array
+    exclude: PropTypes.array,
+    excludeLabel: PropTypes.array,
+    refresh: PropTypes.number,
+    activatedFilters: PropTypes.object
 }
 
 const mapStateToProps = (state) => ({
     isRequest: state.filtersReducer.textFieldSearchResult.isRequest,
-    searchResults: state.filtersReducer.textFieldSearchResult.res
+    searchResults: state.filtersReducer.textFieldSearchResult.res,
+    isCorrectSet: state.uiReducer.isCorrectIds
 })
 
 const mapDispatchToProps = {

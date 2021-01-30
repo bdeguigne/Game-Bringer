@@ -1,5 +1,42 @@
 import TextFieldFilter from "./TextFieldFilter";
 import SliderFilter from "./SliderFilter";
+import moment from 'moment'
+
+const getYears = () => {
+    const years = []
+    const dateStart = moment().add(2, 'y');
+    const dateEnd = moment({ year: 1973 });
+
+    while (dateEnd.diff(dateStart, 'years') <= 0) {
+        years.push(dateStart.format('YYYY'))
+        years.push({
+            type: "checkbox",
+            label: dateStart.format('YYYY'),
+            slug: dateStart.format('YYYY'),
+            id: parseInt(dateStart.format('YYYY'))
+        })
+        dateStart.add(-1, 'year')
+    }
+    return years
+}
+
+// const getMonths = () => {
+//     const months = []
+//     const dateStart = moment()
+//     const dateEnd = moment().add(12, "month")
+//     let i = 0;
+//     while (dateEnd.diff(dateStart, "months") > 0) {
+//         months.push({
+//             type: "checkbox",
+//             label: dateStart.format("MMMM"),
+//             slug: dateStart.format("MMMM").toLowerCase(),
+//             id: i
+//         })
+//         i += 1;
+//         dateStart.add(1, "month");
+//     }
+//     return months
+// }
 
 export function filters(genres, modes, perspectives) {
     const renderedGenres = [];
@@ -97,12 +134,14 @@ export function filters(genres, modes, perspectives) {
                 {
                     type: "component",
                     component: TextFieldFilter,
-                    props: { 
-                        label: "Other platforms", 
-                        placeholder: "Select platforms", 
-                        slug: "platforms", 
+                    props: {
+                        label: "Other platforms",
+                        placeholder: "Select platforms",
+                        slug: "platforms",
                         exclude: ["6", "130", "167", "48", "169", "49"],
-                        endpoint: "/platforms"  }
+                        excludeLabel: ["PC (Microsoft Windows)", "Nintendo Switch", "Playstation 5", "Playstation 4", "Xbox Series", "Xbox One"],
+                        endpoint: "/platforms"
+                    }
                 }
             ]
         },
@@ -116,6 +155,13 @@ export function filters(genres, modes, perspectives) {
             slug: "game_modes",
             collapse: false,
             children: renderedModes
+        },
+        {
+            title: "Years",
+            slug: "year",
+            collapse: false,
+            maxChildren: 12,
+            children: getYears()
         },
         {
             title: "Perspectives",
@@ -142,7 +188,7 @@ export function filters(genres, modes, perspectives) {
                 {
                     type: "component",
                     component: TextFieldFilter,
-                    props: { label: "Game engine", placeholder: "Select game engines", slug: "game_engines", endpoint: "/game_engines"  }
+                    props: { label: "Game engine", placeholder: "Select game engines", slug: "game_engines", endpoint: "/game_engines" }
                 }
             ]
         },
@@ -175,16 +221,20 @@ export const findValueFromQuery = (queryArray, findValue) => {
     return term;
 }
 
-export const addAndGroupElem = (toAdd, type, data, replace) => {
+export const addAndGroupElem = (toAdd, type, data, label, replace) => {
     let isNew = true;
-    
 
+    console.log("TOO ADD", toAdd);
     if (toAdd !== null) {
         Object.entries(toAdd.front).forEach(
             ([key, value]) => {
                 if (key === type) {
+
+
+
                     if (replace === true) {
                         toAdd.front[type] = data
+                        toAdd.chip[type] = label || data
                     } else {
                         let separator = ",";
 
@@ -193,7 +243,8 @@ export const addAndGroupElem = (toAdd, type, data, replace) => {
                         }
                         // toAdd[type] = toAdd[type] + separator + data;
                         toAdd.front[type] = toAdd.front[type] + separator + data;
-                        
+                        toAdd.chip[type] = toAdd.chip[type] + separator + label;
+
                     }
                     isNew = false;
                 }
@@ -201,18 +252,26 @@ export const addAndGroupElem = (toAdd, type, data, replace) => {
 
         if (isNew === true) {
             toAdd.front[type] = data;
+            toAdd.chip[type] = label || data;
             // add.front[type] = data;
         }
     } else {
         toAdd = {
-            front: { [type]: data }
+            front: { [type]: data },
+            chip: { [type]: label || data }
         }
         // toAdd = { [type]: data };
     }
+
+    if (toAdd.front[type] === "")
+        delete toAdd.front[type];
+    if (toAdd.chip[type] === "")
+        delete toAdd.chip[type];
     return toAdd;
 }
 
 export const generateParams = (filtersArray) => {
+    // console.log("GENERATE PARAMS", filtersArray);
     let params = new URLSearchParams(filtersArray).toString();
 
     return params;
@@ -221,7 +280,7 @@ export const generateParams = (filtersArray) => {
 export const isFiltersExist = (toCheck, type, data) => {
     let isExist = false;
 
-    
+
     if (toCheck) {
         Object.entries(toCheck).forEach(
             ([key, value]) => {
@@ -234,8 +293,8 @@ export const isFiltersExist = (toCheck, type, data) => {
                     })
                 }
             })
-        }
-        // console.log("IS FILTER EXISTS", toCheck)
+    }
+    // console.log("IS FILTER EXISTS", toCheck)
     return isExist;
 }
 
@@ -250,19 +309,22 @@ export const replaceTerm = (toReplace, replaceValue) => {
                 if (key === "term") {
                     hasTerm = true;
                     toReplace.front["term"] = replaceValue;
+                    toReplace.chip["term"] = replaceValue;
                 }
             })
-            if (hasTerm === false) {
-                toReplace.front["term"] = replaceValue;
+        if (hasTerm === false) {
+            toReplace.front["term"] = replaceValue;
+            toReplace.chip["term"] = replaceValue;
 
-                return toReplace;
-                // toReplace =  {"term" : replaceValue};
-            }
+            return toReplace;
+            // toReplace =  {"term" : replaceValue};
+        }
     }
 
     if (hasTerm === false) {
         toReplace = {
-            front: {"term": replaceValue}
+            front: { "term": replaceValue },
+            chip: { "term": replaceValue }
         };
     }
 
@@ -271,17 +333,60 @@ export const replaceTerm = (toReplace, replaceValue) => {
     return toReplace;
 }
 
-export const removeTerm = (toRemove, title, filters) => {
+export const replace = (toReplace, replaceKey, replaceValue) => {
+    let hasTerm = false;
 
+    console.log("REPLACE", toReplace, replaceValue)
+    console.log("REPLACE KEY", replaceKey)
 
-    if (toRemove && filters) {
-        let splitFilters = filters.front[title].split(",");
-    
-        splitFilters = splitFilters.filter(item => {
-            return item !== toRemove.slug
+    if (toReplace) {
+        Object.entries(toReplace).forEach(
+            ([key, value]) => {
+                if (key === "term") {
+                    hasTerm = true;
+                    toReplace[replaceKey] = replaceValue;
+                }
+            })
+        if (hasTerm === false) {
+            toReplace[replaceKey] = replaceValue;
+
+            return toReplace;
+        }
+    }
+
+    if (hasTerm === false) {
+        toReplace = { replaceKey: replaceValue }
+    }
+
+    console.log("REPLACE RESULT", toReplace);
+
+    return toReplace;
+}
+
+export const removeTerm = (toRemoveId, toRemoveLabel, title, filters) => {
+    console.log("REMOVE", toRemoveId, toRemoveLabel)
+    console.log("TITLE", title)
+    console.log("FILTERS", filters)
+    if (toRemoveId && filters) {
+        let splitFiltersFront = filters.front[title].split(",");
+        let splitFiltersChip = filters.chip[title].split(",");
+
+        splitFiltersFront = splitFiltersFront.filter(item => {
+            return item !== toRemoveId
         })
 
-        filters.front[title] = splitFilters.join(",")
+        splitFiltersChip = splitFiltersChip.filter(item => {
+            return item !== toRemoveLabel
+        })
+
+        filters.front[title] = splitFiltersFront.join(",")
+
+        filters.chip[title] = splitFiltersChip.join(",")
+
+        if (filters.front[title] === "")
+            delete filters.front[title];
+        if (filters.chip[title] === "")
+            delete filters.chip[title];
 
         return filters;
     }

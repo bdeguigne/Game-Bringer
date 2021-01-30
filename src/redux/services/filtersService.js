@@ -1,4 +1,4 @@
-import {doRequest} from './request';
+import { doRequest } from './request';
 
 export const getFilterRequest = () => {
     const query = `query genres "Genres" {
@@ -34,11 +34,28 @@ export const searchRequest = (filterQuery) => {
     const whereCondition = filterQuery ? "where " + filterQuery : "";
 
     const query = `fields name, platforms, game_modes, genres.slug, platforms.name, platforms.platform_logo.image_id, rating, game_modes.slug, game_engines.slug, involved_companies.developer, involved_companies.company.name, player_perspectives.slug, first_release_date, release_dates.*, cover.image_id, aggregated_rating;
-    ${whereCondition} & aggregated_rating != null;
+    ${whereCondition} & first_release_date != null;
     sort first_release_date desc;
     limit 50;`
 
-    console.log("QUUUERTT", query);
+    // console.log("QUUUERTT", query);
 
     return doRequest("/games", query)
+}
+
+export const correctIdsRequest = (genQuery) => {
+    const queryArray = [];
+    genQuery.forEach(value => {
+        const query = `query ${value.endpoint} "${value.name}" {
+        fields ${value.fields};
+        where ${value.condition};
+        limit 50;};`
+
+        queryArray.push(query);
+    })
+
+    const query = queryArray.join(" ");
+
+    // console.log("QUERY", query);
+    return doRequest("/multiquery", query);
 }
