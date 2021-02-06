@@ -11,7 +11,7 @@ import SearchResultCard from "./SearchResultCard";
 import { Padding } from '../../utils/styles';
 import HandleFilters from './HandleFilters';
 import { useLocation, withRouter } from "react-router-dom";
-import { generateParams, getFiltersWithQuery, findValueFromQuery, replace } from './filters'
+import { generateParams, getFiltersWithQuery, findValueFromQuery, replace } from './Filters'
 import { compose } from 'redux';
 
 const SearchContainer = styled.div`
