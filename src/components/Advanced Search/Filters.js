@@ -223,8 +223,6 @@ export const findValueFromQuery = (queryArray, findValue) => {
 
 export const addAndGroupElem = (toAdd, type, data, label, replace) => {
     let isNew = true;
-
-    console.log("TOO ADD", toAdd);
     if (toAdd !== null) {
         Object.entries(toAdd.front).forEach(
             ([key, value]) => {
@@ -271,7 +269,6 @@ export const addAndGroupElem = (toAdd, type, data, label, replace) => {
 }
 
 export const generateParams = (filtersArray) => {
-    // console.log("GENERATE PARAMS", filtersArray);
     let params = new URLSearchParams(filtersArray).toString();
 
     return params;
@@ -294,14 +291,11 @@ export const isFiltersExist = (toCheck, type, data) => {
                 }
             })
     }
-    // console.log("IS FILTER EXISTS", toCheck)
     return isExist;
 }
 
 export const replaceTerm = (toReplace, replaceValue) => {
     let hasTerm = false;
-
-    console.log("REPLACE", toReplace, replaceValue)
 
     if (toReplace?.front) {
         Object.entries(toReplace.front).forEach(
@@ -328,16 +322,12 @@ export const replaceTerm = (toReplace, replaceValue) => {
         };
     }
 
-    console.log("TOO REPLACE", toReplace)
 
     return toReplace;
 }
 
 export const replace = (toReplace, replaceKey, replaceValue) => {
     let hasTerm = false;
-
-    console.log("REPLACE", toReplace, replaceValue)
-    console.log("REPLACE KEY", replaceKey)
 
     if (toReplace) {
         Object.entries(toReplace).forEach(
@@ -358,15 +348,10 @@ export const replace = (toReplace, replaceKey, replaceValue) => {
         toReplace = { replaceKey: replaceValue }
     }
 
-    console.log("REPLACE RESULT", toReplace);
-
     return toReplace;
 }
 
-export const removeTerm = (toRemoveId, toRemoveLabel, title, filters) => {
-    console.log("REMOVE", toRemoveId, toRemoveLabel)
-    console.log("TITLE", title)
-    console.log("FILTERS", filters)
+export const removeTerm = (toRemoveId, toRemoveLabel, title, filters, isDelete) => {
     if (toRemoveId && filters) {
         let splitFiltersFront = filters.front[title].split(",");
         let splitFiltersChip = filters.chip[title].split(",");
@@ -383,12 +368,14 @@ export const removeTerm = (toRemoveId, toRemoveLabel, title, filters) => {
 
         filters.chip[title] = splitFiltersChip.join(",")
 
-        if (filters.front[title] === "")
+        
+    }
+
+    if (filters.front[title] === "" || isDelete === true)
             delete filters.front[title];
-        if (filters.chip[title] === "")
+        if (filters.chip[title] === "" || isDelete === true)
             delete filters.chip[title];
 
         return filters;
-    }
 
 }

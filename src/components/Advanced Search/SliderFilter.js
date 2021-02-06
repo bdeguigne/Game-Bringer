@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { Slider, TextField } from '@material-ui/core';
 import styled from 'styled-components';
 import { advancedSearchPadding } from '../../utils/styles'
+import { max } from 'moment';
 
 const Container = styled.div`
 padding: ${advancedSearchPadding};
@@ -28,6 +29,8 @@ function SliderFilter(props) {
     const [sliderValue, setSliderValue] = useState([0, 100]);
     const [isFocusTextFields, setIsFocusTextFields] = useState(false);
     const [isDefaultSet, setIsDefaultSet] = useState(false);
+    const [isAnyMin, setIsAnyMin] = useState(true);
+    const [isAnyMax, setIsAnyMax] = useState(true);
 
     const handleSliderChange = (event, newValue) => {
         setSliderValue(newValue);
@@ -44,7 +47,7 @@ function SliderFilter(props) {
                 }
             }
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [inputValue])
 
 
@@ -64,22 +67,45 @@ function SliderFilter(props) {
         let maxValue = items[1];
         let newValue = parseInt(evt.target.value);
 
-        if (isNaN(newValue)) {
-            newValue = "";
-        }
+        if (minValue < maxValue) {
+            if (isNaN(newValue)) {
+                newValue = "";
+            }
 
-        if (type === "min") {
-            minValue = newValue;
-            items[0] = minValue;
+            if (type === "min") {
+                minValue = newValue;
+                items[0] = minValue;
+            } else {
+                maxValue = newValue;
+                items[1] = maxValue;
+                setInputValue(items);
+
+            }
+
         } else {
-            maxValue = newValue;
-            items[1] = maxValue;
+            let change = false;
+
+            if (type === "min" && newValue < maxValue) {
+                minValue = newValue;
+                items[0] = minValue;
+                change = true;
+            } else if (type === "max" && newValue > minValue) {
+                maxValue = newValue;
+                items[1] = maxValue;
+                change = true
+            }
+            if (change) {
+                setInputValue(items);
+            }
         }
 
-        setInputValue(items);
+
     }
 
     const sendSliderValue = (inputValue) => {
+        // setIsAnyMin(inputValue[0] < 0 ? true : false);
+        // setIsAnyMax(inputValue[1] < 0 ? true : false);
+
         let results = {
             title: props.title,
             type: "slider",
@@ -95,6 +121,31 @@ function SliderFilter(props) {
         }
     }
 
+    useEffect(() => {
+        if (props.activatedFilters?.front?.rating) {
+            const rating = props.activatedFilters?.front.rating.split(",");
+
+            setIsAnyMin(rating[0] ? (rating[0] < 0 ? true : false) : true);
+            setIsAnyMax(rating[1] ? (rating[1] < 0 ? true : false) : true);
+        } else {
+            setSliderValue([0, 100])
+            setIsAnyMin(true);
+            setIsAnyMax(true);
+        }
+    }, [props.refresh, props.activatedFilters])
+
+    // useEffect(() => {
+    //     if (inputValue[1]) {
+    //         setSliderValue([0, inputValue[1]])
+    //     }
+    // }, [isAnyMin])
+
+    // useEffect(() => {
+    //     if (inputValue[0]) {
+    //         setSliderValue([inputValue[0], 100])
+    //     }
+    // }, [isAnyMax])
+
     return (
         <Container>
             <SliderContainer>
@@ -108,20 +159,22 @@ function SliderFilter(props) {
             </SliderContainer>
             <TextFieldsContainer>
                 <TextFieldWithMargin
+                    disabled={isAnyMin}
                     marginright={"4px"}
                     variant="outlined"
-                    type="number"
-                    value={inputValue[0]}
+                    type={isAnyMin ? "text" : "number"}
+                    value={isAnyMin ? "any" : inputValue[0]}
                     onChange={(text) => onChange("min", text)}
-                    label="Minimum" 
+                    label="Minimum"
                     onFocus={() => setIsFocusTextFields(true)}
                     onBlur={() => setIsFocusTextFields(false)}
                 />
                 <TextFieldWithMargin
+                    disabled={isAnyMax}
                     marginright={"0"}
                     variant="outlined"
-                    type="number"
-                    value={inputValue[1]}
+                    type={isAnyMax ? "text" : "number"}
+                    value={isAnyMax ? "any" : inputValue[1]}
                     onChange={(text) => onChange("max", text)} label="Maximum"
                     onFocus={() => setIsFocusTextFields(true)}
                     onBlur={() => setIsFocusTextFields(false)}
@@ -135,7 +188,9 @@ SliderFilter.propTypes = {
     title: PropTypes.string.isRequired,
     onChange: PropTypes.func,
     value: PropTypes.array,
-    slug: PropTypes.string
+    slug: PropTypes.string,
+    activatedFilters: PropTypes.object,
+    refresh: PropTypes.number
 }
 
 export default SliderFilter

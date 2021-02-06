@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { appColors } from "../../utils/styles";
 import { InputBase } from "@material-ui/core";
 import { setRouteIndex, setIsCorrectIds, setActivatedFiltersAction } from "../../redux/actions/UIActions";
-import { search } from '../../redux/actions/filtersActions';
+import { search, moreSearchResult } from '../../redux/actions/filtersActions';
 import TermChip from "./ChipFilters";
 import { RouteIndex } from "../../redux/constants/uiConstants";
 import SearchResultCard from "./SearchResultCard";
@@ -22,6 +22,7 @@ const SearchContainer = styled.div`
 `
 
 const SearchBar = styled.div`
+    transition: box-shadow 0.2s;
   border: 1px solid ${appColors.secondaryDarker};
   border-radius: 16px;
   width: 100%;
@@ -29,7 +30,7 @@ const SearchBar = styled.div`
   align-items: center;
   justify-content: space-between;
   background-color : ${appColors.backgroundContrast};
-  box-shadow: 0px 0px 12px 3px rgba(0, 0, 0, 0.25), inset 0px 0px 8px #6D5DD3;
+  box-shadow: ${props => props.isActive ? "0px 0px 12px 3px #6d5dd352, inset 0px 0px 8px #6D5DD3;" : "0px 0px 12px 3px rgba(0, 0, 0, 0.25), inset 0px 0px 8px #6D5DD3;"};
 `
 
 const SearchInput = styled(InputBase)`
@@ -75,8 +76,9 @@ const AdvancedSearch = (props) => {
     const [queryFilters, setQueryFilters] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [searchValue, setSearchValue] = useState("");
-    const [activatedFilters, setActivatedFilters] = useState({})
+    const [activatedFilters, setActivatedFilters] = useState(null)
     const [refresh, setRefresh] = useState(0);
+    const [isSearchbarActive, setIsSearchbarActive] = useState(false);
 
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
@@ -95,7 +97,7 @@ const AdvancedSearch = (props) => {
     const onFiltersChange = (activatedFilters) => {
         console.log("ON FILTERS CHANGE", activatedFilters);
         setRefresh(prev => prev + 1);
-        
+
         setActivatedFilters(activatedFilters);
         props.setActivatedFiltersAction(activatedFilters);
         props.search(activatedFilters.front);
@@ -121,7 +123,7 @@ const AdvancedSearch = (props) => {
         if (props.correctIds.length > 0) {
             const alreadyCorrectIds = [];
 
-            Object.keys(activatedFilters.chip).forEach(filterKey => {
+            Object.keys(activatedFilters?.chip).forEach(filterKey => {
                 props.correctIds.forEach(correctData => {
                     if (filterKey === correctData.name) {
                         let isCompany = false;
@@ -144,7 +146,7 @@ const AdvancedSearch = (props) => {
                         })
 
                         const correctFilters = filterValue.join(",");
-                        
+
 
                         activatedFilters.chip = replace(activatedFilters.chip, filterKey, correctFilters);
 
@@ -155,29 +157,44 @@ const AdvancedSearch = (props) => {
             props.setIsCorrectIds(true);
             onFiltersChange(activatedFilters);
         }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.correctIds, activatedFilters])
 
-    // useEffect(() => {
-    //     console.log("IN REACT", props.searchResult)
-    // }, [props.searchResult])
+    useEffect(() => {
+        props.search();
+
+        if (activatedFilters) {
+            window.addEventListener('scroll', function () {
+                if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+                    props.moreSearchResult(activatedFilters.front);
+                    // Show loading spinnedzdqr and make fetch request to api
+                }
+            });
+        }
+        return () => {
+            window.removeEventListener("scroll", this);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [activatedFilters])
 
     return (
         <Padding>
             <SearchContainer>
-                <SearchBar>
+                <SearchBar isActive={isSearchbarActive}>
                     <SearchInput
                         placeholder={"Search and discover new games"}
                         onChange={(evt) => setSearchValue(evt.target.value)}
                         value={searchValue}
                         onKeyPress={onKeyPressed}
+                        onClick={() => setIsSearchbarActive(true)}
+                        onBlur={() => setIsSearchbarActive(false)}
                     />
                     <SearchButtonContainer onClick={searchInputClick}>
                         <SearchIcon className="icon-search" />
                     </SearchButtonContainer>
                 </SearchBar>
             </SearchContainer>
-            <TermChip activatedFilters={activatedFilters} onChangeFilters={onFiltersChange}/>
+            <TermChip activatedFilters={activatedFilters} onChangeFilters={onFiltersChange} />
             <Row>
                 <ResultContainer>
                     {props.searchResult && props.searchResult.map((res, i) => {
@@ -190,6 +207,8 @@ const AdvancedSearch = (props) => {
                                 platforms={res.platforms}
                                 coverId={res.coverID}
                                 rating={res.rating}
+                                screenshots={res.screenshots}
+                                genres={res.genres}
                             />
                         )
                     })}
@@ -204,7 +223,8 @@ const actionCreators = {
     setRouteIndex,
     search,
     setIsCorrectIds,
-    setActivatedFiltersAction
+    setActivatedFiltersAction,
+    moreSearchResult
 }
 
 function mapStateToProps(state) {

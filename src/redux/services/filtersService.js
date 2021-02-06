@@ -30,15 +30,17 @@ export const searchByNameRequest = (endpoint, searchEntry, exclude) => {
     return doRequest(endpoint, query);
 }
 
-export const searchRequest = (filterQuery) => {
-    const whereCondition = filterQuery ? "where " + filterQuery : "";
+export const searchRequest = (filterQuery, offset) => {
+    const whereCondition = filterQuery ? "where " + filterQuery : "where first_release_date != null";
+    const offsetValue = offset ? offset : 0;
 
-    const query = `fields name, platforms, game_modes, genres.slug, platforms.name, platforms.platform_logo.image_id, rating, game_modes.slug, game_engines.slug, involved_companies.developer, involved_companies.company.name, player_perspectives.slug, first_release_date, release_dates.*, cover.image_id, aggregated_rating;
-    ${whereCondition} & first_release_date != null;
+    const query = `fields name, platforms, game_modes, genres.slug, platforms.name, platforms.platform_logo.image_id, rating, game_modes.slug, game_engines.slug, involved_companies.developer, involved_companies.company.name, player_perspectives.slug, first_release_date, release_dates.*, cover.image_id, aggregated_rating, screenshots.image_id, genres.name;
+    ${whereCondition};
     sort first_release_date desc;
-    limit 50;`
+    limit 20;
+    offset ${offsetValue};`
 
-    // console.log("QUUUERTT", query);
+    console.log("FINAL QUERY", query);
 
     return doRequest("/games", query)
 }
@@ -56,6 +58,5 @@ export const correctIdsRequest = (genQuery) => {
 
     const query = queryArray.join(" ");
 
-    // console.log("QUERY", query);
     return doRequest("/multiquery", query);
 }

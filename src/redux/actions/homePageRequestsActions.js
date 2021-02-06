@@ -46,7 +46,7 @@ export const getPopularGames = () => {
             .then(res => res.json())
             .then(res => {
                 const popularGamesData = [];
-                // console.log("POPULAR RES ", res);
+                // ("POPULAR RES ", res);
                 res.forEach(popularGame => {
                     const id = popularGame.id;
                     const game = popularGame.name;

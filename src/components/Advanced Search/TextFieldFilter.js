@@ -156,9 +156,6 @@ const TextFieldFilter = (props) => {
     }, [props.valueLabel, props.isCorrectSet])
 
     useEffect(() => {
-        // setValue(props.activatedFilters.front[props.slug].split(","));
-        // console.log("REFRESH TEXT FIELDS", props.activatedFilters, props.value)
-        // console.log("REFRESH TEXT FIELDS", props.activatedFilters, props.valueLabel, suggestionsData);
         let change = false
         var correctData = [];
 
@@ -168,7 +165,6 @@ const TextFieldFilter = (props) => {
         }
 
         if (suggestionsData && props.valueLabel) {
-            // console.log("VALUELABL", props.valueLabel)
             suggestionsData.forEach(element => {
                 if (element) {
                     props.valueLabel.forEach(query => {
@@ -179,7 +175,6 @@ const TextFieldFilter = (props) => {
                     })
                 }
             });
-            // console.log("CORRECT DATA", correctData, change);
 
             if (change === true) {
                 setValue(correctData);

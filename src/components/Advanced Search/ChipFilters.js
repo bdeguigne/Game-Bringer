@@ -30,28 +30,34 @@ const AllProductsText = styled.div`
 
 const ChipFilters = props => {
 
-  // useEffect(() => {
-  //   console.log("TERM ", props.activatedFilters);
-  // }, [props.activatedFilters])
-
   return (
     <ChipsContainer>
-      {props.activatedFilters.chip ? Object.keys(props.activatedFilters.chip).map(key => {
-        return (
-          props.activatedFilters.chip[key].split(",").map((filter, index) => {
-            const id = props.activatedFilters.front[key].split(",")[index];
-            return (
-              <FiltersChip
-                key={index}
-                label={key === "term" ? `"${filter}"` : `${filter}`}
-                color={"primary"}
-                onDelete={() => {
-                  props.onChangeFilters(removeTerm(id, filter, key, props.activatedFilters))
-                }}
-              />
-            )
-          })
-        )
+      {props.activatedFilters?.chip ? Object.keys(props.activatedFilters.chip).map(key => {
+        const [min, max] = props.activatedFilters.front[key].split(",");
+        return key === "rating" ? (
+          <FiltersChip
+            key={1}
+            label={`Minimum rating : ${min}, Maximum rating : ${max}`}
+            color={"primary"}
+            onDelete={() => {
+              props.onChangeFilters(removeTerm(null, null, key, props.activatedFilters, true))
+            }}
+          />
+        ) : (
+            props.activatedFilters.chip[key].split(",").map((filter, index) => {
+              const id = props.activatedFilters.front[key].split(",")[index];
+              return (
+                <FiltersChip
+                  key={index + 1}
+                  label={key === "term" ? `"${filter}"` : `${filter}`}
+                  color={"primary"}
+                  onDelete={() => {
+                    props.onChangeFilters(removeTerm(id, filter, key, props.activatedFilters))
+                  }}
+                />
+              )
+            })
+          )
       }) : (
           <AllProductsText>All products</AllProductsText>
         )}

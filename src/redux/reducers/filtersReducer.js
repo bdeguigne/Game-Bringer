@@ -9,7 +9,10 @@ let defaultState = {
         res: []
     },
     searchResult: [],
-    correctIds: []
+    correctIds: [],
+    moreResIsRequest: false,
+    offset: 0,
+    reachEnd: false
 }
 
 function filtersReducer(state = defaultState, action) {
@@ -54,6 +57,26 @@ function filtersReducer(state = defaultState, action) {
             return {
                 ...state,
                 correctIds: action.data
+            }
+        case filtersConstants.SET_REACH_BOTTOM:
+            return {
+                ...state,
+                moreResIsRequest: action.state
+            }
+        case filtersConstants.MORE_SEARCH_RESULTS:
+            return {
+                ...state,
+                searchResult: [...state.searchResult, ...action.res]
+            }
+        case filtersConstants.SET_OFFSET:
+            return {
+                ...state,
+                offset: action.offset
+            }
+        case filtersConstants.SET_REACH_END:
+            return {
+                ...state,
+                reachEnd: action.state
             }
         default:
             return state

@@ -64,12 +64,6 @@ function CardGameInfo({ title, genres, isHovered, videoID }) {
         setRandomIndex(random);
     }, [])
 
-    // useEffect(() => {
-    //     if (isHovered === true) {
-    //         console.log(title + "Hovered !");
-    //     }
-    // }, [isHovered])
-
     return (
         <Container>
             <Top>

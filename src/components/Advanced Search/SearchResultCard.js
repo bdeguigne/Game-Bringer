@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from "styled-components";
 import { appColors, resultItemBoxShadow } from "../../utils/styles";
-import { Tooltip, ButtonBase } from "@material-ui/core";
+import { Tooltip, ButtonBase, Fade } from "@material-ui/core";
+import FloatingGameDetails from "../FloatingGameDetails";
 import CircularProgressWithLabel from "../CircularProgressWithLabel";
 
 const Container = styled.div`
@@ -96,66 +97,71 @@ const DateContainer = styled.div`
   font-size: 14px;
 `
 
+const HoverInfo = styled(Tooltip)`
+  padding: 0 !important;
+`
 
 
 const SearchResultCard = props => {
   return (
-
-    <Container>
-      <RippleEffect>
-        <CoverContainer>
-          {props.coverId ? (
-            <Cover alt={"Result game cover"} src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${props.coverId}.jpg`} />
-          ) : (
+    <HoverInfo title={
+      <FloatingGameDetails title={props.game} date={props.date?.date} elapsedTime={props.date?.elapsedTime} screenshots={props.screenshots} genres={props.genres} />
+    } placement={"right"} TransitionComponent={Fade} arrow={true}>
+      <Container>
+        <RippleEffect>
+          <CoverContainer>
+            {props.coverId ? (
+              <Cover alt={"Result game cover"} src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${props.coverId}.jpg`} />
+            ) : (
               <Cover alt={"Result game cover"} src={process.env.PUBLIC_URL + "/assets/placeholder-cover.png"} />
             )}
-        </CoverContainer>
-        <Content>
-          <LeftContent>
-            <div>
-              <Game>
-                {props.game}
-              </Game>
-              <Developer>
-                {props.developer}
-              </Developer>
-            </div>
-            <PlatformsContainer>
-              {props.platforms && props.platforms.map((platform, i) => {
-                if (platform.platform_logo) {
-                  return (
-                    <Tooltip key={i} title={platform.name}>
-                      <PlatformLogo alt={"platform logo"} src={`https://images.igdb.com/igdb/image/upload/t_logo_med/${platform.platform_logo.image_id}.png`} />
-                    </Tooltip>
-                  )
-                } else {
-                  return null
-                }
-              })}
-            </PlatformsContainer>
-          </LeftContent>
+          </CoverContainer>
+          <Content>
+            <LeftContent>
+              <div>
+                <Game>
+                  {props.game}
+                </Game>
+                <Developer>
+                  {props.developer}
+                </Developer>
+              </div>
+              <PlatformsContainer>
+                {props.platforms && props.platforms.map((platform, i) => {
+                  if (platform.platform_logo) {
+                    return (
+                      <Tooltip key={i} title={platform.name}>
+                        <PlatformLogo alt={"platform logo"} src={`https://images.igdb.com/igdb/image/upload/t_logo_med/${platform.platform_logo.image_id}.png`} />
+                      </Tooltip>
+                    )
+                  } else {
+                    return null
+                  }
+                })}
+              </PlatformsContainer>
+            </LeftContent>
 
-          {props.date && (
-            <ContentCenter>
-              <DateContainer>
-                <div>{props.date.date}</div>
-                {props.date.elapsedTime && (
-                  <div>({props.date.elapsedTime})</div>
-                )}
-              </DateContainer>
-            </ContentCenter>
-          )}
+            {props.date && (
+              <ContentCenter>
+                <DateContainer>
+                  <div>{props.date.date}</div>
+                  {props.date.elapsedTime && (
+                    <div>({props.date.elapsedTime})</div>
+                  )}
+                </DateContainer>
+              </ContentCenter>
+            )}
 
-          {!isNaN(props.rating) && (
-            <ContentCenter>
-              <CircularProgressWithLabel value={props.rating} size={60} />
-            </ContentCenter>
-          )}
-        </Content>
+            {!isNaN(props.rating) && (
+              <ContentCenter>
+                <CircularProgressWithLabel value={props.rating} size={60} />
+              </ContentCenter>
+            )}
+          </Content>
 
-      </RippleEffect>
-    </Container>
-
+        </RippleEffect>
+      </Container>
+    </HoverInfo>
   );
 };
 
@@ -165,7 +171,9 @@ SearchResultCard.propTypes = {
   platforms: PropTypes.array,
   date: PropTypes.object,
   rating: PropTypes.number,
-  coverId: PropTypes.string
+  coverId: PropTypes.string,
+  screenshots: PropTypes.array,
+  genres: PropTypes.array
 };
 
 export default SearchResultCard;

@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from "styled-components";
 import CrossFadeImages from "./CrossFadeImages";
-import {Button} from "@material-ui/core";
-import {DateRange} from "@material-ui/icons";
+import { Button } from "@material-ui/core";
+import { DateRange } from "@material-ui/icons";
 
 const Container = styled.div`
   padding: 16px;
@@ -68,56 +68,58 @@ const GenreButton = styled(Button)`
 
 
 const FloatingGameDetails = props => {
-    return (
-        <Container>
-            <Title>{props.title}</Title>
-            <DateContainer>
-                <Icon  size={"small"}/>
-                {props.elapsedTime ? (
-                    <Date>{`${props.date} (${props.elapsedTime})`}</Date>
-                ) : (
-                    <Date>{props.date}</Date>
-                )}
-            </DateContainer>
-            {props.screenshots && (
-                <ScreenshotContainer>
-                    <CrossFadeImages
-                        style={{borderRadius: "8px"}}
-                        active={true} interval={1500}
-                        images={props.screenshots}
-                        prefixUrl={"https://images.igdb.com/igdb/image/upload/t_screenshot_med/"}
-                        skeletonOnLoadingImages={true}
-                        elevation={false}
-                    />
-                </ScreenshotContainer>
-            )}
-            {props.genres && (
-                <GenreContainer>
-                    {props.genres.map((genre, i) => {
-                        if (i < 3) {
-                            return <GenreButton key={i} color="secondary" size="small">{genre.name}</GenreButton>
-                        } else {
-                            return null
-                        }
-                    })}
-                </GenreContainer>
-            )}
-            {props.summary && (
-                <SumaryContainer>
-                    <p>{props.summary}</p>
-                </SumaryContainer>
-                )}
-        </Container>
-    );
+  return (
+    <Container>
+      <Title>{props.title}</Title>
+      {(props.date || props.elapsedTime) && (
+        <DateContainer>
+          <Icon size={"small"} />
+          {props.elapsedTime ? (
+            <Date>{`${props.date} (${props.elapsedTime})`}</Date>
+          ) : (
+            <Date>{props.date}</Date>
+          )}
+        </DateContainer>
+      )}
+      {props.screenshots && (
+        <ScreenshotContainer>
+          <CrossFadeImages
+            style={{ borderRadius: "8px" }}
+            active={true} interval={1500}
+            images={props.screenshots}
+            prefixUrl={"https://images.igdb.com/igdb/image/upload/t_screenshot_med/"}
+            skeletonOnLoadingImages={true}
+            elevation={false}
+          />
+        </ScreenshotContainer>
+      )}
+      {props.genres && (
+        <GenreContainer>
+          {props.genres.map((genre, i) => {
+            if (i < 3) {
+              return <GenreButton key={i} color="secondary" size="small">{genre.name}</GenreButton>
+            } else {
+              return null
+            }
+          })}
+        </GenreContainer>
+      )}
+      {props.summary && (
+        <SumaryContainer>
+          <p>{props.summary}</p>
+        </SumaryContainer>
+      )}
+    </Container>
+  );
 };
 
 FloatingGameDetails.propTypes = {
-    title: PropTypes.string,
-    date: PropTypes.string,
-    elapsedTime: PropTypes.string,
-    screenshots: PropTypes.array,
-    genres: PropTypes.array,
-    summary: PropTypes.string
+  title: PropTypes.string,
+  date: PropTypes.string,
+  elapsedTime: PropTypes.string,
+  screenshots: PropTypes.array,
+  genres: PropTypes.array,
+  summary: PropTypes.string
 };
 
 export default FloatingGameDetails;
