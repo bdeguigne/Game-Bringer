@@ -4,7 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import styled from "styled-components";
 // import Collapsable from './Collapsable';
-import { filters, addAndGroupElem, isFiltersExist, replaceTerm, findValueFromQuery, removeTerm } from './filters';
+import { filters, addAndGroupElem, isFiltersExist, replaceTerm, findValueFromQuery, removeTerm } from './Filters';
 import CheckboxFilter from './CheckboxFilter';
 import { connect } from 'react-redux';
 import { appColors } from "../../utils/styles";

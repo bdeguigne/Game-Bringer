@@ -4,7 +4,7 @@ import styled from "styled-components";
 import { Chip } from "@material-ui/core";
 import { appColors } from "../../utils/styles";
 import PropTypes from 'prop-types'
-import { removeTerm } from './filters';
+import { removeTerm } from './Filters';
 
 const ChipsContainer = styled.div`
   display: flex;

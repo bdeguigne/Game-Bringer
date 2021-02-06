@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Checkbox, FormControlLabel } from '@material-ui/core';
 import { advancedSearchPadding, appColors } from '../../utils/styles';
-import { isFiltersExist } from './filters';
+import { isFiltersExist } from './Filters';
 
 const Container = styled.div`
     display: flex;
