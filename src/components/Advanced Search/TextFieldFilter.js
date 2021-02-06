@@ -10,7 +10,6 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 
 //REDUX
 import { searchByName } from '../../redux/actions/filtersActions';
-import { Refresh } from '@material-ui/icons'
 
 const Container = styled.div`
     padding: ${advancedSearchPadding};

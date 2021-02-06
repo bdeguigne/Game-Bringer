@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Slider, TextField } from '@material-ui/core';
 import styled from 'styled-components';
 import { advancedSearchPadding } from '../../utils/styles'
-import { max } from 'moment';
 
 const Container = styled.div`
 padding: ${advancedSearchPadding};
