@@ -10,9 +10,10 @@ import { connect } from 'react-redux';
 import { appColors } from "../../utils/styles";
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
-import { TreeItem, TreeView } from '@material-ui/lab';
+import { TreeItem, TreeView, Skeleton } from '@material-ui/lab';
 import { ExpandMore, ChevronLeft } from '@material-ui/icons';
-import { correctIds } from '../../redux/actions/filtersActions'
+import { correctIds, setIsFiltersLoaded } from '../../redux/actions/filtersActions'
+import {setIsNeedRequest} from '../../redux/actions/UIActions'
 
 const FiltersContainer = styled.div`
     width: 238px;
@@ -61,8 +62,8 @@ const DoubleArrowIcon = styled.span`
 function HandleFilters(props) {
     const [expand, setExpand] = useState([]);
     const [activatedFilters, setActivatedFilters] = useState(null);
-    const [loadedFilters, setLoadedFilters] = useState([]);
-    const [collapseIds, setCollapseIds] = useState([]);
+    const [loadedFilters, setLoadedFilters] = useState(null);
+    const [collapseIds, setCollapseIds] = useState(["0", "2"]);
     const [expandIds, setExpandIds] = useState([]);
     const [correctChipIds, setCorrectChipIds] = useState(false);
     const [isFiltersLoaded, setIsFiltersLoaded] = useState(false);
@@ -102,7 +103,7 @@ function HandleFilters(props) {
             setActivatedFilters(
                 { front: props.queryFilters, chip: JSON.parse(JSON.stringify(props.queryFilters)) },
             );
-        } 
+        }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.queryFilters])
@@ -159,13 +160,13 @@ function HandleFilters(props) {
     }
 
     function isFilterActive(title, label) {
-        return isFiltersExist(activatedFilters?.front, title, label)
+        return isFiltersExist(props.activatedFilters?.front, title, label)
     }
 
     const renderFilters = (child, filter, index) => {
         switch (child.type) {
             case "checkbox":
-                return <CheckboxFilter key={index} onChange={onChangeFilter} label={child.label} title={filter.title} titleSlug={filter.slug || filter.title.toLowerCase()} slug={child.slug} id={child.id} active={isFilterActive(filter.slug || filter.title.toLowerCase(), child.id?.toString())} activatedFilters={props.activatedFilters} refresh={props.refreshFilters}/>
+                return <CheckboxFilter key={index} onChange={onChangeFilter} label={child.label} title={filter.title} titleSlug={filter.slug || filter.title.toLowerCase()} slug={child.slug} id={child.id} active={isFilterActive(filter.slug || filter.title.toLowerCase(), child.id?.toString())} activatedFilters={props.activatedFilters} refresh={props.refreshFilters} />
             case "component":
                 return <child.component key={index} onChange={onChangeFilter} title={filter.title} value={findValueFromQuery(activatedFilters?.front, filter.slug || filter.title.toLowerCase()).split(",")} valueLabel={props.isCorrectSet ? findValueFromQuery(activatedFilters?.chip, filter.slug || filter.title.toLowerCase()).split(",") : []} activatedFilters={props.activatedFilters} refresh={props.refreshFilters} {...child.props} />
             case "divider":
@@ -194,7 +195,7 @@ function HandleFilters(props) {
     }
 
     const correctChipIdsOnStart = (filtersData) => {
-        if (filtersData.length > 0 && activatedFilters && !correctChipIds) {
+        if (filtersData?.length > 0 && activatedFilters && !correctChipIds) {
             const needRequestIds = [];
 
             Object.keys(activatedFilters.chip).forEach(key => {
@@ -217,6 +218,7 @@ function HandleFilters(props) {
                                     })
                                 })
                                 if (chipValue.length > 0) {
+                                    props.setIsNeedRequest(true);
                                     needRequestIds.push({ ids: chipValue, slug: key })
                                 }
 
@@ -224,7 +226,7 @@ function HandleFilters(props) {
 
                         }
                         setActivatedFilters(activatedFilters);
-                        onChange()
+                        onChange();
                         setCorrectChipIds(true);
                     }
                 })
@@ -237,7 +239,6 @@ function HandleFilters(props) {
         if (isFiltersLoaded) {
             const filtersData = filters(props.genres, props.modes, props.perspectives);
             const ids = [];
-
 
             filtersData.forEach((filter, index) => {
                 let isCollapse = true;
@@ -261,6 +262,11 @@ function HandleFilters(props) {
     }, [isFiltersLoaded, activatedFilters])
 
     useEffect(() => {
+        props.setIsFiltersLoaded(correctChipIds);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [correctChipIds])
+
+    useEffect(() => {
         if (isFiltersLoaded) {
             if (activatedFilters) {
                 correctChipIdsOnStart(loadedFilters);
@@ -278,6 +284,37 @@ function HandleFilters(props) {
         }
     }, [props.genres, props.modes, props.perspectives])
 
+    const SkeletonFilters = () => {
+        return (
+            <div>
+                <TreeWrapper >
+                    <TreeItem nodeId={`0`} label={<Skeleton animation="wave" height={15} width="80%" />}>
+                        <Skeleton animation="wave" variant="rect" height={60} />
+                    </TreeItem>
+
+                </TreeWrapper>
+
+                <TreeWrapper>
+                    <TreeItem nodeId={`1`} label={<Skeleton animation="wave" height={15} width="80%" />}>
+                        <Skeleton animation="wave" variant="rect" height={150} />
+                    </TreeItem>
+                </TreeWrapper>
+
+                <TreeWrapper>
+                    <TreeItem nodeId={`2`} label={<Skeleton animation="wave" height={15} width="80%" />}>
+                        <Skeleton animation="wave" variant="rect" height={200} />
+                    </TreeItem>
+                </TreeWrapper>
+
+                <TreeWrapper>
+                    <TreeItem nodeId={`3`} label={<Skeleton animation="wave" height={15} width="80%" />}>
+                        <Skeleton animation="wave" variant="rect" height={150} />
+                    </TreeItem>
+                </TreeWrapper>
+            </div>
+        )
+    }
+
     // useEffect(() => {
     //     // setActivatedFilters(props.activatedFilters)
     // }, [props.refresh, props.activatedFilters])
@@ -291,7 +328,8 @@ function HandleFilters(props) {
                     defaultExpanded={collapseIds}
                     onNodeToggle={(evt, value) => setExpandIds(value)}
                 >
-                    {loadedFilters.map((filter, filterIndex) => {
+                    {!loadedFilters && SkeletonFilters()}
+                    {loadedFilters && loadedFilters.map((filter, filterIndex) => {
                         return (
                             <TreeWrapper key={filterIndex}>
                                 <TreeItem nodeId={`${filterIndex}`} label={filter.title}>
@@ -332,7 +370,9 @@ HandleFilters.propTypes = {
 }
 
 const actionCreators = {
-    correctIds
+    correctIds,
+    setIsFiltersLoaded,
+    setIsNeedRequest
 }
 
 function mapStateToProps(state) {
@@ -341,7 +381,7 @@ function mapStateToProps(state) {
         modes: state.filtersReducer.modes,
         perspectives: state.filtersReducer.perspectives,
         isCorrectSet: state.uiReducer.isCorrectIds,
-        activatedFilters: state.uiReducer.activatedFilters,
+        activatedFilters: state.filtersReducer.filters,
         refreshFilters: state.uiReducer.refreshFilters
     };
 }

@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import styled from "styled-components";
 import { appColors, resultItemBoxShadow } from "../../utils/styles";
 import { Tooltip, ButtonBase, Fade } from "@material-ui/core";
+import { Skeleton } from '@material-ui/lab'
 import FloatingGameDetails from "../FloatingGameDetails";
 import CircularProgressWithLabel from "../CircularProgressWithLabel";
+import ImageLoader from '../ImageLoader';
 
 const Container = styled.div`
   width: 100%;
@@ -34,6 +36,7 @@ const RippleEffect = styled(ButtonBase)`
 const CoverContainer = styled.div`
   width: 100px;
   height: 100%;
+  position: relative;
 `
 
 const Cover = styled.img`
@@ -103,15 +106,15 @@ const HoverInfo = styled(Tooltip)`
 
 
 const SearchResultCard = props => {
-  return (
-    <HoverInfo title={
-      <FloatingGameDetails title={props.game} date={props.date?.date} elapsedTime={props.date?.elapsedTime} screenshots={props.screenshots} genres={props.genres} />
-    } placement={"right"} TransitionComponent={Fade} arrow={true}>
+
+  const CardContent = () => {
+    return (
       <Container>
         <RippleEffect>
           <CoverContainer>
             {props.coverId ? (
-              <Cover alt={"Result game cover"} src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${props.coverId}.jpg`} />
+              // <Cover alt={"Result game cover"} src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${props.coverId}.jpg`} />
+              <ImageLoader src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${props.coverId}.jpg`} style={{ objectFit: "cover", width: "100%", height: "100%", borderRadius: "16px", transform: "scale(0.95)" }} />
             ) : (
               <Cover alt={"Result game cover"} src={process.env.PUBLIC_URL + "/assets/placeholder-cover.png"} />
             )}
@@ -161,8 +164,26 @@ const SearchResultCard = props => {
 
         </RippleEffect>
       </Container>
-    </HoverInfo>
-  );
+    )
+  }
+
+  if (props.loading === true) {
+    return (
+      <Container>
+        <Skeleton animation="wave" variant="rect" height="100%" width="100%" style={{borderRadius: "16px"}} />
+      </Container>
+    )
+  } else if (!props.genres && !props.screenshots) {
+    return CardContent()
+  } else {
+    return (
+      <HoverInfo title={
+        <FloatingGameDetails title={props.game} date={props.date?.date} elapsedTime={props.date?.elapsedTime} screenshots={props.screenshots} genres={props.genres} />
+      } placement={"right"} TransitionComponent={Fade} arrow={true}>
+        {CardContent()}
+      </HoverInfo>
+    );
+  }
 };
 
 SearchResultCard.propTypes = {
@@ -173,7 +194,8 @@ SearchResultCard.propTypes = {
   rating: PropTypes.number,
   coverId: PropTypes.string,
   screenshots: PropTypes.array,
-  genres: PropTypes.array
+  genres: PropTypes.array,
+  loading: PropTypes.bool
 };
 
 export default SearchResultCard;

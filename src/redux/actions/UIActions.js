@@ -26,3 +26,12 @@ export const setActivatedFiltersAction = (activatedFilters) => {
         })
     }
 }
+
+export const setIsNeedRequest = (state) => {
+    return dispatch => {
+        dispatch({
+            type: uiConstants.SET_IS_NEED_REQUEST,
+            state
+        })
+    }
+}

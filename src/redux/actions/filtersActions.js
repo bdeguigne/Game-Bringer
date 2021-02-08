@@ -42,6 +42,24 @@ export const getFilters = () => {
     }
 }
 
+export const setFilters = (filters) => {
+    return (dispatch) => {
+        dispatch({
+            type: filtersConstants.SET_FILTERS,
+            data: filters
+        })
+    }
+}
+
+export const setIsFiltersLoaded = (state) => {
+    return (dispatch) => {
+        dispatch({
+            type: filtersConstants.SET_IS_FILTERS_LOADED,
+            state
+        })
+    }
+}
+
 export const searchByName = (endpoint, searchEntry, slug, exclude) => {
     return (dispatch) => {
         dispatch({
@@ -172,7 +190,7 @@ const grabSearchResult = (res) => {
             platforms,
             coverID,
             rating,
-            screenshots, 
+            screenshots,
             genres
         })
     })
@@ -182,44 +200,54 @@ const grabSearchResult = (res) => {
 
 export const search = (filters) => {
 
-    return (dispatch) => {
+    return (dispatch, getState) => {
         const query = generateFilterQuery(filters);
+        const storedFilters = getState().filtersReducer.filters?.front;
 
-        dispatch({
-            type: filtersConstants.SET_OFFSET,
-            offset: 0
-        })
-
-        dispatch({
-            type: filtersConstants.SET_REACH_END,
-            state: false
-        })
-
-        searchRequest(query, 0)
-            .then(res => res.json())
-            .then(res => {
-                const searchResults = grabSearchResult(res);
-                dispatch({
-                    type: filtersConstants.SET_SEARCH_RESULTS,
-                    data: searchResults
-                })
-
-                dispatch({
-                    type: filtersConstants.SET_OFFSET,
-                    offset: 20
-                })
+        if ((!storedFilters && !filters) || JSON.stringify(storedFilters) !== JSON.stringify(filters)) {
+            dispatch({
+                type: filtersConstants.SET_IS_REQUEST,
+                state: true
             })
-            .catch(err => console.log("search error", err))
+            dispatch({
+                type: filtersConstants.SET_OFFSET,
+                offset: 0
+            })
+            dispatch({
+                type: filtersConstants.SET_REACH_END,
+                state: false
+            })
+
+            searchRequest(query, 0)
+                .then(res => res.json())
+                .then(res => {
+                    const searchResults = grabSearchResult(res);
+                    dispatch({
+                        type: filtersConstants.SET_SEARCH_RESULTS,
+                        data: searchResults
+                    })
+
+                    dispatch({
+                        type: filtersConstants.SET_OFFSET,
+                        offset: 20
+                    })
+
+                    dispatch({
+                        type: filtersConstants.SET_IS_REQUEST,
+                        state: false
+                    })
+                })
+                .catch(err => console.log("search error", err))
+        }
     }
 }
 
-export const moreSearchResult = (filters) => {
+export const moreSearchResult = () => {
     return (dispatch, getState) => {
         const moreResIsRequest = getState().filtersReducer.moreResIsRequest;
         const currentOffset = getState().filtersReducer.offset;
         const isReachEnd = getState().filtersReducer.reachEnd;
-
-        console.log("REACH END", isReachEnd);
+        const filters = getState().filtersReducer.filters?.front;
 
         if (moreResIsRequest === false && isReachEnd === false) {
             dispatch({
@@ -234,7 +262,6 @@ export const moreSearchResult = (filters) => {
                 .then(res => {
                     const searchResults = grabSearchResult(res);
 
-                    console.log("MOOOORE RESS", searchResults);
                     if (searchResults.length > 0) {
                         dispatch({
                             type: filtersConstants.MORE_SEARCH_RESULTS,
@@ -263,10 +290,6 @@ export const moreSearchResult = (filters) => {
                     }
                 })
                 .catch(err => console.log("search error", err))
-
-
-
-            console.log("MORE RESSS", query);
         }
     }
 }

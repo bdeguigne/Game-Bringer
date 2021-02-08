@@ -8,11 +8,14 @@ let defaultState = {
         isRequest: false,
         res: []
     },
-    searchResult: [],
+    filters: [],
+    searchResult: null,
     correctIds: [],
     moreResIsRequest: false,
     offset: 0,
-    reachEnd: false
+    reachEnd: false,
+    isRequest: false,
+    isFiltersLoaded: false
 }
 
 function filtersReducer(state = defaultState, action) {
@@ -77,6 +80,21 @@ function filtersReducer(state = defaultState, action) {
             return {
                 ...state,
                 reachEnd: action.state
+            }
+        case filtersConstants.SET_FILTERS:
+            return {
+                ...state,
+                filters: action.data
+            }
+        case filtersConstants.SET_IS_REQUEST:
+            return {
+                ...state,
+                isRequest: action.state
+            }
+        case filtersConstants.SET_IS_FILTERS_LOADED:
+            return {
+                ...state,
+                isFiltersLoaded: action.state
             }
         default:
             return state

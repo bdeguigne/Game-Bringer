@@ -1,10 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from "styled-components";
 import { Chip } from "@material-ui/core";
 import { appColors } from "../../utils/styles";
 import PropTypes from 'prop-types'
 import { removeTerm } from './Filters';
+import { connect } from 'react-redux';
 
 const ChipsContainer = styled.div`
   display: flex;
@@ -26,13 +27,22 @@ const AllProductsText = styled.div`
   color: ${appColors["600"]};
 `
 
-
-
 const ChipFilters = props => {
+  const [showFilters, setShowFilters] = useState(false);
+
+  useEffect(() => {
+    if (props.isFiltersLoaded && props.isNeedRequest) {
+      setShowFilters(props.isCorrectIds);
+      console.log("LOAD TRUE", props.activatedFilters)
+      console.log("NEED REQUEST", props.isNeedRequest)
+    } else {
+      setShowFilters(props.isFiltersLoaded);
+    }
+  }, [props.isFiltersLoaded, props.isCorrectIds])
 
   return (
     <ChipsContainer>
-      {props.activatedFilters?.chip ? Object.keys(props.activatedFilters.chip).map(key => {
+      {showFilters && props.activatedFilters?.chip ? Object.keys(props.activatedFilters.chip).map(key => {
         const [min, max] = props.activatedFilters.front[key].split(",");
         return key === "rating" ? (
           <FiltersChip
@@ -44,30 +54,39 @@ const ChipFilters = props => {
             }}
           />
         ) : (
-            props.activatedFilters.chip[key].split(",").map((filter, index) => {
-              const id = props.activatedFilters.front[key].split(",")[index];
-              return (
-                <FiltersChip
-                  key={index + 1}
-                  label={key === "term" ? `"${filter}"` : `${filter}`}
-                  color={"primary"}
-                  onDelete={() => {
-                    props.onChangeFilters(removeTerm(id, filter, key, props.activatedFilters))
-                  }}
-                />
-              )
-            })
-          )
+          props.activatedFilters.chip[key].split(",").map((filter, index) => {
+            const id = props.activatedFilters.front[key].split(",")[index];
+            return (
+              <FiltersChip
+                key={index + 1}
+                label={key === "term" ? `"${filter}"` : `${filter}`}
+                color={"primary"}
+                onDelete={() => {
+                  props.onChangeFilters(removeTerm(id, filter, key, props.activatedFilters))
+                }}
+              />
+            )
+          })
+        )
       }) : (
-          <AllProductsText>All products</AllProductsText>
-        )}
+        <AllProductsText>All products</AllProductsText>
+      )}
+
     </ChipsContainer>
   );
 };
+
+function mapStateToProps(state) {
+  return {
+    isFiltersLoaded: state.filtersReducer.isFiltersLoaded,
+    isNeedRequest: state.uiReducer.isNeedRequest,
+    isCorrectIds: state.uiReducer.isCorrectIds
+  };
+}
 
 ChipFilters.propTypes = {
   activatedFilters: PropTypes.object,
   onChangeFilters: PropTypes.func
 };
 
-export default ChipFilters;
+export default connect(mapStateToProps)(ChipFilters);

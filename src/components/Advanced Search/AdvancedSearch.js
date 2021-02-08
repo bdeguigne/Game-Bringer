@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import styled from "styled-components";
-import { appColors } from "../../utils/styles";
-import { InputBase } from "@material-ui/core";
+import { appColors, Center } from "../../utils/styles";
+import { InputBase, CircularProgress } from "@material-ui/core";
 import { setRouteIndex, setIsCorrectIds, setActivatedFiltersAction } from "../../redux/actions/UIActions";
-import { search, moreSearchResult } from '../../redux/actions/filtersActions';
+import { search, moreSearchResult, setFilters } from '../../redux/actions/filtersActions';
 import TermChip from "./ChipFilters";
 import { RouteIndex } from "../../redux/constants/uiConstants";
 import SearchResultCard from "./SearchResultCard";
@@ -69,6 +69,8 @@ const ResultContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  opacity: ${props => props.isRequest ? 0.5 : 1};
+  transition: opacity 0.3s;
 `
 
 const AdvancedSearch = (props) => {
@@ -82,7 +84,14 @@ const AdvancedSearch = (props) => {
 
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
+        const query = getFiltersWithQuery(queryParams)
         setQueryFilters(getFiltersWithQuery(queryParams));
+
+        console.log("QUERRRY", query);
+
+        if (!query) {
+            props.search();
+        }
 
         if (searchValue === "") {
             setSearchValue(findValueFromQuery(queryFilters, "term"));
@@ -95,13 +104,17 @@ const AdvancedSearch = (props) => {
     }, [props]);
 
     const onFiltersChange = (activatedFilters) => {
+        console.log(props.isFiltersLoaded)
+        if (props.isFiltersLoaded) {
+            console.log("CORRECT TRUE",activatedFilters )
+        }
         console.log("ON FILTERS CHANGE", activatedFilters);
+        props.search(activatedFilters.front);
+        props.setFilters(JSON.parse(JSON.stringify(activatedFilters)));
         setRefresh(prev => prev + 1);
 
         setActivatedFilters(activatedFilters);
         props.setActivatedFiltersAction(activatedFilters);
-        props.search(activatedFilters.front);
-
         const url = props.match.path + "?" + generateParams(activatedFilters.front);
 
         props.history.replace(url);
@@ -120,7 +133,7 @@ const AdvancedSearch = (props) => {
     }
 
     useEffect(() => {
-        if (props.correctIds.length > 0) {
+        if (props.correctIds.length > 0 && activatedFilters) {
             const alreadyCorrectIds = [];
 
             Object.keys(activatedFilters?.chip).forEach(filterKey => {
@@ -160,22 +173,26 @@ const AdvancedSearch = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.correctIds, activatedFilters])
 
-    useEffect(() => {
-        props.search();
+    // useEffect(() => {
+    //     console.log("ACTIVATED FILTERS", activatedFilters, queryFilters);
+    //     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // }, [activatedFilters, queryFilters])
 
-        if (activatedFilters) {
-            window.addEventListener('scroll', function () {
-                if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-                    props.moreSearchResult(activatedFilters.front);
-                    // Show loading spinnedzdqr and make fetch request to api
-                }
-            });
+    const handleScroll = () => {
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+            props.moreSearchResult();
         }
+    }
+
+    useEffect(() => {
+        // props.search();
+        window.addEventListener("scroll", handleScroll);
+
         return () => {
-            window.removeEventListener("scroll", this);
+            window.removeEventListener("scroll", handleScroll);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [activatedFilters])
+    }, [])
 
     return (
         <Padding>
@@ -194,9 +211,12 @@ const AdvancedSearch = (props) => {
                     </SearchButtonContainer>
                 </SearchBar>
             </SearchContainer>
-            <TermChip activatedFilters={activatedFilters} onChangeFilters={onFiltersChange} />
+            <TermChip activatedFilters={JSON.parse(JSON.stringify(activatedFilters))} onChangeFilters={onFiltersChange} />
             <Row>
-                <ResultContainer>
+                <ResultContainer isRequest={props.isRequest}>
+                    {!props.searchResult && Array.from(Array(20), (e, i) => { return (
+                         <SearchResultCard key={i} loading={true}/>
+                    )})}
                     {props.searchResult && props.searchResult.map((res, i) => {
                         return (
                             <SearchResultCard
@@ -212,6 +232,11 @@ const AdvancedSearch = (props) => {
                             />
                         )
                     })}
+                    {props.moreResIsRequest && (
+                        <Center margin={"12px 0"}>
+                            <CircularProgress />
+                        </Center>
+                    )}
                 </ResultContainer>
                 <HandleFilters queryFilters={queryFilters} onChange={onFiltersChange} term={searchTerm} refresh={refresh} />
             </Row>
@@ -223,14 +248,18 @@ const actionCreators = {
     setRouteIndex,
     search,
     setIsCorrectIds,
+    moreSearchResult,
     setActivatedFiltersAction,
-    moreSearchResult
+    setFilters
 }
 
 function mapStateToProps(state) {
     return {
         searchResult: state.filtersReducer.searchResult,
-        correctIds: state.filtersReducer.correctIds
+        correctIds: state.filtersReducer.correctIds,
+        moreResIsRequest: state.filtersReducer.moreResIsRequest,
+        isRequest: state.filtersReducer.isRequest,
+        isFiltersLoaded: state.filtersReducer.isFiltersLoaded
     };
 }
 

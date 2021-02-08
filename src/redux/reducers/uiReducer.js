@@ -2,9 +2,10 @@ import { uiConstants, RouteIndex } from "../constants/uiConstants";
 
 let defaultState = {
     index: RouteIndex.HOMEPAGE,
-    isCorrectIds: false,
+    isCorrectIds: null,
     activatedFilters: {},
-    refreshFilters: 0
+    refreshFilters: 0,
+    isNeedRequest: false
 }
 
 function UIReducer(state = defaultState, action) {
@@ -24,6 +25,11 @@ function UIReducer(state = defaultState, action) {
                 ...state,
                 activatedFilters: action.activatedFilters,
                 refreshFilters: state.refreshFilters + 1
+            }
+        case uiConstants.SET_IS_NEED_REQUEST:
+            return {
+                ...state,
+                isNeedRequest: action.state
             }
         default:
             return state

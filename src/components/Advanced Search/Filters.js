@@ -195,6 +195,10 @@ export function filters(genres, modes, perspectives) {
     ]
 }
 
+function checkEmptyObject(obj) {
+   return obj && Object.keys(obj).length === 0 && obj.constructor === Object ? true : false
+}
+
 // Utils function
 
 export function getFiltersWithQuery(query) {
@@ -203,7 +207,9 @@ export function getFiltersWithQuery(query) {
     for (const [key, value] of query) {
         result[key] = value;
     }
-    return result;
+
+    
+    return checkEmptyObject(result) ? null : result;
 }
 
 export const findValueFromQuery = (queryArray, findValue) => {
