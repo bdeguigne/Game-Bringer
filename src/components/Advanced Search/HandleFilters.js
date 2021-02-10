@@ -13,7 +13,7 @@ import { withRouter } from 'react-router-dom';
 import { TreeItem, TreeView, Skeleton } from '@material-ui/lab';
 import { ExpandMore, ChevronLeft } from '@material-ui/icons';
 import { correctIds, setIsFiltersLoaded } from '../../redux/actions/filtersActions'
-import {setIsNeedRequest} from '../../redux/actions/UIActions'
+import { setIsNeedRequest } from '../../redux/actions/UIActions'
 
 const FiltersContainer = styled.div`
     width: 238px;
@@ -77,14 +77,16 @@ function HandleFilters(props) {
             replace = filter.replace
         }
 
-        const res = addAndGroupElem(activatedFilters, filter.type, filter.data, filter.label, replace);
+        const res = addAndGroupElem(JSON.parse(JSON.stringify(props.activatedFilters)), filter.type, filter.data, filter.label, replace);
 
+        console.log("RRRRREEEESSSSS", res);
+        console.log("DKJZDJZJDKZ", props.activatedFilters);
         setActivatedFilters(res);
         onChange()
     }
 
     const removeActivatedFilters = (toRemoved, titleSlug) => {
-        setActivatedFilters(removeTerm(toRemoved.slug, toRemoved.label, titleSlug, activatedFilters))
+        setActivatedFilters(JSON.parse(JSON.stringify(removeTerm(toRemoved.slug, toRemoved.label, titleSlug, activatedFilters))))
         onChange();
     }
 
@@ -123,6 +125,7 @@ function HandleFilters(props) {
     const onChangeFilter = (data) => {
         switch (data.type) {
             case "checkbox":
+                console.log("CHECKBOX ADD", data);
                 if (data.data.checked === true) {
                     addActivatedFilters({
                         front: {
@@ -166,9 +169,9 @@ function HandleFilters(props) {
     const renderFilters = (child, filter, index) => {
         switch (child.type) {
             case "checkbox":
-                return <CheckboxFilter key={index} onChange={onChangeFilter} label={child.label} title={filter.title} titleSlug={filter.slug || filter.title.toLowerCase()} slug={child.slug} id={child.id} active={isFilterActive(filter.slug || filter.title.toLowerCase(), child.id?.toString())} activatedFilters={props.activatedFilters} refresh={props.refreshFilters} />
+                return <CheckboxFilter key={index} onChange={onChangeFilter} label={child.label} title={filter.title} titleSlug={filter.slug || filter.title.toLowerCase()} slug={child.slug} id={child.id} active={isFilterActive(filter.slug || filter.title.toLowerCase(), child.id?.toString())} activatedFilters={activatedFilters} refresh={props.refreshFilters} />
             case "component":
-                return <child.component key={index} onChange={onChangeFilter} title={filter.title} value={findValueFromQuery(activatedFilters?.front, filter.slug || filter.title.toLowerCase()).split(",")} valueLabel={props.isCorrectSet ? findValueFromQuery(activatedFilters?.chip, filter.slug || filter.title.toLowerCase()).split(",") : []} activatedFilters={props.activatedFilters} refresh={props.refreshFilters} {...child.props} />
+                return <child.component key={index} onChange={onChangeFilter} title={filter.title} value={findValueFromQuery(activatedFilters?.front, filter.slug || filter.title.toLowerCase()).split(",")} valueLabel={props.isCorrectSet ? findValueFromQuery(props.activatedFilters?.chip, filter.slug || filter.title.toLowerCase()).split(",") : []} activatedFilters={props.activatedFilters} refresh={props.refreshFilters} {...child.props} />
             case "divider":
                 return <Divider key={index} />
             default:
@@ -254,6 +257,8 @@ function HandleFilters(props) {
                 }
             })
 
+            console.log("IDSSSS ", ids);
+
             setCollapseIds(ids);
             setExpandIds(ids);
             setLoadedFilters(filtersData);
@@ -263,7 +268,7 @@ function HandleFilters(props) {
 
     useEffect(() => {
         props.setIsFiltersLoaded(correctChipIds);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [correctChipIds])
 
     useEffect(() => {
@@ -325,8 +330,8 @@ function HandleFilters(props) {
                 <LargeTreeView
                     defaultCollapseIcon={<ExpandMore />}
                     defaultExpandIcon={<ChevronLeft />}
-                    defaultExpanded={collapseIds}
-                    onNodeToggle={(evt, value) => setExpandIds(value)}
+                    expanded={collapseIds}
+                    onNodeToggle={(evt, value) => { setExpandIds(value); setCollapseIds(value)}}
                 >
                     {!loadedFilters && SkeletonFilters()}
                     {loadedFilters && loadedFilters.map((filter, filterIndex) => {

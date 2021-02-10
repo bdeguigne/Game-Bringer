@@ -94,6 +94,10 @@ const ContentCenter = styled.div`
   margin: 4px 8px;
 `
 
+const RateContainer = styled.div`
+  width: 65px;
+`
+
 const DateContainer = styled.div`
   text-align: center;
   color: #B2B2B2;
@@ -155,11 +159,14 @@ const SearchResultCard = props => {
               </ContentCenter>
             )}
 
-            {!isNaN(props.rating) && (
-              <ContentCenter>
-                <CircularProgressWithLabel value={props.rating} size={60} />
-              </ContentCenter>
-            )}
+            <ContentCenter>
+              <RateContainer>
+
+                {!isNaN(props.rating) && (
+                  <CircularProgressWithLabel value={props.rating} size={60} />
+                )}
+              </RateContainer>
+            </ContentCenter>
           </Content>
 
         </RippleEffect>
@@ -170,7 +177,7 @@ const SearchResultCard = props => {
   if (props.loading === true) {
     return (
       <Container>
-        <Skeleton animation="wave" variant="rect" height="100%" width="100%" style={{borderRadius: "16px"}} />
+        <Skeleton animation="wave" variant="rect" height="100%" width="100%" style={{ borderRadius: "16px" }} />
       </Container>
     )
   } else if (!props.genres && !props.screenshots) {

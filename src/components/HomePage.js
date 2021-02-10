@@ -1,10 +1,11 @@
-import React from "react"
+import React, { useEffect } from "react"
 import ShowCarousel from "./ShowCarousel";
 import TopRatedGames from "./TopRatedGames";
 import { connect } from "react-redux";
 import styled from 'styled-components';
-import {Padding, SectionTitle} from '../utils/styles';
+import { Padding, SectionTitle } from '../utils/styles';
 import OtherGamesSlider from "./OtherGamesSlider";
+import { setRouteIndex } from '../redux/actions/UIActions'
 
 const TitleContainer = styled(Padding)`
     margin-top: 16px;
@@ -17,6 +18,12 @@ const Title = styled(SectionTitle)`
 `
 
 const HomePage = (props) => {
+    useEffect(() => {
+        console.log("WHAT");
+        props.setRouteIndex(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     return (
         <div>
             <TitleContainer>
@@ -42,6 +49,10 @@ const HomePage = (props) => {
     )
 }
 
+const actionCreators = {
+    setRouteIndex
+}
+
 function mapStateToProps(state) {
     return {
         popularGames: state.homePageRequests.popularGames,
@@ -51,6 +62,6 @@ function mapStateToProps(state) {
     }
 }
 
-const connectedHomePage = connect(mapStateToProps)(HomePage);
+const connectedHomePage = connect(mapStateToProps, actionCreators)(HomePage);
 
 export default connectedHomePage;

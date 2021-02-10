@@ -32,10 +32,12 @@ const ChipFilters = props => {
 
   useEffect(() => {
     if (props.isFiltersLoaded && props.isNeedRequest) {
-      setShowFilters(props.isCorrectIds);
+      setShowFilters(true);
       console.log("LOAD TRUE", props.activatedFilters)
       console.log("NEED REQUEST", props.isNeedRequest)
+      console.log("SHOW FILTEES", props.isCorrectIds)
     } else {
+      console.log("ELSEEE", props.isFiltersLoaded)
       setShowFilters(props.isFiltersLoaded);
     }
   }, [props.isFiltersLoaded, props.isCorrectIds])
@@ -80,12 +82,13 @@ function mapStateToProps(state) {
   return {
     isFiltersLoaded: state.filtersReducer.isFiltersLoaded,
     isNeedRequest: state.uiReducer.isNeedRequest,
-    isCorrectIds: state.uiReducer.isCorrectIds
+    isCorrectIds: state.uiReducer.isCorrectIds,
+    activatedFilters: state.filtersReducer.filters,
   };
 }
 
 ChipFilters.propTypes = {
-  activatedFilters: PropTypes.object,
+  // activatedFilters: PropTypes.object,
   onChangeFilters: PropTypes.func
 };
 

@@ -105,7 +105,7 @@ export const Center = styled.div`
   display: flex;
   width: 100%;
   justify-content: center;
-  margin: ${props => props.margin}
+  margin: ${props => props.margin};
 `
 
 export const SectionTitle = styled.h2`

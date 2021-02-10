@@ -30,6 +30,7 @@ const ScreenshotSkeleton = styled(Skeleton)`
 //Show a skeleton placeholder when the image is loading
 const ImageLoader = props => {
     const [loaded, setLoaded] = useState(false);
+    const [onError, setOnError] = useState(false)
 
 
     const onLoad = () => {
@@ -41,7 +42,11 @@ const ImageLoader = props => {
 
     return (
         <Container id={"IMAGE-LOADER"}>
-            <img src={props.src} alt={"Game screenshot"} style={props.style} className={props.className} onLoad={onLoad}/>
+            <img src={props.src} alt={"Game screenshot"} style={props.style} className={props.className} onLoad={onLoad} onError={() => setOnError(true)}/>
+
+            {onError && (
+                <img className={props.className} onLoad={onLoad} src={process.env.PUBLIC_URL + "/assets/placeholder-cover.png"} alt="placeholder"/>
+            )}
             <SkeletonContainer hide={loaded}>
                 <ScreenshotSkeleton variant="rect" animation={"wave"} style={props.style && {borderRadius: props.style.borderRadius}}/>
             </SkeletonContainer>

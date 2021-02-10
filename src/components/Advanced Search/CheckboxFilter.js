@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { Checkbox, FormControlLabel } from '@material-ui/core';
 import { advancedSearchPadding, appColors } from '../../utils/styles';
 import { isFiltersExist } from './Filters';
+import {connect} from 'react-redux'
 
 const Container = styled.div`
     display: flex;
@@ -70,14 +71,14 @@ function CheckboxFilter(props) {
         }
     }
 
-    const handleChangeExclude = (evt) => {
-        let state = evt.target.checked;
-        setExclude(state);
-        if (checked === true) {
-            setChecked(false);
+    // const handleChangeExclude = (evt) => {
+    //     let state = evt.target.checked;
+    //     setExclude(state);
+    //     if (checked === true) {
+    //         setChecked(false);
 
-        }
-    }
+    //     }
+    // }
 
     useEffect(() => {
         let isExist = isFiltersExist(props.activatedFilters.chip, props.titleSlug, props.label);
@@ -97,14 +98,14 @@ function CheckboxFilter(props) {
                 }
                 label={props.label}
             />
-            <SmallCheckBox
+            {/* <SmallCheckBox
                 indeterminate
                 checked={exclude}
                 onChange={handleChangeExclude}
                 name={props.label}
                 color="secondary"
                 opacity="0.5"
-            />
+            /> */}
         </Container>
     )
 }
@@ -121,9 +122,16 @@ CheckboxFilter.propTypes = {
     active: PropTypes.bool.isRequired,
     titleSlug: PropTypes.string,
     id: PropTypes.number,
-    activatedFilters: PropTypes.object,
+    // activatedFilters: PropTypes.object,
     refresh: PropTypes.number
 }
 
-export default CheckboxFilter
+function mapStateToProps(state) {
+    return {
+        activatedFilters: state.filtersReducer.filters,
+        refreshFilters: state.uiReducer.refreshFilters
+    };
+}
+
+export default connect(mapStateToProps, null)(CheckboxFilter);
 

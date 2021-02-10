@@ -5,7 +5,7 @@ let defaultState = {
     isCorrectIds: null,
     activatedFilters: {},
     refreshFilters: 0,
-    isNeedRequest: false
+    isNeedRequest: false,
 }
 
 function UIReducer(state = defaultState, action) {
@@ -31,6 +31,7 @@ function UIReducer(state = defaultState, action) {
                 ...state,
                 isNeedRequest: action.state
             }
+      
         default:
             return state
     }

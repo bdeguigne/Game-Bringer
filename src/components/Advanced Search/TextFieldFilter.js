@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { Autocomplete } from '@material-ui/lab'
 import { TextField } from '@material-ui/core'
-import { advancedSearchPadding } from '../../utils/styles'
+import { advancedSearchPadding, Center } from '../../utils/styles'
 import styled from 'styled-components';
 import CircularProgress from '@material-ui/core/CircularProgress';
 
@@ -26,7 +26,6 @@ const TextFieldFilter = (props) => {
     const isExclude = (element) => {
         let isExclude = false;
 
-
         if (props.excludeLabel) {
             props.excludeLabel.forEach(exclude => {
                 if (exclude === element) {
@@ -39,8 +38,11 @@ const TextFieldFilter = (props) => {
     }
 
     const onInputChange = (evt, value, reason) => {
-        if (props.searchResults.length === 0) {
-            props.searchByName(props.endpoint, "", props.slug, props.exclude);
+        // if (props.searchResults.length === 0) {
+        //     props.searchByName(props.endpoint, "", props.slug, props.exclude);
+        // }
+        if (props.onTypeSuggestion) {
+            props.searchByName(props.endpoint, evt.target.value, props.slug, props.exclude);
         }
     }
 
@@ -190,7 +192,7 @@ const TextFieldFilter = (props) => {
                 getOptionSelected={(option, value) => (option.name === value.name) || option === value}
                 loading={props.isRequest}
                 limitTags={1}
-                loadingText={<CircularProgress />}
+                loadingText={<Center><CircularProgress /></Center>}
                 value={value}
                 size="small"
                 ChipProps={{ color: "primary" }}
@@ -220,7 +222,8 @@ TextFieldFilter.propTypes = {
     exclude: PropTypes.array,
     excludeLabel: PropTypes.array,
     refresh: PropTypes.number,
-    activatedFilters: PropTypes.object
+    activatedFilters: PropTypes.object,
+    onTypeSuggestion: PropTypes.bool
 }
 
 const mapStateToProps = (state) => ({

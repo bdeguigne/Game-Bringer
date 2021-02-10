@@ -58,8 +58,9 @@ function TopBar(props) {
 	const [tabValue, setTabValue] = useState(props.tabIndex);
 
 	useEffect(() => {
+		console.log("TAB TOTOTOABJZBAJEBABSBSB", props.tabIndex)
 		setTabValue(props.tabIndex);
-	}, [props.tabIndex]);
+	}, [props]);
 
 
 

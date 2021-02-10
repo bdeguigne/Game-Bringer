@@ -140,7 +140,8 @@ export function filters(genres, modes, perspectives) {
                         slug: "platforms",
                         exclude: ["6", "130", "167", "48", "169", "49"],
                         excludeLabel: ["PC (Microsoft Windows)", "Nintendo Switch", "Playstation 5", "Playstation 4", "Xbox Series", "Xbox One"],
-                        endpoint: "/platforms"
+                        endpoint: "/platforms",
+                        onTypeSuggestion: false
                     }
                 }
             ]
@@ -176,7 +177,7 @@ export function filters(genres, modes, perspectives) {
                 {
                     type: "component",
                     component: TextFieldFilter,
-                    props: { label: "Companies", placeholder: "Select companies", slug: "companies", endpoint: "/companies" }
+                        props: { label: "Companies", placeholder: "Select companies", slug: "companies", endpoint: "/companies", onTypeSuggestion: true }
                 }
             ]
         },
@@ -188,7 +189,7 @@ export function filters(genres, modes, perspectives) {
                 {
                     type: "component",
                     component: TextFieldFilter,
-                    props: { label: "Game engine", placeholder: "Select game engines", slug: "game_engines", endpoint: "/game_engines" }
+                    props: { label: "Game engine", placeholder: "Select game engines", slug: "game_engines", endpoint: "/game_engines", onTypeSuggestion: true }
                 }
             ]
         },
@@ -229,7 +230,7 @@ export const findValueFromQuery = (queryArray, findValue) => {
 
 export const addAndGroupElem = (toAdd, type, data, label, replace) => {
     let isNew = true;
-    if (toAdd !== null) {
+    if (toAdd && toAdd.front) {
         Object.entries(toAdd.front).forEach(
             ([key, value]) => {
                 if (key === type) {

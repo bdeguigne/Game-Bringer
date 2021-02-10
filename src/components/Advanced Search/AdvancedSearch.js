@@ -87,28 +87,25 @@ const AdvancedSearch = (props) => {
         const query = getFiltersWithQuery(queryParams)
         setQueryFilters(getFiltersWithQuery(queryParams));
 
-        console.log("QUERRRY", query);
-
         if (!query) {
             props.search();
         }
 
-        if (searchValue === "") {
-            setSearchValue(findValueFromQuery(queryFilters, "term"));
-        }
+        // if (searchValue === "") {
+        //     setSearchValue(findValueFromQuery(queryFilters, "term"));
+        // }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location])
 
-    useEffect(() => {
-        props.setRouteIndex(RouteIndex.SEARCH);
-    }, [props]);
-
     const onFiltersChange = (activatedFilters) => {
-        console.log(props.isFiltersLoaded)
-        if (props.isFiltersLoaded) {
-            console.log("CORRECT TRUE",activatedFilters )
-        }
+        console.log("FIND TERM", findValueFromQuery(activatedFilters.chip, "term"))
         console.log("ON FILTERS CHANGE", activatedFilters);
+        console.log("ON FILTERS CHANGE PROPS", props.activatedFilters);
+        const term = findValueFromQuery(activatedFilters.chip, "term");
+
+        if (!term || term === "") {
+            setSearchValue("")
+        }
         props.search(activatedFilters.front);
         props.setFilters(JSON.parse(JSON.stringify(activatedFilters)));
         setRefresh(prev => prev + 1);
@@ -116,7 +113,6 @@ const AdvancedSearch = (props) => {
         setActivatedFilters(activatedFilters);
         props.setActivatedFiltersAction(activatedFilters);
         const url = props.match.path + "?" + generateParams(activatedFilters.front);
-
         props.history.replace(url);
     }
 
@@ -179,7 +175,8 @@ const AdvancedSearch = (props) => {
     // }, [activatedFilters, queryFilters])
 
     const handleScroll = () => {
-        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        // console.log("OFFSET HEIGHT", document.body.offsetHeight)
+        if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 600) {
             props.moreSearchResult();
         }
     }
@@ -188,8 +185,12 @@ const AdvancedSearch = (props) => {
         // props.search();
         window.addEventListener("scroll", handleScroll);
 
+        props.setRouteIndex(RouteIndex.SEARCH);
+
         return () => {
             window.removeEventListener("scroll", handleScroll);
+            setActivatedFilters(null);
+            props.setFilters([]);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -200,7 +201,7 @@ const AdvancedSearch = (props) => {
                 <SearchBar isActive={isSearchbarActive}>
                     <SearchInput
                         placeholder={"Search and discover new games"}
-                        onChange={(evt) => setSearchValue(evt.target.value)}
+                        onChange={(evt) => {console.log("ON CHANGE TEXT", evt.target.value); setSearchValue(evt.target.value)}}
                         value={searchValue}
                         onKeyPress={onKeyPressed}
                         onClick={() => setIsSearchbarActive(true)}
@@ -250,7 +251,7 @@ const actionCreators = {
     setIsCorrectIds,
     moreSearchResult,
     setActivatedFiltersAction,
-    setFilters
+    setFilters,
 }
 
 function mapStateToProps(state) {
@@ -259,6 +260,7 @@ function mapStateToProps(state) {
         correctIds: state.filtersReducer.correctIds,
         moreResIsRequest: state.filtersReducer.moreResIsRequest,
         isRequest: state.filtersReducer.isRequest,
+        activatedFilters: state.filtersReducer.filters,
         isFiltersLoaded: state.filtersReducer.isFiltersLoaded
     };
 }

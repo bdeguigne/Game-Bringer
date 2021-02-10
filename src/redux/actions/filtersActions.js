@@ -201,10 +201,18 @@ const grabSearchResult = (res) => {
 export const search = (filters) => {
 
     return (dispatch, getState) => {
-        const query = generateFilterQuery(filters);
-        const storedFilters = getState().filtersReducer.filters?.front;
 
-        if ((!storedFilters && !filters) || JSON.stringify(storedFilters) !== JSON.stringify(filters)) {
+        const query = generateFilterQuery(filters);
+        const storedFilters = getState().filtersReducer.lastRequestFilters;
+
+        console.log("SEARCH !", filters);
+        console.log("STORED FILTERS !", storedFilters);
+
+        if ((!storedFilters || !filters) || JSON.stringify(storedFilters) !== JSON.stringify(filters)) {
+            var filtersCopy = null;
+            if (filters) {
+                filtersCopy = JSON.parse(JSON.stringify(filters))
+            }
             dispatch({
                 type: filtersConstants.SET_IS_REQUEST,
                 state: true
@@ -216,6 +224,10 @@ export const search = (filters) => {
             dispatch({
                 type: filtersConstants.SET_REACH_END,
                 state: false
+            })
+            dispatch({
+                type: filtersConstants.SET_LAST_REQUEST_FILTERS,
+                data: filtersCopy || filters
             })
 
             searchRequest(query, 0)
@@ -236,6 +248,8 @@ export const search = (filters) => {
                         type: filtersConstants.SET_IS_REQUEST,
                         state: false
                     })
+
+
                 })
                 .catch(err => console.log("search error", err))
         }

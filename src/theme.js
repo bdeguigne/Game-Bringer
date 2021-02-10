@@ -1,11 +1,12 @@
 import { createMuiTheme } from '@material-ui/core/styles';
-// import type from '@material-ui/lab/themeAugmentation';
 import {
     appColors,
     toolTipBoxShadow,
     genresNeonBoxShadow,
     genresNeonBoxShadowHover,
     PrimaryNeonBoxShadow, PrimaryNeonBoxShadowHover,
+    gameShowNeonBoxShadow
+    
 } from "./utils/styles";
 
 export default createMuiTheme({
@@ -226,6 +227,13 @@ export default createMuiTheme({
                 marginLeft: 0,
             },
             
+        },
+        MuiAutocomplete: {
+            paper: {
+                fontFamily: "Montserrat, sans-serif",
+                backgroundColor: appColors.backgroundContrast,
+                boxShadow: gameShowNeonBoxShadow
+            }
         }
 
     }

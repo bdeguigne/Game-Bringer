@@ -188,7 +188,9 @@ SliderFilter.propTypes = {
     onChange: PropTypes.func,
     value: PropTypes.array,
     slug: PropTypes.string,
-    activatedFilters: PropTypes.object,
+    activatedFilters: PropTypes.oneOfType([
+        PropTypes.object, PropTypes.array
+    ]),
     refresh: PropTypes.number
 }
 
