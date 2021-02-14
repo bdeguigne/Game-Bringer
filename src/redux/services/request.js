@@ -39,7 +39,7 @@ export const handleError = (name, error, dispatch) => {
             state: true
         })
 
-        if (error.statusText === "Forbidden" && error.status === 403) {
+        if (error.status === 403) {
             console.log("FORBIDDEN");
             getTokens()
                 .then(res => res.json())
