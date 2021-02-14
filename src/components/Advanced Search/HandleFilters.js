@@ -7,17 +7,19 @@ import styled from "styled-components";
 import { filters, addAndGroupElem, isFiltersExist, replaceTerm, findValueFromQuery, removeTerm } from './Filters';
 import CheckboxFilter from './CheckboxFilter';
 import { connect } from 'react-redux';
-import { appColors } from "../../utils/styles";
+import { appColors, openDrawerButton } from "../../utils/styles";
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { TreeItem, TreeView, Skeleton } from '@material-ui/lab';
 import { ExpandMore, ChevronLeft } from '@material-ui/icons';
-import { correctIds, setIsFiltersLoaded } from '../../redux/actions/filtersActions'
+import { correctIds, setIsFiltersLoaded, setFilters } from '../../redux/actions/filtersActions'
 import { setIsNeedRequest } from '../../redux/actions/UIActions'
+import { SwipeableDrawer } from '@material-ui/core';
+import useWindowDimensions from "../../utils/useWindowDimensions";
+import MenuIcon from '@material-ui/icons/Menu';
 
 const FiltersContainer = styled.div`
     width: 238px;
-    margin-left: 16px;
 `
 
 const Divider = styled.hr`
@@ -59,7 +61,31 @@ const DoubleArrowIcon = styled.span`
     color: ${appColors.primarySimple};
 `
 
+const OpenDrawerContainer = styled.div`
+    position: fixed;
+    right: 0;
+    top: 92px;
+    border-bottom-left-radius: 50%;
+    border-top-left-radius: 50%;
+    height: 55px;
+    width: 40px;
+    background-color: ${appColors.secondaryDarker};
+    box-shadow: ${openDrawerButton};
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    opacity: 0.9;
+    z-index: 3;
+    
+`
+
+const OpenMenuIcon = styled(MenuIcon)`
+    font-size: 2.0rem !important;
+    opacity: 0.9;
+`
+
 function HandleFilters(props) {
+    const { width } = useWindowDimensions();
     const [expand, setExpand] = useState([]);
     const [activatedFilters, setActivatedFilters] = useState(null);
     const [loadedFilters, setLoadedFilters] = useState(null);
@@ -67,6 +93,7 @@ function HandleFilters(props) {
     const [expandIds, setExpandIds] = useState([]);
     const [correctChipIds, setCorrectChipIds] = useState(false);
     const [isFiltersLoaded, setIsFiltersLoaded] = useState(false);
+    const [mobileOpen, setMobileOpen] = useState(false);
 
     const addActivatedFilters = (data) => {
         let replace = false;
@@ -81,8 +108,9 @@ function HandleFilters(props) {
 
         console.log("RRRRREEEESSSSS", res);
         console.log("DKJZDJZJDKZ", props.activatedFilters);
+        props.setFilters(res);
         setActivatedFilters(res);
-        onChange()
+        onChange(res)
     }
 
     const removeActivatedFilters = (toRemoved, titleSlug) => {
@@ -91,9 +119,9 @@ function HandleFilters(props) {
     }
 
     const onChange = useCallback(
-        () => {
-            if (props.onChange && activatedFilters) {
-                props.onChange(activatedFilters);
+        (res) => {
+            if (props.onChange) {
+                props.onChange(res || activatedFilters);
             }
         },
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -102,8 +130,12 @@ function HandleFilters(props) {
 
     useEffect(() => {
         if (props.queryFilters && Object.keys(props.queryFilters).length !== 0 && !activatedFilters) {
+            console.log("IN HANDLE QUERRYYRYRYRYR", props.queryFilters);
             setActivatedFilters(
-                { front: props.queryFilters, chip: JSON.parse(JSON.stringify(props.queryFilters)) },
+                { front: JSON.parse(JSON.stringify(props.queryFilters)), chip: JSON.parse(JSON.stringify(props.queryFilters)) },
+            );
+            props.setFilters(
+                { front: JSON.parse(JSON.stringify(props.queryFilters)), chip: JSON.parse(JSON.stringify(props.queryFilters)) },
             );
         }
 
@@ -112,15 +144,16 @@ function HandleFilters(props) {
 
     useEffect(() => {
         if (props.term !== "") {
-            setActivatedFilters(replaceTerm(activatedFilters, props.term))
-            onChange();
+            // setActivatedFilters(replaceTerm(activatedFilters, props.term));
+            // props.setFilters(replaceTerm(props.activatedFilters, props.term));
+            onChange(replaceTerm(JSON.parse(JSON.stringify(props.activatedFilters)), props.term));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.term])
 
-    useEffect(() => {
-        onChange()
-    }, [onChange])
+    // useEffect(() => {
+    //     onChange()
+    // }, [onChange])
 
     const onChangeFilter = (data) => {
         switch (data.type) {
@@ -200,39 +233,52 @@ function HandleFilters(props) {
     const correctChipIdsOnStart = (filtersData) => {
         if (filtersData?.length > 0 && activatedFilters && !correctChipIds) {
             const needRequestIds = [];
+            let needCorrect = false;
 
             Object.keys(activatedFilters.chip).forEach(key => {
+
                 const replaceFiltersArray = [];
+                if (key !== "term" && key !== "sort") {
+                    needCorrect = true;
+                }
 
-                filtersData.forEach(filter => {
-                    if ((filter.slug || filter.title.toLowerCase()) === key) {
-                        switch (key) {
-                            case "ratings":
-                                break;
-                            default:
-                                let chipValue = activatedFilters.chip[key].split(",");
+                if (needCorrect) {
+                    filtersData.forEach(filter => {
+                        if ((filter.slug || filter.title.toLowerCase()) === key) {
+                            switch (key) {
+                                case "term":
+                                    break;
+                                case "ratings":
+                                    break;
+                                case "sort":
+                                    break;
+                                default:
+                                    let chipValue = activatedFilters.chip[key].split(",");
 
-                                chipValue.forEach(chipId => {
-                                    filter.children.forEach(child => {
-                                        if (child.id === parseInt(chipId)) {
-                                            replaceFiltersArray.push(child.label)
-                                            chipValue = chipValue.filter(item => item !== chipId)
-                                        }
+                                    chipValue.forEach(chipId => {
+                                        filter.children.forEach(child => {
+                                            if (child.id === parseInt(chipId)) {
+                                                replaceFiltersArray.push(child.label)
+                                                chipValue = chipValue.filter(item => item !== chipId)
+                                            }
+                                        })
                                     })
-                                })
-                                if (chipValue.length > 0) {
-                                    props.setIsNeedRequest(true);
-                                    needRequestIds.push({ ids: chipValue, slug: key })
-                                }
+                                    if (chipValue.length > 0) {
+                                        props.setIsNeedRequest(true);
+                                        needRequestIds.push({ ids: chipValue, slug: key })
+                                    }
 
-                                activatedFilters.chip[key] = replaceFiltersArray.concat(chipValue).join(",")
+                                    activatedFilters.chip[key] = replaceFiltersArray.concat(chipValue).join(",")
 
+                            }
+                            setActivatedFilters(activatedFilters);
+                            onChange();
+                            setCorrectChipIds(true);
                         }
-                        setActivatedFilters(activatedFilters);
-                        onChange();
-                        setCorrectChipIds(true);
-                    }
-                })
+                    })
+                } else {
+                    setCorrectChipIds(true);
+                }
             })
             props.correctIds(needRequestIds);
         }
@@ -267,6 +313,7 @@ function HandleFilters(props) {
     }, [isFiltersLoaded, activatedFilters])
 
     useEffect(() => {
+        console.log("SET IS FILTERS LOADED", correctChipIds);
         props.setIsFiltersLoaded(correctChipIds);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [correctChipIds])
@@ -288,6 +335,16 @@ function HandleFilters(props) {
             setIsFiltersLoaded(true)
         }
     }, [props.genres, props.modes, props.perspectives])
+
+
+    const toggleDrawer = (open) => (event) => {
+        if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+            return;
+        }
+
+        setMobileOpen(open);
+    };
+
 
     const SkeletonFilters = () => {
         return (
@@ -324,14 +381,14 @@ function HandleFilters(props) {
     //     // setActivatedFilters(props.activatedFilters)
     // }, [props.refresh, props.activatedFilters])
 
-    return (
+    const filtersDrawer = (
         <FiltersContainer>
             {collapseIds.length > 0 && (
                 <LargeTreeView
                     defaultCollapseIcon={<ExpandMore />}
                     defaultExpandIcon={<ChevronLeft />}
                     expanded={collapseIds}
-                    onNodeToggle={(evt, value) => { setExpandIds(value); setCollapseIds(value)}}
+                    onNodeToggle={(evt, value) => { setExpandIds(value); setCollapseIds(value) }}
                 >
                     {!loadedFilters && SkeletonFilters()}
                     {loadedFilters && loadedFilters.map((filter, filterIndex) => {
@@ -365,6 +422,37 @@ function HandleFilters(props) {
             )}
         </FiltersContainer >
     )
+
+    const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
+
+    return (
+        <div>
+            {width >= 1000 ?
+                filtersDrawer
+                : (
+                    <>
+                        <OpenDrawerContainer>
+                            <OpenMenuIcon onClick={() => setMobileOpen(true)}></OpenMenuIcon>
+                        </OpenDrawerContainer>
+                        <SwipeableDrawer
+                            disableBackdropTransition={!iOS}
+                            disableDiscovery={iOS}
+                            anchor="right"
+                            open={mobileOpen}
+                            onClose={toggleDrawer(false)}
+                            onOpen={toggleDrawer(true)}
+                            ModalProps={{
+                                keepMounted: true
+                            }}
+                        >
+                            {filtersDrawer}
+                        </SwipeableDrawer>
+                    </>
+                )}
+
+        </div>
+
+    )
 }
 
 HandleFilters.propTypes = {
@@ -377,7 +465,8 @@ HandleFilters.propTypes = {
 const actionCreators = {
     correctIds,
     setIsFiltersLoaded,
-    setIsNeedRequest
+    setIsNeedRequest,
+    setFilters
 }
 
 function mapStateToProps(state) {

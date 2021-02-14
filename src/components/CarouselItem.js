@@ -24,7 +24,7 @@ const Slide = styled.div`
 
   border-radius: ${borderRadius};
   transform: none;
-  box-shadow: ${props => props.isSelected ? (props.videoReady ? carousel.selectedBoxShadow : props.isDesktop ? carousel.hoveredNeonBoxShadow : carousel.hoveredNeonBoxShadowMobile) : carousel.boxShadow}
+  box-shadow: ${props => props.isSelected ? (props.videoReady ? carousel.selectedBoxShadow : props.isDesktop ? carousel.hoveredNeonBoxShadow : carousel.hoveredNeonBoxShadowMobile) : carousel.boxShadow};
     //border: ${carousel.border};
 
   overflow: hidden;

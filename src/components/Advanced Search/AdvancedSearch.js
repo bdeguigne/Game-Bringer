@@ -2,8 +2,9 @@ import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import styled from "styled-components";
 import { appColors, Center } from "../../utils/styles";
-import { InputBase, CircularProgress } from "@material-ui/core";
-import { setRouteIndex, setIsCorrectIds, setActivatedFiltersAction } from "../../redux/actions/UIActions";
+import { InputBase, CircularProgress, Snackbar } from "@material-ui/core";
+import { Alert } from '@material-ui/lab';
+import { setRouteIndex, setIsCorrectIds, setActivatedFiltersAction, setIsErrorOccurred } from "../../redux/actions/UIActions";
 import { search, moreSearchResult, setFilters } from '../../redux/actions/filtersActions';
 import TermChip from "./ChipFilters";
 import { RouteIndex } from "../../redux/constants/uiConstants";
@@ -11,8 +12,9 @@ import SearchResultCard from "./SearchResultCard";
 import { Padding } from '../../utils/styles';
 import HandleFilters from './HandleFilters';
 import { useLocation, withRouter } from "react-router-dom";
-import { generateParams, getFiltersWithQuery, findValueFromQuery, replace } from './Filters'
+import { generateParams, getFiltersWithQuery, replace, addAndGroupElem } from './Filters'
 import { compose } from 'redux';
+import SelectSort from './SelectSort';
 
 const SearchContainer = styled.div`
   width: 100%;
@@ -69,12 +71,25 @@ const ResultContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  max-width: 740px;
   opacity: ${props => props.isRequest ? 0.5 : 1};
   transition: opacity 0.3s;
 `
 
+const SortContainer = styled.div`
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 8px;
+`
+
+const FullWidth = styled.div`
+    width: 100%;
+    margin-right: 16px;
+`
+
 const AdvancedSearch = (props) => {
     let location = useLocation();
+    const [openSnackBar, setOpenSnackBar] = useState(false);
     const [queryFilters, setQueryFilters] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
     const [searchValue, setSearchValue] = useState("");
@@ -84,12 +99,11 @@ const AdvancedSearch = (props) => {
 
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
-        const query = getFiltersWithQuery(queryParams)
         setQueryFilters(getFiltersWithQuery(queryParams));
 
-        if (!query) {
-            props.search();
-        }
+        // if (!query) {
+        //     props.search();
+        // }
 
         // if (searchValue === "") {
         //     setSearchValue(findValueFromQuery(queryFilters, "term"));
@@ -98,21 +112,24 @@ const AdvancedSearch = (props) => {
     }, [location])
 
     const onFiltersChange = (activatedFilters) => {
-        console.log("FIND TERM", findValueFromQuery(activatedFilters.chip, "term"))
+        // console.log("FIND TERM", findValueFromQuery(activatedFilters.chip, "term"))
         console.log("ON FILTERS CHANGE", activatedFilters);
         console.log("ON FILTERS CHANGE PROPS", props.activatedFilters);
-        const term = findValueFromQuery(activatedFilters.chip, "term");
+        // const term = findValueFromQuery(activatedFilters?.chip, "term");
 
-        if (!term || term === "") {
-            setSearchValue("")
-        }
-        props.search(activatedFilters.front);
-        props.setFilters(JSON.parse(JSON.stringify(activatedFilters)));
+        // if (!term || term === "") {
+        //     setSearchValue("")
+        // }
         setRefresh(prev => prev + 1);
 
-        setActivatedFilters(activatedFilters);
-        props.setActivatedFiltersAction(activatedFilters);
-        const url = props.match.path + "?" + generateParams(activatedFilters.front);
+        const copyFilters = JSON.parse(JSON.stringify(activatedFilters));
+        props.setFilters(copyFilters);
+
+        props.search(copyFilters?.front);
+
+        setActivatedFilters(copyFilters);
+        props.setActivatedFiltersAction(copyFilters);
+        const url = props.match.path + "?" + generateParams(copyFilters?.front);
         props.history.replace(url);
     }
 
@@ -181,6 +198,12 @@ const AdvancedSearch = (props) => {
         }
     }
 
+    const handleSortChange = (sort) => {
+        const filters = addAndGroupElem(JSON.parse(JSON.stringify(props.activatedFilters)), "sort", sort, sort, true);
+        onFiltersChange(filters);
+    }
+
+
     useEffect(() => {
         // props.search();
         window.addEventListener("scroll", handleScroll);
@@ -195,13 +218,35 @@ const AdvancedSearch = (props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    useEffect(() => {
+        if (props.isErrorOccurred) {
+            console.log("ERROR SHOW SNACKBAR", props.isErrorOccurred)
+            setOpenSnackBar(props.isErrorOccurred)
+        }
+    }, [props.isErrorOccurred])
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        props.setIsErrorOccurred(false);
+
+        setOpenSnackBar(false);
+    };
+
     return (
         <Padding>
+            <Snackbar open={openSnackBar} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical: "top", horizontal: "right" }}>
+                <Alert onClose={handleClose} severity="error">
+                    Sorry, a error occured, please try again.
+                </Alert>
+            </Snackbar>
             <SearchContainer>
                 <SearchBar isActive={isSearchbarActive}>
                     <SearchInput
                         placeholder={"Search and discover new games"}
-                        onChange={(evt) => {console.log("ON CHANGE TEXT", evt.target.value); setSearchValue(evt.target.value)}}
+                        onChange={(evt) => { console.log("ON CHANGE TEXT", evt.target.value); setSearchValue(evt.target.value) }}
                         value={searchValue}
                         onKeyPress={onKeyPressed}
                         onClick={() => setIsSearchbarActive(true)}
@@ -213,32 +258,40 @@ const AdvancedSearch = (props) => {
                 </SearchBar>
             </SearchContainer>
             <TermChip activatedFilters={JSON.parse(JSON.stringify(activatedFilters))} onChangeFilters={onFiltersChange} />
+
             <Row>
-                <ResultContainer isRequest={props.isRequest}>
-                    {!props.searchResult && Array.from(Array(20), (e, i) => { return (
-                         <SearchResultCard key={i} loading={true}/>
-                    )})}
-                    {props.searchResult && props.searchResult.map((res, i) => {
-                        return (
-                            <SearchResultCard
-                                key={i}
-                                game={res.name}
-                                developer={res.company?.name}
-                                date={res.releaseDate}
-                                platforms={res.platforms}
-                                coverId={res.coverID}
-                                rating={res.rating}
-                                screenshots={res.screenshots}
-                                genres={res.genres}
-                            />
-                        )
-                    })}
-                    {props.moreResIsRequest && (
-                        <Center margin={"12px 0"}>
-                            <CircularProgress />
-                        </Center>
-                    )}
-                </ResultContainer>
+                <FullWidth>
+                    <SortContainer >
+                        <SelectSort onChange={(sort) => handleSortChange(sort)} />
+                    </SortContainer>
+                    <ResultContainer isRequest={props.isRequest}>
+                        {!props.searchResult && Array.from(Array(20), (e, i) => {
+                            return (
+                                <SearchResultCard key={i} loading={true} />
+                            )
+                        })}
+                        {props.searchResult && props.searchResult.map((res, i) => {
+                            return (
+                                <SearchResultCard
+                                    key={i}
+                                    game={res.name}
+                                    developer={res.company?.name}
+                                    date={res.releaseDate}
+                                    platforms={res.platforms}
+                                    coverId={res.coverID}
+                                    rating={res.rating}
+                                    screenshots={res.screenshots}
+                                    genres={res.genres}
+                                />
+                            )
+                        })}
+                        {props.moreResIsRequest && (
+                            <Center margin={"12px 0"}>
+                                <CircularProgress />
+                            </Center>
+                        )}
+                    </ResultContainer>
+                </FullWidth>
                 <HandleFilters queryFilters={queryFilters} onChange={onFiltersChange} term={searchTerm} refresh={refresh} />
             </Row>
         </Padding>
@@ -252,6 +305,7 @@ const actionCreators = {
     moreSearchResult,
     setActivatedFiltersAction,
     setFilters,
+    setIsErrorOccurred
 }
 
 function mapStateToProps(state) {
@@ -261,7 +315,8 @@ function mapStateToProps(state) {
         moreResIsRequest: state.filtersReducer.moreResIsRequest,
         isRequest: state.filtersReducer.isRequest,
         activatedFilters: state.filtersReducer.filters,
-        isFiltersLoaded: state.filtersReducer.isFiltersLoaded
+        isFiltersLoaded: state.filtersReducer.isFiltersLoaded,
+        isErrorOccurred: state.uiReducer.isErrorOccurred,
     };
 }
 

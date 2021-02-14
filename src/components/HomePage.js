@@ -1,11 +1,13 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import ShowCarousel from "./ShowCarousel";
 import TopRatedGames from "./TopRatedGames";
 import { connect } from "react-redux";
 import styled from 'styled-components';
 import { Padding, SectionTitle } from '../utils/styles';
 import OtherGamesSlider from "./OtherGamesSlider";
-import { setRouteIndex } from '../redux/actions/UIActions'
+import { setRouteIndex, setIsErrorOccurred } from '../redux/actions/UIActions';
+import { Snackbar } from '@material-ui/core';
+import { Alert } from '@material-ui/lab';
 
 const TitleContainer = styled(Padding)`
     margin-top: 16px;
@@ -18,14 +20,38 @@ const Title = styled(SectionTitle)`
 `
 
 const HomePage = (props) => {
+    const [openSnackBar, setOpenSnackBar] = useState(false);
+
     useEffect(() => {
-        console.log("WHAT");
         props.setRouteIndex(0);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+        if (props.isErrorOccurred) {
+            console.log("ERROR SHOW SNACKBAR", props.isErrorOccurred)
+            setOpenSnackBar(props.isErrorOccurred)
+        }
+    }, [props.isErrorOccurred])
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+
+        props.setIsErrorOccurred(false);
+
+        setOpenSnackBar(false);
+    };
 
     return (
         <div>
+            <Snackbar open={openSnackBar} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical: "top", horizontal: "right" }}>
+                <Alert onClose={handleClose} severity="error">
+                    Sorry, a error occured, please try again.
+                </Alert>
+            </Snackbar>
+
             <TitleContainer>
                 <Title>Popular games right now</Title>
             </TitleContainer>
@@ -50,7 +76,8 @@ const HomePage = (props) => {
 }
 
 const actionCreators = {
-    setRouteIndex
+    setRouteIndex,
+    setIsErrorOccurred
 }
 
 function mapStateToProps(state) {
@@ -58,7 +85,8 @@ function mapStateToProps(state) {
         popularGames: state.homePageRequests.popularGames,
         recentlyReleasedGames: state.homePageRequests.recentlyReleasedGames,
         comingSoonGames: state.homePageRequests.comingSoonGames,
-        bestRatedGames: state.homePageRequests.bestRatedGamesThisMonth
+        bestRatedGames: state.homePageRequests.bestRatedGamesThisMonth,
+        isErrorOccurred: state.uiReducer.isErrorOccurred,
     }
 }
 

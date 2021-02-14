@@ -30,13 +30,14 @@ export const searchByNameRequest = (endpoint, searchEntry, exclude) => {
     return doRequest(endpoint, query);
 }
 
-export const searchRequest = (filterQuery, offset) => {
+export const searchRequest = (filterQuery, sort, offset) => {
     const whereCondition = filterQuery ? "where " + filterQuery : "where first_release_date != null";
     const offsetValue = offset ? offset : 0;
+    const sortValue = sort ? `sort ${sort};` : "";
 
     const query = `fields name, platforms, game_modes, genres.slug, platforms.name, platforms.platform_logo.image_id, rating, game_modes.slug, game_engines.slug, involved_companies.developer, involved_companies.company.name, player_perspectives.slug, first_release_date, release_dates.*, cover.image_id, aggregated_rating, screenshots.image_id, genres.name;
     ${whereCondition};
-    sort first_release_date desc;
+    ${sortValue}
     limit 20;
     offset ${offsetValue};`
 

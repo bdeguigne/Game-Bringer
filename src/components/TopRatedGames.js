@@ -146,7 +146,7 @@ function TopRatedGames({games}) {
         <Container>
             <Header>
                 <SectionTitle>
-                    Top Rated Games
+                    Top Rated Games this month
                 </SectionTitle>
             </Header>
             <SliderWrapper isLoading={!hideSkeleton}>

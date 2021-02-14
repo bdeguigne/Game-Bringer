@@ -6,6 +6,7 @@ let defaultState = {
     activatedFilters: {},
     refreshFilters: 0,
     isNeedRequest: false,
+    isErrorOccurred: false
 }
 
 function UIReducer(state = defaultState, action) {
@@ -31,7 +32,11 @@ function UIReducer(state = defaultState, action) {
                 ...state,
                 isNeedRequest: action.state
             }
-      
+        case uiConstants.SET_IS_ERROR_OCCURRED:
+            return {
+                ...state,
+                isErrorOccurred: action.state
+            }
         default:
             return state
     }

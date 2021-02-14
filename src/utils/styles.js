@@ -88,6 +88,8 @@ export const genresNeonBoxShadowHover = `0px 0px 64px 0px ${appColors.secondary}
 export const resultItemBoxShadow = "0px 4px 4px rgba(0, 0, 0, 0.25);"
 export const advancedSearchPadding = "4px 6px 4px 6px";
 
+export const openDrawerButton = `0px 0px 30px 0px ${appColors.secondary}, 0px 0px 12px -11px #ffffff, inset 0px 0px 32px -5px ${appColors.secondary}`;
+
 /* Others */
 
 export const Padding = styled.div`

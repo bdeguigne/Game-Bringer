@@ -1,6 +1,7 @@
 import { homePageRequestsConstants } from "../constants/homePageRequestsConstants";
 import { getPopularGameRequest, getRecentlyReleasedRequest, getComingSoonGamesRequest, getBestRatedGamesRequest } from "../services/homePageRequestsServices";
-import { findDeveloper, getElapsedTime, getRandom, getVideoTrailer} from '../../utils/requestFormat'
+import { findDeveloper, getElapsedTime, getRandom, getVideoTrailer } from '../../utils/requestFormat'
+import { handleError } from '../services/request';
 
 const grabGameData = (games) => {
     let storedIds = [];
@@ -18,7 +19,7 @@ const grabGameData = (games) => {
                 const coverID = game.game.cover ? game.game.cover.image_id : null;
                 const genres = game.game.genres;
                 const screenshots = game.game.screenshots;
-                const releasedDate = getElapsedTime({date: game.date, category: game.category, human: game.human});
+                const releasedDate = getElapsedTime({ date: game.date, category: game.category, human: game.human });
                 const rating = Math.round(game.game.aggregated_rating);
 
                 gamesData.push({
@@ -43,7 +44,10 @@ const grabGameData = (games) => {
 export const getPopularGames = () => {
     return (dispatch) => {
         getPopularGameRequest()
-            .then(res => res.json())
+            .then(res => {
+                handleError("getPopularGames error", res, dispatch);
+                return res.json();
+            })
             .then(res => {
                 const popularGamesData = [];
                 // ("POPULAR RES ", res);
@@ -52,7 +56,7 @@ export const getPopularGames = () => {
                     const game = popularGame.name;
                     const rating = Math.round(popularGame.aggregated_rating);
                     const genres = popularGame.genres;
-                    const screenshotID = popularGame.screenshots ?  (popularGame.screenshots[Math.floor(Math.random() * popularGame.screenshots.length)]).image_id : null;
+                    const screenshotID = popularGame.screenshots ? (popularGame.screenshots[Math.floor(Math.random() * popularGame.screenshots.length)]).image_id : null;
                     const videoID = getVideoTrailer(popularGame.videos);
                     const releaseDate = getElapsedTime(popularGame.release_dates, popularGame.first_release_date);
                     const company = findDeveloper(popularGame.involved_companies);
@@ -81,7 +85,6 @@ export const getPopularGames = () => {
                 })
 
             })
-            .catch(error => console.log("getPopularGames error", error));
     }
 }
 
@@ -89,7 +92,10 @@ export const getPopularGames = () => {
 export const getRecentlyReleasedGames = () => {
     return dispatch => {
         getRecentlyReleasedRequest(30)
-            .then(res => res.json())
+            .then(res => {
+                handleError("getRecentlyReleasedGames error", res, dispatch);
+                return res.json();
+            })
             .then(res => {
                 let games = grabGameData(res);
 
@@ -98,14 +104,16 @@ export const getRecentlyReleasedGames = () => {
                     games
                 })
             })
-            .catch(error => console.log("getRecentlyReleasedGames error", error))
     }
 }
 
 export const getComingSoonGames = () => {
     return dispatch => {
         getComingSoonGamesRequest(30)
-            .then(res => res.json())
+            .then(res => {
+                handleError("getComingSoonGames error", res, dispatch);
+                return res.json();
+            })
             .then(res => {
                 let games = grabGameData(res);
 
@@ -114,7 +122,6 @@ export const getComingSoonGames = () => {
                     games
                 })
             })
-            .catch(error => console.log("getComingSoonGames error", error))
     }
 }
 
@@ -122,7 +129,10 @@ export const getComingSoonGames = () => {
 export const getBestRatedGames = (time) => {
     return dispatch => {
         getBestRatedGamesRequest(time, 10)
-            .then(res => res.json())
+            .then(res => {
+                handleError("getBestRatedGames ", res, dispatch);
+                return res.json();
+            })
             .then(res => {
                 const bestRatedGamesData = [];
                 res.forEach(bestRatedGame => {
@@ -151,6 +161,7 @@ export const getBestRatedGames = (time) => {
                     games: bestRatedGamesData
                 })
             })
-            .catch(error => console.log("getBestRatedGames ", error))
+            .catch(error => handleError("getBestRatedGames ", error, dispatch))
+
     }
 }

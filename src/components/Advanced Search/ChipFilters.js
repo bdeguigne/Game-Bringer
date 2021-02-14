@@ -33,11 +33,8 @@ const ChipFilters = props => {
   useEffect(() => {
     if (props.isFiltersLoaded && props.isNeedRequest) {
       setShowFilters(true);
-      console.log("LOAD TRUE", props.activatedFilters)
-      console.log("NEED REQUEST", props.isNeedRequest)
-      console.log("SHOW FILTEES", props.isCorrectIds)
     } else {
-      console.log("ELSEEE", props.isFiltersLoaded)
+      // setShowFilters(props.isFiltersLoaded);
       setShowFilters(props.isFiltersLoaded);
     }
   }, [props.isFiltersLoaded, props.isCorrectIds])
@@ -46,6 +43,8 @@ const ChipFilters = props => {
     <ChipsContainer>
       {showFilters && props.activatedFilters?.chip ? Object.keys(props.activatedFilters.chip).map(key => {
         const [min, max] = props.activatedFilters.front[key].split(",");
+        if (key === "sort")
+          return null
         return key === "rating" ? (
           <FiltersChip
             key={1}

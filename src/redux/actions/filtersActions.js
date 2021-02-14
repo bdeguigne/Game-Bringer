@@ -1,12 +1,16 @@
 import { getFilterRequest, searchByNameRequest, searchRequest, correctIdsRequest } from '../services/filtersService';
 import { filtersConstants } from '../constants/filtersConstants'
 import { findDeveloper, getElapsedTime } from '../../utils/requestFormat';
+import { handleError } from '../services/request';
 import moment from 'moment';
 
 export const getFilters = () => {
     return (dispatch) => {
         getFilterRequest()
-            .then(res => res.json())
+            .then(res => {
+                handleError("getFilters error", res, dispatch);
+                return res.json();
+            })
             .then(res => {
                 let genres = [];
                 let modes = [];
@@ -38,7 +42,6 @@ export const getFilters = () => {
                 })
 
             })
-            .catch(error => console.log("getFilters error", error))
     }
 }
 
@@ -66,7 +69,10 @@ export const searchByName = (endpoint, searchEntry, slug, exclude) => {
             type: filtersConstants.TEXTFIELDS_RES_REQUEST
         })
         searchByNameRequest(endpoint, searchEntry, exclude)
-            .then(res => res.json())
+            .then(res => {
+                handleError("Search by name error", res, dispatch);
+                return res.json();
+            })
             .then(res => {
 
                 dispatch({
@@ -76,7 +82,6 @@ export const searchByName = (endpoint, searchEntry, slug, exclude) => {
                     }
                 })
             })
-            .catch(error => console.log("getFilters error", error))
     }
 }
 
@@ -110,26 +115,42 @@ export const correctIds = (needRequestArray) => {
     return (dispatch) => {
         const queryData = genQuery();
         correctIdsRequest(queryData)
-            .then(res => res.json())
+            .then(res => {
+                handleError("error CorrectIds", res, dispatch);
+                return res.json();
+            })
             .then(res => {
                 dispatch({
                     type: filtersConstants.SET_CORRECT_IDS,
                     data: res
                 })
             })
-            .catch(err => console.log("error CorrectIds", err))
+            .catch(err => handleError("error CorrectIds", err, dispatch))
     }
 }
 
 function generateFilterQuery(filters) {
 
     let filtersQueryArray = [];
+    let sortValue = null;
 
     if (filters) {
         Object.keys(filters).forEach(key => {
             // ("OBJ", key);
 
             switch (key) {
+                case "sort":
+                    sortValue = filters[key].replace("-", " ");
+
+                    const getSort = sortValue.split(" ");
+
+                    if (getSort[0] === "aggregated_rating") {
+                        filtersQueryArray.push("aggregated_rating != null");
+                    } else {
+                        filtersQueryArray.push("first_release_date != null");
+                    }
+
+                    break;
                 case "term":
                     const searchTerm = `name ~ *"${filters[key]}"*`;
                     filtersQueryArray.push(searchTerm);
@@ -137,7 +158,7 @@ function generateFilterQuery(filters) {
                 case "rating":
                     const [min, max] = filters[key].split(",");
 
-                    const formatFiltersRates = `aggregated_rating >= ${min} & aggregated_rating <= ${max} & aggregated_rating != null`;
+                    const formatFiltersRates = `aggregated_rating >= ${min} & aggregated_rating <= ${max}`;
                     filtersQueryArray.push(formatFiltersRates);
                     break
                 case "companies":
@@ -151,7 +172,7 @@ function generateFilterQuery(filters) {
                     years.forEach(year => {
                         const unixYear = moment({ year }).format("X");
                         const unixYearEnd = moment({ year }).add(1, 'y').format("X");
-                        const dateQuery = `first_release_date >= ${unixYear} & first_release_date <= ${unixYearEnd}`;
+                        const dateQuery = `(first_release_date >= ${unixYear} & first_release_date <= ${unixYearEnd})`;
                         datesQuery.push(dateQuery);
                     })
                     filtersQueryArray.push(datesQuery.join(" | "));
@@ -167,7 +188,11 @@ function generateFilterQuery(filters) {
 
     const filtersQuery = filtersQueryArray.join(" & ");
 
-    return filtersQuery !== "" ? filtersQuery : null;
+    // return filtersQuery !== "" ? {query : filtersQuery, sort: "test"} : null;
+    return {
+        query: filtersQuery !== "" ? filtersQuery : null,
+        sort: sortValue
+    }
 }
 
 const grabSearchResult = (res) => {
@@ -202,11 +227,9 @@ export const search = (filters) => {
 
     return (dispatch, getState) => {
 
-        const query = generateFilterQuery(filters);
+        const queryFilters = generateFilterQuery(filters);
+        const query = queryFilters.query;
         const storedFilters = getState().filtersReducer.lastRequestFilters;
-
-        console.log("SEARCH !", filters);
-        console.log("STORED FILTERS !", storedFilters);
 
         if ((!storedFilters || !filters) || JSON.stringify(storedFilters) !== JSON.stringify(filters)) {
             var filtersCopy = null;
@@ -230,9 +253,13 @@ export const search = (filters) => {
                 data: filtersCopy || filters
             })
 
-            searchRequest(query, 0)
-                .then(res => res.json())
+            searchRequest(query, queryFilters.sort, 0)
                 .then(res => {
+                    handleError("search error", res, dispatch);
+                    return res.json();
+                })
+                .then(res => {
+
                     const searchResults = grabSearchResult(res);
                     dispatch({
                         type: filtersConstants.SET_SEARCH_RESULTS,
@@ -251,7 +278,6 @@ export const search = (filters) => {
 
 
                 })
-                .catch(err => console.log("search error", err))
         }
     }
 }
@@ -269,10 +295,14 @@ export const moreSearchResult = () => {
                 state: true
             })
 
-            const query = generateFilterQuery(filters);
+            const queryFilters = generateFilterQuery(filters);
+            const query = queryFilters.query;
 
-            searchRequest(query, currentOffset)
-                .then(res => res.json())
+            searchRequest(query, queryFilters.sort, currentOffset)
+                .then(res => {
+                    handleError("more search error", res, dispatch);
+                    return res.json();
+                })
                 .then(res => {
                     const searchResults = grabSearchResult(res);
 
@@ -303,7 +333,6 @@ export const moreSearchResult = () => {
                         })
                     }
                 })
-                .catch(err => console.log("search error", err))
         }
     }
 }

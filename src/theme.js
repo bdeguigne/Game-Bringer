@@ -234,6 +234,17 @@ export default createMuiTheme({
                 backgroundColor: appColors.backgroundContrast,
                 boxShadow: gameShowNeonBoxShadow
             }
+        },
+        MuiDrawer: {
+            paper: {
+                padding: "8px",
+                boxShadow: toolTipBoxShadow,
+            }
+        },
+        MuiPaper: {
+            root: {
+                backgroundColor: appColors.backgroundContrast
+            }
         }
 
     }

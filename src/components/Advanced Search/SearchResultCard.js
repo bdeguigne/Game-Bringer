@@ -10,7 +10,7 @@ import ImageLoader from '../ImageLoader';
 
 const Container = styled.div`
   width: 100%;
-  height: 100px;
+  min-height: 100px;
   display: flex;
   border-radius: 16px;
   background-color: ${appColors.searchResultItemBackground};
@@ -24,6 +24,9 @@ const Container = styled.div`
     background-color: #0F0A10;
     box-shadow: 0px 0px 40px -20px #6D5DD3, 0px 0px 15px -8px rgba(255, 255, 255, 0.5);
   }
+
+  
+ 
 `
 
 const RippleEffect = styled(ButtonBase)`
@@ -42,7 +45,7 @@ const CoverContainer = styled.div`
 const Cover = styled.img`
   object-fit: cover;
   width: 100%;
-  height: 100%;
+  height: 100px;
   border-radius: 16px;
   transform: scale(0.95);
 `
@@ -51,7 +54,11 @@ const Content = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  height: 100%;
+  /* height: 100%; */
+
+  @media only screen and (min-width: 768px) {
+    flex-direction: row;
+  }
 `
 
 const LeftContent = styled.div`
@@ -59,7 +66,12 @@ const LeftContent = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  width: 50%;
+  width: 100%;
+  /* height: 100%; */
+
+  @media only screen and (min-width: 768px) {
+    width: 50%;
+  }
 `
 
 const Game = styled.div`
@@ -74,6 +86,7 @@ const Developer = styled.div`
 
 const PlatformsContainer = styled.div`
   display: flex;
+  margin-top: 8px;
 `
 
 const PlatformLogo = styled.img`
@@ -94,18 +107,73 @@ const ContentCenter = styled.div`
   margin: 4px 8px;
 `
 
+const DateCenter = styled.div`
+  display: none;
+  align-items: center;
+  margin: 4px 8px;
+
+  @media only screen and (min-width: 768px) {
+    display: flex;
+  }
+`
+
 const RateContainer = styled.div`
   width: 65px;
 `
 
 const DateContainer = styled.div`
+  display: flex;
   text-align: center;
   color: #B2B2B2;
   font-size: 14px;
+  flex-direction: row;
+
+  @media only screen and (min-width: 768px) {
+    flex-direction: column;
+  }
 `
 
 const HoverInfo = styled(Tooltip)`
   padding: 0 !important;
+`
+
+const GameContent = styled.div`
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+
+  @media only screen and (min-width: 768px) {
+    flex-direction: row;
+    justify-content: initial;
+  }
+`
+
+const Wrapper = styled.div`
+  display: flex;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+`
+
+const FlexFullWidthHeight = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+`
+
+const DateMobileContainer = styled.div`
+  display: flex;
+  @media only screen and (min-width: 768px) {
+    display: none;
+    flex-direction: row;
+    justify-content: initial;
+  }
+`
+
+const RowContainer = styled.div`
+  display: flex;
+  width: 100%;
 `
 
 
@@ -115,50 +183,80 @@ const SearchResultCard = props => {
     return (
       <Container>
         <RippleEffect>
-          <CoverContainer>
-            {props.coverId ? (
-              // <Cover alt={"Result game cover"} src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${props.coverId}.jpg`} />
-              <ImageLoader src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${props.coverId}.jpg`} style={{ objectFit: "cover", width: "100%", height: "100%", borderRadius: "16px", transform: "scale(0.95)" }} />
-            ) : (
-              <Cover alt={"Result game cover"} src={process.env.PUBLIC_URL + "/assets/placeholder-cover.png"} />
-            )}
-          </CoverContainer>
-          <Content>
-            <LeftContent>
-              <div>
-                <Game>
-                  {props.game}
-                </Game>
-                <Developer>
-                  {props.developer}
-                </Developer>
-              </div>
-              <PlatformsContainer>
-                {props.platforms && props.platforms.map((platform, i) => {
-                  if (platform.platform_logo) {
-                    return (
-                      <Tooltip key={i} title={platform.name}>
-                        <PlatformLogo alt={"platform logo"} src={`https://images.igdb.com/igdb/image/upload/t_logo_med/${platform.platform_logo.image_id}.png`} />
-                      </Tooltip>
-                    )
-                  } else {
-                    return null
-                  }
-                })}
-              </PlatformsContainer>
-            </LeftContent>
-
-            {props.date && (
-              <ContentCenter>
-                <DateContainer>
-                  <div>{props.date.date}</div>
-                  {props.date.elapsedTime && (
-                    <div>({props.date.elapsedTime})</div>
+          <RowContainer>
+            <Wrapper>
+              <FlexFullWidthHeight>
+                <CoverContainer>
+                  {props.coverId ? (
+                    // <Cover alt={"Result game cover"} src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${props.coverId}.jpg`} />
+                    <ImageLoader src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${props.coverId}.jpg`} style={{ objectFit: "cover", width: "100%", height: "100px", borderRadius: "16px", transform: "scale(0.95)" }} />
+                  ) : (
+                    <Cover alt={"Result game cover"} src={process.env.PUBLIC_URL + "/assets/placeholder-cover.png"} />
                   )}
-                </DateContainer>
-              </ContentCenter>
-            )}
+                </CoverContainer>
+                <Content>
+                  <GameContent>
 
+                    <LeftContent>
+                      <div>
+                        <Game>
+                          {props.game}
+                        </Game>
+                        <Developer>
+                          {props.developer}
+                        </Developer>
+                      </div>
+                      <PlatformsContainer>
+                        {props.platforms && props.platforms.map((platform, i) => {
+                          if (platform.platform_logo && i <= 6) {
+                            return (
+                              <Tooltip key={i} title={platform.name}>
+                                <PlatformLogo alt={"platform logo"} src={`https://images.igdb.com/igdb/image/upload/t_logo_med/${platform.platform_logo.image_id}.png`} />
+                              </Tooltip>
+                            )
+                          } else {
+                            return null
+                          }
+                        })}
+                      </PlatformsContainer>
+                    </LeftContent>
+
+                    {props.date && (
+                      <DateCenter>
+                        <DateContainer>
+                          <div style={{ marginRight: "4px" }}>{props.date.date}</div>
+                          {props.date.elapsedTime && (
+                            <div>({props.date.elapsedTime})</div>
+                          )}
+                        </DateContainer>
+                      </DateCenter>
+                    )}
+
+                  </GameContent>
+
+                  {/* <ContentCenter>
+                    <RateContainer>
+
+                      {!isNaN(props.rating) && (
+                        <CircularProgressWithLabel value={props.rating} size={60} />
+                      )}
+                    </RateContainer>
+                  </ContentCenter> */}
+                </Content>
+              </FlexFullWidthHeight>
+              <DateMobileContainer>
+                {props.date && (
+                  <ContentCenter>
+                    <DateContainer>
+                      <div style={{ marginRight: "4px" }}>{props.date.date}</div>
+                      {props.date.elapsedTime && (
+                        <div>({props.date.elapsedTime})</div>
+                      )}
+                    </DateContainer>
+                  </ContentCenter>
+                )}
+              </DateMobileContainer>
+            </Wrapper>
             <ContentCenter>
               <RateContainer>
 
@@ -167,9 +265,10 @@ const SearchResultCard = props => {
                 )}
               </RateContainer>
             </ContentCenter>
-          </Content>
+          </RowContainer>
 
         </RippleEffect>
+
       </Container>
     )
   }

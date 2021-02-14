@@ -1,22 +1,39 @@
 const fetch = require('node-fetch')
+require('dotenv').config();
+
+// VIEUX TOKEN i7vmph6ootlnq25jw6t8whrzoh38pq
 
 const handler = async function (event) {
     try {
         let query = event.queryStringParameters.query;
         let url = event.queryStringParameters.url;
+        let token = event.queryStringParameters.token;
+        let accessToken = event.queryStringParameters.access_token;
 
-        let requestOptions = {
-            method: 'POST',
-            headers: {
-                "Client-ID": "e31044r4d7oqge4odpsqg7xeet90oz",
-                "Authorization": "Bearer i7vmph6ootlnq25jw6t8whrzoh38pq",
-                "Content-Type": "text/plain"
-            },
-            body: query,
-            redirect: 'follow'
-        };
+        let response = null;
 
-        const response = await fetch("https://api.igdb.com/v4" + url, requestOptions);
+        if (token) {
+            response = await fetch(`https://id.twitch.tv/oauth2/token?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&grant_type=client_credentials`, {
+                method: "POST"
+            })
+            // return {
+            //     statusCode: 200,
+            //     body: JSON.stringify(process.env.CLIENT_ID)
+            // }
+        } else {
+            let requestOptions = {
+                method: 'POST',
+                headers: {
+                    "Client-ID": "e31044r4d7oqge4odpsqg7xeet90oz",
+                    "Authorization": `Bearer ${accessToken}`,
+                    "Content-Type": "text/plain"
+                },
+                body: query,
+                redirect: 'follow'
+            };
+
+            response = await fetch("https://api.igdb.com/v4" + url, requestOptions);
+        }
 
         if (!response.ok) {
             // NOT res.status >= 200 && res.status < 300

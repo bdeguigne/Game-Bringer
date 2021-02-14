@@ -35,3 +35,12 @@ export const setIsNeedRequest = (state) => {
         })
     }
 }
+
+export const setIsErrorOccurred = (state) => {
+    return dispatch => {
+        dispatch({
+            type: uiConstants.SET_IS_ERROR_OCCURRED,
+            state
+        })
+    }
+}

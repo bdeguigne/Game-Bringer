@@ -81,7 +81,7 @@ function CheckboxFilter(props) {
     // }
 
     useEffect(() => {
-        let isExist = isFiltersExist(props.activatedFilters.chip, props.titleSlug, props.label);
+        let isExist = isFiltersExist(props.activatedFilters?.chip, props.titleSlug, props.label);
         setChecked(isExist);
     }, [props.refresh])
 
