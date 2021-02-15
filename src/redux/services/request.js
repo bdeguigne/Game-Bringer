@@ -27,7 +27,7 @@ export const doRequest = (url, query) => {
     return (fetch(`/.netlify/functions/node-fetch?url=${encodeURIComponent(url)}&query=${encodeURIComponent(query)}&access_token=${token}`));
 }
 
-const getTokens = () => {
+export const getTokens = () => {
     return (fetch(`/.netlify/functions/node-fetch?token=true`));
 }
 
@@ -47,5 +47,7 @@ export const handleError = (name, error, dispatch) => {
                     localStorage.setItem("token", JSON.stringify(res));
                 });
         }
+        return true;
     }
+    return false;
 }

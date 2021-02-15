@@ -8,39 +8,44 @@ export const getFilters = () => {
     return (dispatch) => {
         getFilterRequest()
             .then(res => {
-                handleError("getFilters error", res, dispatch);
+                if (handleError("getFilters error", res, dispatch)) {
+                    return;
+                }
+
                 return res.json();
             })
             .then(res => {
-                let genres = [];
-                let modes = [];
-                let perspective = [];
+                if (res) {
 
-                res.forEach(element => {
-                    if (element.name === "Genres") {
-                        genres = element.result
-                    } else if (element.name === "Modes") {
-                        modes = element.result;
-                    } else if (element.name === "Perspectives") {
-                        perspective = element.result;
-                    } else {
-                        console.log("getFilters error");
-                    }
-                });
+                    let genres = [];
+                    let modes = [];
+                    let perspective = [];
 
-                dispatch({
-                    type: filtersConstants.GET_GENRES,
-                    data: genres
-                })
-                dispatch({
-                    type: filtersConstants.GET_MODES,
-                    data: modes
-                })
-                dispatch({
-                    type: filtersConstants.GET_PERSPECTIVE,
-                    data: perspective
-                })
+                    res.forEach(element => {
+                        if (element.name === "Genres") {
+                            genres = element.result
+                        } else if (element.name === "Modes") {
+                            modes = element.result;
+                        } else if (element.name === "Perspectives") {
+                            perspective = element.result;
+                        } else {
+                            console.log("getFilters error");
+                        }
+                    });
 
+                    dispatch({
+                        type: filtersConstants.GET_GENRES,
+                        data: genres
+                    })
+                    dispatch({
+                        type: filtersConstants.GET_MODES,
+                        data: modes
+                    })
+                    dispatch({
+                        type: filtersConstants.GET_PERSPECTIVE,
+                        data: perspective
+                    })
+                }
             })
     }
 }
@@ -70,17 +75,20 @@ export const searchByName = (endpoint, searchEntry, slug, exclude) => {
         })
         searchByNameRequest(endpoint, searchEntry, exclude)
             .then(res => {
-                handleError("Search by name error", res, dispatch);
+                if (handleError("Search by name error", res, dispatch)) {
+                    return;
+                }
                 return res.json();
             })
             .then(res => {
-
-                dispatch({
-                    type: filtersConstants.SET_TEXTFIELDS_SEARCH_RES,
-                    res: {
-                        [slug]: res
-                    }
-                })
+                if (res) {
+                    dispatch({
+                        type: filtersConstants.SET_TEXTFIELDS_SEARCH_RES,
+                        res: {
+                            [slug]: res
+                        }
+                    })
+                }
             })
     }
 }
@@ -116,16 +124,19 @@ export const correctIds = (needRequestArray) => {
         const queryData = genQuery();
         correctIdsRequest(queryData)
             .then(res => {
-                handleError("error CorrectIds", res, dispatch);
+                if (handleError("error CorrectIds", res, dispatch)) {
+                    return;
+                }
                 return res.json();
             })
             .then(res => {
-                dispatch({
-                    type: filtersConstants.SET_CORRECT_IDS,
-                    data: res
-                })
+                if (res) {
+                    dispatch({
+                        type: filtersConstants.SET_CORRECT_IDS,
+                        data: res
+                    })
+                }
             })
-            .catch(err => handleError("error CorrectIds", err, dispatch))
     }
 }
 
@@ -255,28 +266,29 @@ export const search = (filters) => {
 
             searchRequest(query, queryFilters.sort, 0)
                 .then(res => {
-                    handleError("search error", res, dispatch);
+                    if (handleError("search error", res, dispatch)) {
+                        return;
+                    }
                     return res.json();
                 })
                 .then(res => {
+                    if (res) {
+                        const searchResults = grabSearchResult(res);
+                        dispatch({
+                            type: filtersConstants.SET_SEARCH_RESULTS,
+                            data: searchResults
+                        })
 
-                    const searchResults = grabSearchResult(res);
-                    dispatch({
-                        type: filtersConstants.SET_SEARCH_RESULTS,
-                        data: searchResults
-                    })
+                        dispatch({
+                            type: filtersConstants.SET_OFFSET,
+                            offset: 20
+                        })
 
-                    dispatch({
-                        type: filtersConstants.SET_OFFSET,
-                        offset: 20
-                    })
-
-                    dispatch({
-                        type: filtersConstants.SET_IS_REQUEST,
-                        state: false
-                    })
-
-
+                        dispatch({
+                            type: filtersConstants.SET_IS_REQUEST,
+                            state: false
+                        })
+                    }
                 })
         }
     }
@@ -300,37 +312,41 @@ export const moreSearchResult = () => {
 
             searchRequest(query, queryFilters.sort, currentOffset)
                 .then(res => {
-                    handleError("more search error", res, dispatch);
+                    if (handleError("more search error", res, dispatch)) {
+                        return;
+                    }
                     return res.json();
                 })
                 .then(res => {
-                    const searchResults = grabSearchResult(res);
+                    if (res) {
+                        const searchResults = grabSearchResult(res);
 
-                    if (searchResults.length > 0) {
-                        dispatch({
-                            type: filtersConstants.MORE_SEARCH_RESULTS,
-                            res: searchResults
-                        })
+                        if (searchResults.length > 0) {
+                            dispatch({
+                                type: filtersConstants.MORE_SEARCH_RESULTS,
+                                res: searchResults
+                            })
 
-                        dispatch({
-                            type: filtersConstants.SET_OFFSET,
-                            offset: currentOffset + 20
-                        })
+                            dispatch({
+                                type: filtersConstants.SET_OFFSET,
+                                offset: currentOffset + 20
+                            })
 
-                        dispatch({
-                            type: filtersConstants.SET_REACH_BOTTOM,
-                            state: false
-                        })
-                    } else {
-                        dispatch({
-                            type: filtersConstants.SET_REACH_END,
-                            state: true
-                        })
+                            dispatch({
+                                type: filtersConstants.SET_REACH_BOTTOM,
+                                state: false
+                            })
+                        } else {
+                            dispatch({
+                                type: filtersConstants.SET_REACH_END,
+                                state: true
+                            })
 
-                        dispatch({
-                            type: filtersConstants.SET_REACH_BOTTOM,
-                            state: false
-                        })
+                            dispatch({
+                                type: filtersConstants.SET_REACH_BOTTOM,
+                                state: false
+                            })
+                        }
                     }
                 })
         }

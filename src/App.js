@@ -5,12 +5,14 @@ import TopBar from "./components/TopBar";
 import styled from 'styled-components';
 import { maxWidth } from './utils/styles';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import { routes } from "./routes"
+import { routes } from "./routes";
 // REDUX
 import { connect } from "react-redux";
 import { getPopularGames, getRecentlyReleasedGames, getComingSoonGames, getBestRatedGames } from './redux/actions/homePageRequestsActions';
 import { getFilters } from './redux/actions/filtersActions';
 import { bestRatedGames } from "./redux/constants/homePageRequestsConstants"
+import { getTokens } from './redux/services/request'
+import { setIsErrorOccurred } from './redux/actions/UIActions'
 
 
 const MainContent = styled.div`
@@ -21,13 +23,36 @@ const MainContent = styled.div`
 
 function App(props) {
 
-    useEffect(() => {
+    const doRequest = () => {
         props.getPopularGames();
         props.getRecentlyReleasedGames();
         props.getComingSoonGames();
         props.getBestRatedGames(bestRatedGames.THIS_MONTH);
         props.getFilters();
-    }, [props])
+    }
+
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        if (token) {
+            doRequest();
+        } else {
+            getTokens()
+                .then(res => {
+                    if (!res.ok) {
+                        props.setIsErrorOccurred(true);
+                        return;
+                    }
+                    return res.json();
+                })
+                .then(res => {
+                    if (res) {
+                        localStorage.setItem("token", JSON.stringify(res));
+                        doRequest();
+                    }
+                });
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return (
         <Router>
@@ -55,7 +80,8 @@ const actionCreators = {
     getRecentlyReleasedGames,
     getComingSoonGames,
     getBestRatedGames,
-    getFilters
+    getFilters,
+    setIsErrorOccurred
 }
 
 function mapStateToProps() {
