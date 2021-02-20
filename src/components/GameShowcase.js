@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
-import {gameShowNeonBoxShadow, appColors} from "../utils/styles";
+import { appColors} from "../utils/styles";
 import {Button} from "@material-ui/core";
 import CircularProgressWithLabel from "./CircularProgressWithLabel";
 import CrossFadeImages from "./CrossFadeImages";
@@ -23,8 +23,7 @@ export const Container = styled.div`
   //width: 1130px;
   //border: 0.5px solid #FFFFFF;
   border-radius: 32px;
-    //box-shadow: ${gameShowNeonBoxShadow};
-  background: ${appColors.backgroundContrast};
+  background: ${props => appColors[props.theme].backgroundContrast};
   display: flex;
   flex-direction: column;
   //justify-content: space-between;
@@ -122,9 +121,9 @@ const SeeAllGamesButton = styled(Button)`
   margin-left: 0 !important;
   padding: 12px 24px !important;
   font-size: 14px !important;
-  background: ${appColors.backgroundContrast} !important;
+  background: ${props => appColors[props.theme].backgroundContrast} !important;
   border-radius: 0 !important;
-  box-shadow: 0 0 44px -20px ${appColors.secondaryDarker},inset 30px -17px 32px -31px ${appColors.secondaryDarker}, inset -30px -17px 32px -31px ${appColors.secondaryDarker} !important;
+  box-shadow: ${props => `0 0 44px -20px ${appColors[props.theme].secondaryDarker},inset 30px -17px 32px -31px ${appColors[props.theme].secondaryDarker}, inset -30px -17px 32px -31px ${appColors[props.theme].secondaryDarker} !important`} ;
 
   font-weight: 500 !important;
   color: white !important;
@@ -133,7 +132,7 @@ const SeeAllGamesButton = styled(Button)`
   transition: all 0.3s ease;
 
   &:hover {
-    box-shadow: 0 0 64px -5px ${appColors.secondary}, 0px 0px 8px #FFFFFF, inset -18px -22px 32px -31px ${appColors.secondary} !important;
+    box-shadow: ${props => `0 0 64px -5px ${appColors[props.theme].secondary}, 0px 0px 8px #FFFFFF, inset -18px -22px 32px -31px ${appColors[props.theme].secondary} !important`} ;
   }
 
   @media only screen and (min-width: 768px) {
@@ -141,7 +140,7 @@ const SeeAllGamesButton = styled(Button)`
     margin-left: auto !important;
     border-top-left-radius: 32px !important;
     border-bottom-right-radius: 32px !important;
-    box-shadow: 0 0 44px -20px ${appColors.secondary}, inset -18px -22px 32px -31px ${appColors.secondary} !important;
+    box-shadow: ${props => `0 0 44px -20px ${appColors[props.theme].secondary}, inset -18px -22px 32px -31px ${appColors[props.theme].secondary} !important` };
   }
 `
 
@@ -187,14 +186,14 @@ function GameShowcase(props) {
     return (
         <>
             {props.isLoading ? (
-                <GameShowcaseSkeleton />
+                <GameShowcaseSkeleton theme={props.theme}/>
             ) : (
                 <FullWidthContainer>
-                    <Container>
+                    <Container theme={props.theme}>
                         <ScreenshotContainer>
                             {/*<Screenshot src={`https://images.igdb.com/igdb/image/upload/t_screenshot_huge/${props.data.screenshots[0].image_id}.jpg`} />*/}
                             {props.data.screenshots ? (
-                                <CrossFadeImages active={props.showed} style={{borderRadius: width >= 738 ? 32 : 0}} images={props.data.screenshots} prefixUrl={"https://images.igdb.com/igdb/image/upload/t_screenshot_huge/"} interval={3000} onLoad={onLoad} />
+                                <CrossFadeImages active={props.showed} style={{borderRadius: width >= 738 ? 32 : 0}} images={props.data.screenshots} prefixUrl={"https://images.igdb.com/igdb/image/upload/t_screenshot_huge/"} interval={3000} onLoad={onLoad} theme={props.theme}/>
                             ) : (
                                 <PlaceholderImage src={process.env.PUBLIC_URL + "/assets/placeholder-big.png"} alt="Placeholder"/>
                             )}
@@ -250,7 +249,7 @@ function GameShowcase(props) {
                                 </GameInfoPadding>
                             </div>
                             <BottomContainer>
-                                <SeeAllGamesButton color="secondary">
+                                <SeeAllGamesButton color="secondary" theme={props.theme}>
                                     See all games
                                 </SeeAllGamesButton>
                             </BottomContainer>
@@ -273,7 +272,8 @@ GameShowcase.propTypes = {
     darkerImage: PropTypes.bool,
     isLoading: PropTypes.bool,
     onLoad: PropTypes.func,
-    showed: PropTypes.bool
+    showed: PropTypes.bool,
+    theme: PropTypes.string.isRequired
 }
 
 export default withRouter(GameShowcase);

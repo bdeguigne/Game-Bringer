@@ -25,14 +25,14 @@ const SearchContainer = styled.div`
 
 const SearchBar = styled.div`
     transition: box-shadow 0.2s;
-  border: 1px solid ${appColors.secondaryDarker};
+  border: ${props => `1px solid ${appColors[props.theme].secondaryDarker}`};
   border-radius: 16px;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color : ${appColors.backgroundContrast};
-  box-shadow: ${props => props.isActive ? "0px 0px 12px 3px #6d5dd352, inset 0px 0px 8px #6D5DD3;" : "0px 0px 12px 3px rgba(0, 0, 0, 0.25), inset 0px 0px 8px #6D5DD3;"};
+  background-color : ${props => appColors[props.theme].backgroundContrast};
+  box-shadow: ${props => props.isActive ? `0px 0px 12px 3px #6d5dd352, inset 0px 0px 8px ${appColors[props.theme].secondaryDarker}` : `0px 0px 12px 3px rgba(0, 0, 0, 0.25), inset 0px 0px 8px ${appColors[props.theme].secondary}`};
 `
 
 const SearchInput = styled(InputBase)`
@@ -51,7 +51,7 @@ const SearchButtonContainer = styled.div`
     justify-content: center;
     display: flex;
     align-items: center;
-    background-color: ${appColors.secondary} !important;
+    background-color: ${props => appColors[props.theme].secondary} !important;
     border-radius: 16px !important;
     cursor: pointer;
     box-shadow: -1px 0px 18px -5px rgba(255, 255, 255, 0.25);
@@ -243,7 +243,7 @@ const AdvancedSearch = (props) => {
                 </Alert>
             </Snackbar>
             <SearchContainer>
-                <SearchBar isActive={isSearchbarActive}>
+                <SearchBar isActive={isSearchbarActive} theme={props.theme}>
                     <SearchInput
                         placeholder={"Search and discover new games"}
                         onChange={(evt) => { console.log("ON CHANGE TEXT", evt.target.value); setSearchValue(evt.target.value) }}
@@ -252,7 +252,7 @@ const AdvancedSearch = (props) => {
                         onClick={() => setIsSearchbarActive(true)}
                         onBlur={() => setIsSearchbarActive(false)}
                     />
-                    <SearchButtonContainer onClick={searchInputClick}>
+                    <SearchButtonContainer onClick={searchInputClick} theme={props.theme}>
                         <SearchIcon className="icon-search" />
                     </SearchButtonContainer>
                 </SearchBar>
@@ -267,7 +267,7 @@ const AdvancedSearch = (props) => {
                     <ResultContainer isRequest={props.isRequest}>
                         {!props.searchResult && Array.from(Array(20), (e, i) => {
                             return (
-                                <SearchResultCard key={i} loading={true} />
+                                <SearchResultCard key={i} loading={true} theme={props.theme}/>
                             )
                         })}
                         {props.searchResult && props.searchResult.map((res, i) => {
@@ -282,6 +282,7 @@ const AdvancedSearch = (props) => {
                                     rating={res.rating}
                                     screenshots={res.screenshots}
                                     genres={res.genres}
+                                    theme={props.theme}
                                 />
                             )
                         })}
@@ -317,6 +318,7 @@ function mapStateToProps(state) {
         activatedFilters: state.filtersReducer.filters,
         isFiltersLoaded: state.filtersReducer.isFiltersLoaded,
         isErrorOccurred: state.uiReducer.isErrorOccurred,
+        theme: state.uiReducer.theme
     };
 }
 

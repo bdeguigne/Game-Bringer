@@ -5,7 +5,7 @@ import { ArrowBackIos, ArrowForwardIos } from "@material-ui/icons"
 import Skeleton from '@material-ui/lab/Skeleton';
 import styled from 'styled-components';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import {SectionTitle, SkeletonColor} from "../utils/styles";
+import {SectionTitle, appColors} from "../utils/styles";
 import { connect } from 'react-redux';
 
 const Container = styled.div`
@@ -76,7 +76,7 @@ const CardStyleSkeleton = styled(Skeleton)`
   overflow-y: hidden;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.527);
   transition: all ease 500ms;
-  background-color: ${SkeletonColor} !important;
+  background-color: ${props => appColors[props.theme][900]} !important;
 
   &:hover {
     box-shadow: 0 7px 16px rgba(0, 0, 0, 0.527);
@@ -116,7 +116,7 @@ const sliderConfiguration = {
     animationDuration: 500
 };
 
-const HorizontalSlider = ({ sliderName, title, children, isLoading, imageLoaded, removeSkeleton }) => {
+const HorizontalSlider = ({ sliderName, title, children, isLoading, imageLoaded, removeSkeleton, theme }) => {
     const [slider] = useState(new Glide(`#${sliderName}`, sliderConfiguration));
     const [sliderSkeleton] = useState(new Glide(`#${sliderName}-skeleton`, sliderConfiguration));
 
@@ -175,7 +175,7 @@ const HorizontalSlider = ({ sliderName, title, children, isLoading, imageLoaded,
                         <div className="glide__track" data-glide-el="track">
                             <Slide className="glide__slides" >
                                 {Array.from({ length: 5 }, (item, index) => {
-                                    return <CardStyleSkeleton key={index} variant="rect" animation="wave" />
+                                    return <CardStyleSkeleton key={index} variant="rect" animation="wave" theme={theme} />
                                 })}
                             </Slide>
                         </div>
@@ -188,7 +188,8 @@ const HorizontalSlider = ({ sliderName, title, children, isLoading, imageLoaded,
 
 function mapStateToProps(state) {
     return {
-        menuExpanded: state.uiReducer.menuExpanded
+        menuExpanded: state.uiReducer.menuExpanded,
+        theme: state.uiReducer.theme
     }
 }
 

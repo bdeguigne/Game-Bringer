@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from "styled-components";
 import {Skeleton} from "@material-ui/lab";
-import {SkeletonColor} from "../utils/styles";
+import {appColors} from "../utils/styles";
 import {FullWidthContainer, Container, ScreenshotContainer, GameInfoContainer} from "./GameShowcase";
 
 const ScreenshotSkeleton = styled(Skeleton)`
-  background-color: ${SkeletonColor} !important;
+  background-color: ${props => appColors[props.theme][900]} !important;
   width: 100% !important;
   height: 100% !important;
   border-radius: 0;
@@ -19,7 +19,7 @@ const ScreenshotSkeleton = styled(Skeleton)`
 
 const TextSkeleton = styled(Skeleton)`
   border-radius: 6px;
-  background-color: ${SkeletonColor} !important;
+  background-color: ${props => appColors[props.theme][900]} !important;
   width: ${props => props.width + " !important"};
   height: ${props => props.height + " !important"};
 `
@@ -48,32 +48,32 @@ const GenresContainer = styled.div `
   display: flex;
 `
 
-const GameShowcaseSkeleton = () => {
+const GameShowcaseSkeleton = ({theme}) => {
     return (
         <FullWidthContainer>
-            <Container>
+            <Container theme={theme}>
                 <ScreenshotContainer>
-                    <ScreenshotSkeleton variant="rect"/>
+                    <ScreenshotSkeleton variant="rect" theme={theme}/>
                 </ScreenshotContainer>
 
                 <GameInfoContainer>
                     <GameInfoPadding>
                         <Space height={12}>
-                            <TextSkeleton width={"80%"} height={"40px"} animation="wave" variant="rect" />
+                            <TextSkeleton width={"80%"} height={"40px"} animation="wave" variant="rect" theme={theme} />
                         </Space>
                         <Space height={16}>
                             <DateContainer>
-                                <TextSkeleton width={"40%"} animation="wave" variant="rect" />
+                                <TextSkeleton width={"40%"} animation="wave" variant="rect" theme={theme} />
                             </DateContainer>
                         </Space>
                         <Space height={18}>
                             <GenresContainer>
-                                <GenreSkeleton width={"30%"} height={"35px"} animation="wave" variant="rect"/>
-                                <GenreSkeleton width={"30%"} height={"35px"} animation="wave"  variant="rect"/>
+                                <GenreSkeleton width={"30%"} height={"35px"} animation="wave" variant="rect" theme={theme}/>
+                                <GenreSkeleton width={"30%"} height={"35px"} animation="wave"  variant="rect" theme={theme}/>
                             </GenresContainer>
                         </Space>
                         <Space height={24}>
-                            <TextSkeleton width={"100%"} height={"166px"} animation="wave"  variant="rect"/>
+                            <TextSkeleton width={"100%"} height={"166px"} animation="wave"  variant="rect" theme={theme}/>
                         </Space>
 
                     </GameInfoPadding>

@@ -1,9 +1,11 @@
 import './App.css';
 import "./global.css";
+import { ThemeProvider } from '@material-ui/core/styles';
+
 import React, { useEffect } from "react";
 import TopBar from "./components/TopBar";
 import styled from 'styled-components';
-import { maxWidth } from './utils/styles';
+import { appColors, maxWidth } from './utils/styles';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { routes } from "./routes";
 // REDUX
@@ -13,6 +15,7 @@ import { getFilters } from './redux/actions/filtersActions';
 import { bestRatedGames } from "./redux/constants/homePageRequestsConstants"
 import { getTokens } from './redux/services/request'
 import { setIsErrorOccurred } from './redux/actions/UIActions'
+import muiTheme from "./theme";
 
 
 const MainContent = styled.div`
@@ -32,6 +35,8 @@ function App(props) {
     }
 
     useEffect(() => {
+        // document.body.style.backgroundColor = appColors[props.theme].backgroundColor
+
         const token = localStorage.getItem("token");
         if (token) {
             doRequest();
@@ -54,24 +59,30 @@ function App(props) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    useEffect(() => {
+        document.body.style.backgroundColor = appColors[props.theme].backgroundColor
+    }, [props.theme])
+
     return (
-        <Router>
-            <div className="app">
-                <div>
-                    <TopBar />
-                    <MainContent>
-                        <Switch>
-                            {routes.map((route, i) => {
-                                return (
-                                    <Route key={i} path={route.path} render={() => <route.component />} />
-                                )
-                            }
-                            )}
-                        </Switch>
-                    </MainContent>
+        <ThemeProvider theme={muiTheme(props.theme)}>
+            <Router>
+                <div className="app">
+                    <div>
+                        <TopBar />
+                        <MainContent>
+                            <Switch>
+                                {routes.map((route, i) => {
+                                    return (
+                                        <Route key={i} path={route.path} render={() => <route.component />} />
+                                    )
+                                }
+                                )}
+                            </Switch>
+                        </MainContent>
+                    </div>
                 </div>
-            </div>
-        </Router>
+            </Router>
+        </ThemeProvider>
     );
 }
 
@@ -84,8 +95,10 @@ const actionCreators = {
     setIsErrorOccurred
 }
 
-function mapStateToProps() {
-    return {}
+function mapStateToProps(state) {
+    return {
+        theme: state.uiReducer.theme
+    }
 }
 
 const connectedApp = connect(mapStateToProps, actionCreators)(App);

@@ -4,7 +4,7 @@ import GameShowcase from "./GameShowcase";
 
 import styled from "styled-components";
 import Glide from "@glidejs/glide";
-import {appColors, gameShowNeonBoxShadow, SectionTitle, ArrowIcon} from "../utils/styles";
+import {appColors, SectionTitle, ArrowIcon} from "../utils/styles";
 
 const Container = styled.div`
   margin-top: 0;
@@ -25,9 +25,9 @@ const Header = styled.div`
 const SliderWrapper = styled.div`
   transition: box-shadow,border 1s;
   z-index: 10;
-  border: 2px solid ${props => props.isLoading === false ? "white" : appColors.secondaryDarker};
+  border: 2px solid ${props => props.isLoading === false ? "white" : appColors[props.theme].secondaryDarker};
   border-radius: 32px;
-  box-shadow: ${props => props.isLoading === false && gameShowNeonBoxShadow} ;
+  box-shadow: ${props => props.isLoading === false && `0px 0px 64px -24px ${appColors[props.theme].secondary}, 0px 0px 8px #FFFFFF, inset 0px 0px 32px -15px ${appColors[props.theme].secondary}`} ;
 `
 
 const Slider = styled.div`
@@ -68,8 +68,7 @@ display: flex;
 `
 
 const RoundedArrowIconContainer = styled.div`
-  
-  background: ${appColors.backgroundColor};
+  background: ${props => appColors[props.theme].backgroundColor};
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -91,7 +90,7 @@ const Icon = styled(ArrowIcon)`
 
   @media only screen and (min-width: 768px) {
     font-size: 2.5rem;
-    color: ${appColors.secondaryDarker};
+    color: ${props => appColors[props.theme].secondaryDarker};
   }
 `
 
@@ -113,7 +112,7 @@ const sliderConfiguration = {
     focusAt: 0,
 }
 
-function TopRatedGames({games}) {
+function TopRatedGames({games, theme}) {
 
     const [slider] = useState(new Glide(`#topRatedSlider`, sliderConfiguration));
     const [sliderLoaded, setSliderLoaded] = useState(false);
@@ -149,29 +148,29 @@ function TopRatedGames({games}) {
                     Top Rated Games this month
                 </SectionTitle>
             </Header>
-            <SliderWrapper isLoading={!hideSkeleton}>
+            <SliderWrapper isLoading={!hideSkeleton} theme={theme}>
                 <Slider id="topRatedSlider">
                     <div className="glide__track" data-glide-el="track">
                         <Slide className="glide__slides">
                             {games.length > 0 && games.map((game, index) => {
                                     return (
-                                        <GameShowcase showed={currentIndex === index} key={index} data={game} darkerImage={true} isLoading={false} onLoad={() => !hideSkeleton && setHideSkeleton(true)}/>
+                                        <GameShowcase showed={currentIndex === index} key={index} data={game} darkerImage={true} isLoading={false} onLoad={() => !hideSkeleton && setHideSkeleton(true)} theme={theme}/>
                                     )
                                 }
                             )}
                         </Slide>
                         <ArrowsContainer>
-                            <RoundedArrowIconContainer>
-                                <Icon onClick={() => slider.go("<")} className="icon-arrow-left" left={true}/>
+                            <RoundedArrowIconContainer theme={theme}>
+                                <Icon onClick={() => slider.go("<")} className="icon-arrow-left" left={true} theme={theme}/>
                             </RoundedArrowIconContainer>
-                            <RoundedArrowIconContainer>
-                                <Icon onClick={() => slider.go(">")} className="icon-arrow-right" right={true}/>
+                            <RoundedArrowIconContainer theme={theme}>
+                                <Icon onClick={() => slider.go(">")} className="icon-arrow-right" right={true} theme={theme}/>
                             </RoundedArrowIconContainer>
                         </ArrowsContainer>
                     </div>
                     {!removeSkeleton && (
                         <LoadingContainer hide={hideSkeleton}>
-                            <GameShowcase isLoading={true}/>
+                            <GameShowcase isLoading={true} theme={theme}/>
                         </LoadingContainer>
                     )}
                 </Slider>
@@ -185,7 +184,8 @@ function TopRatedGames({games}) {
 
 function mapStateToProps(state) {
     return {
-        games: state.homePageRequests.bestRatedGamesThisMonth
+        games: state.homePageRequests.bestRatedGamesThisMonth,
+        theme: state.uiReducer.theme
     }
 }
 

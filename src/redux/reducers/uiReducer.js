@@ -1,6 +1,7 @@
 import { uiConstants, RouteIndex } from "../constants/uiConstants";
 
 let defaultState = {
+    theme: localStorage.getItem("theme") || "midnight",
     index: RouteIndex.HOMEPAGE,
     isCorrectIds: null,
     activatedFilters: {},
@@ -36,6 +37,11 @@ function UIReducer(state = defaultState, action) {
             return {
                 ...state,
                 isErrorOccurred: action.state
+            }
+        case uiConstants.SET_THEME:
+            return {
+                ...state,
+                theme: action.theme
             }
         default:
             return state

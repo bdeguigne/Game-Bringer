@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import PropTypes from 'prop-types';
 import styled from "styled-components";
 import {Skeleton} from "@material-ui/lab";
-import {SkeletonColor} from "../utils/styles";
+import {appColors} from "../utils/styles";
 
 const Container = styled.div`
   width: 100%;
@@ -21,7 +21,7 @@ const SkeletonContainer = styled.div`
 `
 
 const ScreenshotSkeleton = styled(Skeleton)`
-  background-color: ${SkeletonColor} !important;
+  background-color: ${props => appColors[props.customtheme][900]} !important;
   width: 100% !important;
   height: 100% !important;
   border-radius: 32px;
@@ -48,7 +48,7 @@ const ImageLoader = props => {
                 <img className={props.className} onLoad={onLoad} src={process.env.PUBLIC_URL + "/assets/placeholder-cover.png"} alt="placeholder"/>
             )}
             <SkeletonContainer hide={loaded}>
-                <ScreenshotSkeleton variant="rect" animation={"wave"} style={props.style && {borderRadius: props.style.borderRadius}}/>
+                <ScreenshotSkeleton variant="rect"  customtheme={props.theme} animation={"wave"} style={props.style && {borderRadius: props.style.borderRadius}} />
             </SkeletonContainer>
         </Container>
     );
@@ -61,6 +61,7 @@ ImageLoader.propTypes = {
     style: PropTypes.object,
     className: PropTypes.string,
     onLoad: PropTypes.func,
+    theme: PropTypes.string.isRequired
 };
 
 export default ImageLoader;

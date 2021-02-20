@@ -38,11 +38,11 @@ const Loading = styled(CircularProgress)`
 const RoundedIcon = styled(FiberManualRecordRounded)`
   border-radius: 50% !important;
   transition: color 0.3s ease !important;
-  color: ${props => props.isselected === "true" ? appColors[300] : appColors.secondaryDarker };
-  box-shadow: ${props => props.isselected === "true" ? carousel.indicatorBoxShadow : "none"};
+  color: ${props => props.isselected === "true" ? appColors[props.theme][300] : appColors[props.theme].secondaryDarker };
+  box-shadow: ${props => props.isselected === "true" ? `0 0 50px -5px #fff, 0 0 50px -9px ${appColors[props.theme].secondary}, inset 0px 0px 30px -31px rgb(255 255 255), 0 0 4rem -15px ${appColors[props.theme].secondary}` : "none"};
 `
 
-function CarouselIndicator({ itemCount, onClick, selectedIndex, setSelectedIndex, loadingStatus, onLeftArrowClick, onRightArrowClick }) {
+function CarouselIndicator({ itemCount, onClick, selectedIndex, setSelectedIndex, loadingStatus, onLeftArrowClick, onRightArrowClick, theme }) {
 
     const handler = (index) => {
         setSelectedIndex(index);
@@ -78,7 +78,7 @@ function CarouselIndicator({ itemCount, onClick, selectedIndex, setSelectedIndex
                 {Array.from(Array(itemCount), (e, i) => {
                     return (
                         <Indicator key={i} onClick={() => handler(i)} isselected={isActive(selectedIndex, i).toString()}>
-                            <RoundedIcon isselected={isActive(selectedIndex, i).toString()} />
+                            <RoundedIcon isselected={isActive(selectedIndex, i).toString()} theme={theme}/>
                         </Indicator>
                     )
                 })}

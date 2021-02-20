@@ -15,7 +15,7 @@ const ChipsContainer = styled.div`
 `
 
 const FiltersChip = styled(Chip)`
-  background: ${appColors.primary} !important;
+  background: ${appColors["midnight"].primary} !important;
   
   margin-right: 12px;
   margin-bottom: 12px;

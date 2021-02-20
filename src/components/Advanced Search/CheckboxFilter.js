@@ -12,7 +12,7 @@ const Container = styled.div`
     justify-content: space-between;
     align-items: center;
     height: 30px;
-    background: ${props => props.checked ? appColors.secondaryDarker : "transparent"};
+    background: ${props => props.checked ? appColors["midnight"].secondaryDarker : "transparent"};
     padding: ${advancedSearchPadding};
     transition: background 0.3s;
 `

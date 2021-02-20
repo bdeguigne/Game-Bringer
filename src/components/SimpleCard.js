@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import {gameShowNeonBoxShadow} from "../utils/styles";
 import {Tooltip, Fade} from "@material-ui/core";
 import FloatingGameDetails from "./FloatingGameDetails";
 import {withRouter} from "react-router-dom"
@@ -55,7 +54,6 @@ const Wrapper = styled.div`
   overflow: hidden;
 
   &:hover {
-      //box-shadow: ${gameShowNeonBoxShadow};
     &::before {
       //box-shadow: 0px 7px 16px rgba(0, 0, 0, 0.527);
 
@@ -83,7 +81,7 @@ const HoverInfo = styled(Tooltip)`
   padding: 0 !important;
 `
 
-function SimpleCard({ coverID, onLoad, game, history }) {
+function SimpleCard({ coverID, onLoad, game, history, theme }) {
 
     const onClick = () => {
         let urlTitle = game.gameName.split(' ').join('_');
@@ -92,7 +90,7 @@ function SimpleCard({ coverID, onLoad, game, history }) {
 
     return (
         <HoverInfo title={
-            <FloatingGameDetails title={game.gameName} date={game.releasedDate.date} elapsedTime={game.releasedDate.elapsedTime} screenshots={game.screenshots} genres={game.genres}/>
+            <FloatingGameDetails title={game.gameName} date={game.releasedDate.date} elapsedTime={game.releasedDate.elapsedTime} screenshots={game.screenshots} genres={game.genres} theme={theme}/>
         } placement={"right"} TransitionComponent={Fade} arrow={true}>
 
             <CardStyleContainer onClick={onClick}>

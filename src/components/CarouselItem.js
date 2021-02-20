@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
-import {Button, Fade, Tooltip} from "@material-ui/core";
+import { Button, Fade, Tooltip } from "@material-ui/core";
 import PropTypes from 'prop-types';
 import CircularProgressWithLabel from "./CircularProgressWithLabel";
 import Skeleton from '@material-ui/lab/Skeleton';
 import styled from 'styled-components';
-import {SkeletonColor} from '../utils/styles';
 import VideoPlayer from "./VideoPlayer";
-import { appColors, carousel } from "../utils/styles";
+import { appColors } from "../utils/styles";
 import Shine from "./Shine";
 import FloatingGameDetails from "./FloatingGameDetails";
 import useWindowDimensions from "../utils/useWindowDimensions";
@@ -24,8 +23,11 @@ const Slide = styled.div`
 
   border-radius: ${borderRadius};
   transform: none;
-  box-shadow: ${props => props.isSelected ? (props.videoReady ? carousel.selectedBoxShadow : props.isDesktop ? carousel.hoveredNeonBoxShadow : carousel.hoveredNeonBoxShadowMobile) : carousel.boxShadow};
-    //border: ${carousel.border};
+  box-shadow: ${props => props.isSelected ? (props.videoReady ?
+    "0px 0px 20px 4px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.19)" : props.isDesktop ?
+      `0 0 0.5rem ${appColors[props.theme].secondary}, 0 0 2rem -21px ${appColors[props.theme].secondary}, inset 12px -20px 2rem -24px ${appColors[props.theme].secondary}, 0 0 4rem -15px ${appColors[props.theme].secondary}` :
+      `0 0 0.5rem ${appColors[props.theme].secondary}, 0 0 2rem -14px ${appColors[props.theme].secondary}, inset 12px -24px 2rem -24px ${appColors[props.theme].secondary}, 0 0 4rem -45px ${appColors[props.theme].secondary}`) :
+    `0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.19);`};
 
   overflow: hidden;
 
@@ -151,7 +153,7 @@ const CompanyName = styled.span`
 `
 
 const StyledSkeleton = styled(Skeleton)`
-  background-color: ${SkeletonColor} !important;
+  background-color: ${props => appColors[props.theme][900]} !important;
   width: 100% !important;
   height: 483px !important;
   
@@ -179,118 +181,119 @@ const SkeletonContainer = styled.div`
 `
 
 const ScreenshotSkeleton = styled(Skeleton)`
-  background-color: ${SkeletonColor} !important;
+  background-color: ${props => appColors[props.theme][900]} !important;
   width: 100% !important;
   height: 100% !important;
   border-radius: 32px;
 `
 
-function CarouselItem({ imageId, isSelected, title, genres, rate, isLoading, company, videoId, releaseDate, screenshots, summary, id, onClick }) {
-    const [isHover, setIsHover] = useState(false);
-    const [hide, setHide] = useState(false);
-    const [imageLoaded, setImageLoaded] = useState(false);
-    const {width} = useWindowDimensions();
+function CarouselItem({ imageId, isSelected, title, genres, rate, isLoading, company, videoId, releaseDate, screenshots, summary, id, onClick, theme }) {
+  const [isHover, setIsHover] = useState(false);
+  const [hide, setHide] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const { width } = useWindowDimensions();
 
-    const onSlideHover = () => {
-        if (isSelected === true && videoId != null) {
-            setIsHover(true);
-        }
+  const onSlideHover = () => {
+    if (isSelected === true && videoId != null) {
+      setIsHover(true);
     }
+  }
 
-    const onSlideLeave = () => {
-        if (isSelected === true) {
-            setIsHover(false);
-            setHide(false);
-        }
+  const onSlideLeave = () => {
+    if (isSelected === true) {
+      setIsHover(false);
+      setHide(false);
     }
+  }
 
-    const onClickItem = () => {
-        if (isSelected === true) {
-            onClick(id, title);
-        }
+  const onClickItem = () => {
+    if (isSelected === true) {
+      onClick(id, title);
     }
+  }
 
 
-    if (isLoading) {
-        return (
-            <Slide isSelected={isSelected} onMouseEnter={onSlideHover} onMouseLeave={onSlideLeave} videoReady={!hide}>
-                <Shine active={isHover} borderColor={hide ? appColors.shine : appColors.secondaryDarker} childrenStyle={{top: "0.75%", left: "0.75%", height: "98.5%", width: "98.5%"}}>
-                    <StyledSkeleton selected={isSelected} variant="rect" animation="wave" />
-                </Shine>
-            </Slide>
-        )
-    }
-    else {
-        return (
-            <Tooltip title={
-                <FloatingGameDetails title={title} date={releaseDate.date} elapsedTime={releaseDate.elapsedTime} genres={genres} screenshots={screenshots} summary={summary}/>
-            } placement={"right"} TransitionComponent={Fade} arrow={true} disableHoverListener={!isSelected} disableTouchListener={true} >
+  if (isLoading) {
+    return (
+      <Slide isSelected={isSelected} onMouseEnter={onSlideHover} onMouseLeave={onSlideLeave} videoReady={!hide} theme={theme}>
+        <Shine active={isHover} borderColor={hide ? appColors[theme].shine : appColors[theme].secondaryDarker} childrenStyle={{ top: "0.75%", left: "0.75%", height: "98.5%", width: "98.5%" }} theme={theme}>
+          <StyledSkeleton selected={isSelected} variant="rect" animation="wave" theme={theme} />
+        </Shine>
+      </Slide>
+    )
+  }
+  else {
+  return (
+    <Tooltip title={
+      <FloatingGameDetails title={title} date={releaseDate.date} elapsedTime={releaseDate.elapsedTime} genres={genres} screenshots={screenshots} summary={summary} theme={theme} />
+    } placement={"right"} TransitionComponent={Fade} arrow={true} disableHoverListener={!isSelected} disableTouchListener={true} >
 
-                <Slide isSelected={isSelected} onMouseEnter={onSlideHover} onMouseLeave={onSlideLeave} videoReady={!hide} onClick={onClickItem}>
-                    <Shine active={isHover && !hide && width >= 768 } borderColor={hide ? appColors.shine : appColors.secondaryDarker} childrenStyle={{top: "0.75%", left: "0.75%", height: "98.5%", width: "98.5%"}}>
-                        <div style={{ position: "relative", borderRadius: "45px !important" }}>
-                            {isHover && width >= 768 && (
-                                <VideoPlayer className="carousel-video-player" videoID={videoId} onReady={() => setHide(true)} playtime="15" />
-                            )}
-                            <Image onLoad={() => setImageLoaded(true)} isSelected={isSelected} isHover={width >= 768 ? isHover : false} hide={imageLoaded ? hide : true} alt="slider" src={"https://images.igdb.com/igdb/image/upload/t_screenshot_huge/" + imageId + ".jpg"} />
+      <Slide isSelected={isSelected} onMouseEnter={onSlideHover} onMouseLeave={onSlideLeave} videoReady={!hide} onClick={onClickItem} theme={theme}>
+        <Shine active={isHover && !hide && width >= 768} borderColor={hide ? appColors[theme].shine : appColors[theme].secondaryDarker} childrenStyle={{ top: "0.75%", left: "0.75%", height: "98.5%", width: "98.5%" }} theme={theme}>
+          <div style={{ position: "relative", borderRadius: "45px !important" }}>
+            {isHover && width >= 768 && (
+              <VideoPlayer className="carousel-video-player" videoID={videoId} onReady={() => setHide(true)} playtime="15" />
+            )}
+            <Image onLoad={() => setImageLoaded(true)} isSelected={isSelected} isHover={width >= 768 ? isHover : false} hide={imageLoaded ? hide : true} alt="slider" src={"https://images.igdb.com/igdb/image/upload/t_screenshot_huge/" + imageId + ".jpg"} />
 
-                        </div>
-                        <SkeletonContainer hide={imageLoaded}>
-                            <ScreenshotSkeleton variant="rect" animation={imageLoaded ? false : "wave"} style={{borderRadius: "16px"}}/>
-                        </SkeletonContainer>
-                    </Shine>
+          </div>
+          <SkeletonContainer hide={imageLoaded}>
+            <ScreenshotSkeleton variant="rect" animation={imageLoaded ? false : "wave"} style={{ borderRadius: "16px" }} theme={theme}/>
+          </SkeletonContainer>
+        </Shine>
 
 
-                    <Legend isSelected={isSelected} hide={hide}>
+        <Legend isSelected={isSelected} hide={hide}>
 
-                        <LegendBottom>
-                            <div>
-                                <GameName>{title}</GameName>
-                                <Date>
-                                    {company && (
-                                        <CompanyName>{company.name} - </CompanyName>
-                                    )}
-                                    <span style={{color: "#e0e0e0"}}>{releaseDate.elapsedTime ? releaseDate.elapsedTime : releaseDate.date}</span>
-                                    {/*{releaseDate.date} {releaseDate.elapsedTime !== undefined && (`(${releaseDate.elapsedTime})`)}*/}
-                                </Date>
-                            </div>
-                            {genres &&
-                            <FlexContainer>
-                                {genres.map((genre, index) => {
-                                    if (index < 3) {
-                                        return <Genre key={index} size="small" color="secondary">{genre.name}</Genre>
-                                    }
-                                    return null
-                                })}
+          <LegendBottom>
+            <div>
+              <GameName>{title}</GameName>
+              <Date>
+                {company && (
+                  <CompanyName>{company.name} - </CompanyName>
+                )}
+                <span style={{ color: "#e0e0e0" }}>{releaseDate.elapsedTime ? releaseDate.elapsedTime : releaseDate.date}</span>
+                {/*{releaseDate.date} {releaseDate.elapsedTime !== undefined && (`(${releaseDate.elapsedTime})`)}*/}
+              </Date>
+            </div>
+            {genres &&
+              <FlexContainer>
+                {genres.map((genre, index) => {
+                  if (index < 3) {
+                    return <Genre key={index} size="small" color="secondary">{genre.name}</Genre>
+                  }
+                  return null
+                })}
 
-                            </FlexContainer>
-                            }
-                            <ButtonContainer>
-                                <SeeMoreButton color="primary">See more</SeeMoreButton>
-                                {!isNaN(rate) &&
-                                <RateContainer>
-                                    <CircularProgressWithLabel value={rate} />
-                                </RateContainer>
-                                }
-                            </ButtonContainer>
-                        </LegendBottom>
+              </FlexContainer>
+            }
+            <ButtonContainer>
+              <SeeMoreButton color="primary">See more</SeeMoreButton>
+              {!isNaN(rate) &&
+                <RateContainer>
+                  <CircularProgressWithLabel value={rate} />
+                </RateContainer>
+              }
+            </ButtonContainer>
+          </LegendBottom>
 
-                    </Legend>
+        </Legend>
 
-                </Slide>
-            </Tooltip>
-        )
-    }
+      </Slide>
+    </Tooltip>
+  )
+}
 }
 
 CarouselItem.prototype = {
-    imageId: PropTypes.string,
-    isSelected: PropTypes.bool,
-    title: PropTypes.string,
-    category: PropTypes.string,
-    rate: PropTypes.number,
-    screenshots: PropTypes.array,
-    summary: PropTypes.string
+  imageId: PropTypes.string,
+  isSelected: PropTypes.bool,
+  title: PropTypes.string,
+  category: PropTypes.string,
+  rate: PropTypes.number,
+  screenshots: PropTypes.array,
+  summary: PropTypes.string,
+  theme: PropTypes.string.isRequired
 }
 
 export default CarouselItem;

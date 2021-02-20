@@ -39,7 +39,7 @@ const SeeAllContainer = styled.div`
 const SeeAllButton = styled.div`
     cursor: pointer;
     text-transform: uppercase;
-    color: ${appColors.primarySimple};
+    color: ${appColors["midnight"].primarySimple};
 `
 
 const Collapsable = props => {

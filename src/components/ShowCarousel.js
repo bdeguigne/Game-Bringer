@@ -29,7 +29,7 @@ const ArrowContainer = styled.div`
 
 const RoundedArrowIconContainer = styled.div`
   cursor: pointer;
-  background: ${appColors.backgroundColor};
+  background: ${appColors["midnight"].backgroundColor};
   border-radius: 50%;
   display: flex;
   justify-content: center;
@@ -45,7 +45,7 @@ const WhiteArrowIcon = styled(ArrowIcon)`
   margin-right: ${props => props.right ? "0" : "4px"};
 `
 
-function ShowCarousel({ data, loadingStatus, history }) {
+function ShowCarousel({ data, loadingStatus, history, theme }) {
     const [currentSlide, setCurrentSlide] = useState(0);
     const {width} = useWindowDimensions();
 
@@ -94,6 +94,7 @@ function ShowCarousel({ data, loadingStatus, history }) {
                         screenshots={element.screenshots}
                         summary={element.summary}
                         onClick={onClickItem}
+                        theme={theme}
                     />
                 }) : (
                         Array.from({ length: 10 }, (item, index) => {
@@ -101,6 +102,7 @@ function ShowCarousel({ data, loadingStatus, history }) {
                                 key={index}
                                 isSelected={currentSlide === index}
                                 isLoading={true}
+                                theme={theme}
                             />
                         }
                         )
@@ -109,10 +111,10 @@ function ShowCarousel({ data, loadingStatus, history }) {
             </Carousel>
             <ArrowContainer>
                 <RoundedArrowIconContainer onClick={() => updateCurrentSlide(currentSlide - 1)}>
-                    <WhiteArrowIcon className="icon-arrow-left" left={true}/>
+                    <WhiteArrowIcon className="icon-arrow-left" left={true} theme={theme}/>
                 </RoundedArrowIconContainer>
                 <RoundedArrowIconContainer onClick={() => updateCurrentSlide(currentSlide + 1)}>
-                    <WhiteArrowIcon className="icon-arrow-right" right={true}/>
+                    <WhiteArrowIcon className="icon-arrow-right" right={true} theme={theme}/>
                 </RoundedArrowIconContainer>
             </ArrowContainer>
                 <CarouselIndicator
@@ -121,13 +123,15 @@ function ShowCarousel({ data, loadingStatus, history }) {
                     selectedIndex={currentSlide}
                     setSelectedIndex={updateCurrentSlide}
                     loadingStatus={data.length === 10 ? null : loadingStatus}
+                    theme={theme}
                 />
         </Container>
     );
 }
 
 ShowCarousel.prototype = {
-    games: PropTypes.array.isRequired
+    games: PropTypes.array.isRequired,
+    theme: PropTypes.string.isRequired
 }
 
 export default withRouter(ShowCarousel);

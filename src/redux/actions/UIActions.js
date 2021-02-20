@@ -44,3 +44,13 @@ export const setIsErrorOccurred = (state) => {
         })
     }
 }
+
+export const setTheme = (theme) => {
+    return dispatch => {
+        localStorage.setItem("theme", theme);
+        dispatch({
+            type: uiConstants.SET_THEME,
+            theme
+        })
+    }
+} 

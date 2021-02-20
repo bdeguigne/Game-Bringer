@@ -3,12 +3,12 @@
 }
 
 body {
+  background-color: var(--background-color);
   margin: 0;
   font-family: 'Montserrat', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: white;
-  background-color: var(--background-color);
 }
 
 code {
@@ -46,6 +46,9 @@ code {
   .icon-compass:before {
     content: "\e903";
   }
+  .icon-paint:before {
+    content: "\e90c";
+  }
   .icon-search:before {
     content: "\e906";
   }
@@ -64,4 +67,5 @@ code {
   .icon-arrow-left:before {
     content: "\e902";
   }
+  
   

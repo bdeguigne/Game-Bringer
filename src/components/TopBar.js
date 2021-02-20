@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
 import SearchBar from "./SearchBar";
-import { Tabs } from "@material-ui/core";
+import { Popover, Tabs, Tooltip } from "@material-ui/core";
 import styled from "styled-components";
-import { appColors, Padding, topBarNeonBorder, topBarNeonBoxShadow, maxWidth } from "../utils/styles";
+import { appColors, Padding, topBarNeonBorder, maxWidth } from "../utils/styles";
 import { withRouter } from "react-router-dom";
 import { compose } from "redux";
 import { connect } from "react-redux";
+import BrushIcon from '@material-ui/icons/Brush';
+import { setTheme } from '../redux/actions/UIActions';
+import ThemePopover from "./Advanced Search/ThemePopover";
 
 const Container = styled.div`
   min-height: 50px;
@@ -14,7 +17,7 @@ const Container = styled.div`
   padding-top: 18px;
   padding-bottom: 18px;
  
-  box-shadow: ${topBarNeonBoxShadow};
+  box-shadow: ${props => `0 0 0.5rem #fff, 0 0 2rem -21px ${appColors[props.theme].secondary}, inset 0px -20px 2rem -24px ${appColors[props.theme].secondary}, 0 0 4rem -15px ${appColors[props.theme].secondary}`};
 `;
 
 const Center = styled.div`
@@ -46,16 +49,18 @@ const TabsIcon = styled.span`
   font-size: 21px;
   
   transition: color, text-shadow 0.3s;
-  color: ${props => props.active ? appColors.primarySimple : appColors.secondaryDarker}; 
-  text-shadow: ${props => props.active ? `0 0 2px rgba(255, 255, 255, 0.25), 0 0 16px ${appColors.primarySimple};` : "none"}; ;
+  color: ${props => props.active ? appColors[props.theme].primarySimple : appColors[props.theme].secondaryDarker}; 
+  text-shadow: ${props => props.active ? `0 0 2px rgba(255, 255, 255, 0.25), 0 0 16px ${appColors[props.theme].primarySimple};` : "none"}; ;
   
   &:hover {
-    color: ${props => props.active ? appColors.primarySimple : appColors.secondary};
+    color: ${props => props.active ? appColors[props.theme].primarySimple : appColors[props.theme].secondary};
   }
 `;
 
 function TopBar(props) {
 	const [tabValue, setTabValue] = useState(props.tabIndex);
+	const [anchorEl, setAnchorEl] = React.useState(null);
+	const open = Boolean(anchorEl);
 
 	useEffect(() => {
 		setTabValue(props.tabIndex);
@@ -73,20 +78,49 @@ function TopBar(props) {
 		props.history.push("/search");
 	}
 
-	function reviewsIconClick() {
-		setTabValue(2);
+	function themeIconClick(event) {
+		setAnchorEl(event.currentTarget);
+	}
+
+	function popoverOnClose() {
+		setAnchorEl(null);
+	}
+
+	function onChangeThemeClick(theme) {
+		props.setTheme(theme);
 	}
 
 	return (
-		<Container>
+		<Container theme={props.theme}>
 			<Center>
 				<Wrapper>
 					<SearchBar />
 					<RightLayout>
 						<Tabs value={tabValue}>
-							<TabsIcon active={tabValue === 0} className={"icon-compass"} onClick={exploreIconClick} />
-							<TabsIcon active={tabValue === 1} className={"icon-search-plus"} onClick={searchIconClick} />
-							<TabsIcon active={tabValue === 2} className={"icon-thumbs-up"} onClick={reviewsIconClick} />
+							<Tooltip title={"Explore"}>
+								<TabsIcon active={tabValue === 0} className={"icon-compass"} onClick={exploreIconClick} theme={props.theme} />
+							</Tooltip>
+							<Tooltip title={"Advanced search"}>
+								<TabsIcon active={tabValue === 1} className={"icon-search-plus"} onClick={searchIconClick} theme={props.theme} />
+							</Tooltip>
+							<Tooltip title={"Change theme"}>
+								<TabsIcon active={open} className={"icon-paint"} onClick={themeIconClick} theme={props.theme} aria-describedby={"toggle-theme"}/>
+							</Tooltip>
+							<Popover
+								id={"toggle-theme"}
+								open={open}
+								anchorEl={anchorEl}
+								onClose={popoverOnClose}
+								anchorOrigin={{
+									vertical: 'bottom',
+									horizontal: 'left',
+								}}
+								transformOrigin={{
+									vertical: 'top',
+									horizontal: 'center',
+								}}>
+									<ThemePopover onChangeTheme={onChangeThemeClick} theme={props.theme} />
+							</Popover>
 						</Tabs>
 					</RightLayout>
 				</Wrapper>
@@ -95,13 +129,18 @@ function TopBar(props) {
 	)
 }
 
+const actionCreator = {
+	setTheme
+}
+
 function mapStateToProps(state) {
 	return {
-		tabIndex: state.uiReducer.index
+		tabIndex: state.uiReducer.index,
+		theme: state.uiReducer.theme
 	}
 }
 
 export default compose(
 	withRouter,
-	connect(mapStateToProps)
+	connect(mapStateToProps, actionCreator)
 )(TopBar)

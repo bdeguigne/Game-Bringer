@@ -20,7 +20,7 @@ const OtherGamesSlider = props => {
         <HorizontalSlider sliderName={props.sliderName} title={props.title} isLoading={props.data.length === 0} imageLoaded={sliderLoaded} removeSkeleton={removeSkeleton} >
             {props.data.map((game, i) => {
                     return (
-                        <SimpleCard onLoad={sliderOnLoad} key={i} coverID={game.coverID} game={game} />
+                        <SimpleCard onLoad={sliderOnLoad} key={i} coverID={game.coverID} game={game} theme={props.theme}/>
                     )
                 })
             }
@@ -31,7 +31,8 @@ const OtherGamesSlider = props => {
 OtherGamesSlider.propTypes = {
     sliderName: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    data : PropTypes.array.isRequired
+    data : PropTypes.array.isRequired,
+    theme : PropTypes.string.isRequired
 };
 
 export default OtherGamesSlider;

@@ -13,7 +13,7 @@ const Container = styled.div`
   min-height: 100px;
   display: flex;
   border-radius: 16px;
-  background-color: ${appColors.searchResultItemBackground};
+  background-color: ${props => appColors[props.theme].searchResultItemBackground};
   box-shadow: ${resultItemBoxShadow};
   margin-bottom: 8px;
   transition: background-color 0.3s ,box-shadow 0.3s, transform 0.3s;
@@ -21,8 +21,8 @@ const Container = styled.div`
 
   &:hover {
     transform: scale(1.01);
-    background-color: #0F0A10;
-    box-shadow: 0px 0px 40px -20px #6D5DD3, 0px 0px 15px -8px rgba(255, 255, 255, 0.5);
+    background-color: ${props => appColors[props.theme].searchResultItemBackgroundHover};
+    box-shadow: ${props => `0px 0px 40px -20px ${appColors[props.theme].secondary}, 0px 0px 15px -8px rgba(255, 255, 255, 0.5)`} ;
   }
 
   
@@ -181,7 +181,7 @@ const SearchResultCard = props => {
 
   const CardContent = () => {
     return (
-      <Container>
+      <Container theme={props.theme}>
         <RippleEffect>
           <RowContainer>
             <Wrapper>
@@ -189,7 +189,7 @@ const SearchResultCard = props => {
                 <CoverContainer>
                   {props.coverId ? (
                     // <Cover alt={"Result game cover"} src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${props.coverId}.jpg`} />
-                    <ImageLoader src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${props.coverId}.jpg`} style={{ objectFit: "cover", width: "100%", height: "100px", borderRadius: "16px", transform: "scale(0.95)" }} />
+                    <ImageLoader src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${props.coverId}.jpg`} style={{ objectFit: "cover", width: "100%", height: "100px", borderRadius: "16px", transform: "scale(0.95)" }} theme={props.theme} />
                   ) : (
                     <Cover alt={"Result game cover"} src={process.env.PUBLIC_URL + "/assets/placeholder-cover.png"} />
                   )}
@@ -275,7 +275,7 @@ const SearchResultCard = props => {
 
   if (props.loading === true) {
     return (
-      <Container>
+      <Container theme={props.theme}>
         <Skeleton animation="wave" variant="rect" height="100%" width="100%" style={{ borderRadius: "16px" }} />
       </Container>
     )
@@ -284,7 +284,7 @@ const SearchResultCard = props => {
   } else {
     return (
       <HoverInfo title={
-        <FloatingGameDetails title={props.game} date={props.date?.date} elapsedTime={props.date?.elapsedTime} screenshots={props.screenshots} genres={props.genres} />
+        <FloatingGameDetails title={props.game} date={props.date?.date} elapsedTime={props.date?.elapsedTime} screenshots={props.screenshots} genres={props.genres} theme={props.theme} />
       } placement={"right"} TransitionComponent={Fade} arrow={true}>
         {CardContent()}
       </HoverInfo>
@@ -301,7 +301,8 @@ SearchResultCard.propTypes = {
   coverId: PropTypes.string,
   screenshots: PropTypes.array,
   genres: PropTypes.array,
-  loading: PropTypes.bool
+  loading: PropTypes.bool,
+  theme: PropTypes.string.isRequired
 };
 
 export default SearchResultCard;

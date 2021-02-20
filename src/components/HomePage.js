@@ -57,7 +57,7 @@ const HomePage = (props) => {
             </TitleContainer>
 
             <div>
-                <ShowCarousel data={props.popularGames} />
+                <ShowCarousel data={props.popularGames} theme={props.theme} />
             </div>
 
             <Padding>
@@ -65,11 +65,11 @@ const HomePage = (props) => {
             </Padding>
 
             <Padding>
-                <OtherGamesSlider sliderName={"recently-released"} title={"Recently released"} data={props.recentlyReleasedGames} />
+                <OtherGamesSlider sliderName={"recently-released"} title={"Recently released"} data={props.recentlyReleasedGames} theme={props.theme}/>
             </Padding>
 
             <Padding>
-                <OtherGamesSlider sliderName={"coming-soon"} title={"Coming Soon"} data={props.comingSoonGames} />
+                <OtherGamesSlider sliderName={"coming-soon"} title={"Coming Soon"} data={props.comingSoonGames} theme={props.theme} />
             </Padding>
         </div>
     )
@@ -87,6 +87,7 @@ function mapStateToProps(state) {
         comingSoonGames: state.homePageRequests.comingSoonGames,
         bestRatedGames: state.homePageRequests.bestRatedGamesThisMonth,
         isErrorOccurred: state.uiReducer.isErrorOccurred,
+        theme: state.uiReducer.theme
     }
 }
 

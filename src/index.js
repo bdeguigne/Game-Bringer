@@ -4,8 +4,6 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-import { ThemeProvider } from '@material-ui/core/styles';
-import theme from "./theme";
 
 //REDUX 
 import { Provider } from "react-redux";
@@ -15,9 +13,7 @@ import store from "./redux/store/index";
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <ThemeProvider theme={theme}>
         <App />
-      </ThemeProvider>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

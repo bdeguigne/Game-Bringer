@@ -90,6 +90,7 @@ const FloatingGameDetails = props => {
             prefixUrl={"https://images.igdb.com/igdb/image/upload/t_screenshot_med/"}
             skeletonOnLoadingImages={true}
             elevation={false}
+            theme={props.theme}
           />
         </ScreenshotContainer>
       )}
@@ -119,7 +120,8 @@ FloatingGameDetails.propTypes = {
   elapsedTime: PropTypes.string,
   screenshots: PropTypes.array,
   genres: PropTypes.array,
-  summary: PropTypes.string
+  summary: PropTypes.string,
+  theme: PropTypes.string.isRequired
 };
 
 export default FloatingGameDetails;

@@ -7,7 +7,7 @@ import styled from "styled-components";
 import { filters, addAndGroupElem, isFiltersExist, replaceTerm, findValueFromQuery, removeTerm } from './Filters';
 import CheckboxFilter from './CheckboxFilter';
 import { connect } from 'react-redux';
-import { appColors, openDrawerButton } from "../../utils/styles";
+import { appColors } from "../../utils/styles";
 import { compose } from 'redux';
 import { withRouter } from 'react-router-dom';
 import { TreeItem, TreeView, Skeleton } from '@material-ui/lab';
@@ -25,7 +25,7 @@ const FiltersContainer = styled.div`
 const Divider = styled.hr`
     margin: 8px auto;
     width: 80%;
-    border: 1px solid ${appColors[700]};
+    border: ${props => `1px solid ${appColors[props.theme][700]}`};
     opacity: 0.6;
     border-radius: 5px;
 `
@@ -37,7 +37,7 @@ const LargeTreeView = styled(TreeView)`
 const SeeAllButton = styled.div`
     cursor: pointer;
     text-transform: uppercase;
-    color: ${appColors.primarySimple};
+    color: ${props => appColors[props.theme].primarySimple};
 `
 
 const TreeWrapper = styled.div`
@@ -58,7 +58,7 @@ const DoubleArrowIcon = styled.span`
     font-size: 14px !important;
     margin-left: 4px;
     transform: rotate(-90deg);
-    color: ${appColors.primarySimple};
+    color: ${props => appColors[props.theme].primarySimple};
 `
 
 const OpenDrawerContainer = styled.div`
@@ -69,8 +69,8 @@ const OpenDrawerContainer = styled.div`
     border-top-left-radius: 50%;
     height: 55px;
     width: 40px;
-    background-color: ${appColors.secondaryDarker};
-    box-shadow: ${openDrawerButton};
+    background-color: ${props => appColors[props.theme].secondaryDarker};
+    box-shadow: ${props => `0px 0px 30px 0px ${appColors[props.theme].secondary}, 0px 0px 12px -11px #ffffff, inset 0px 0px 32px -5px ${appColors[props.theme].secondary}`};
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -206,7 +206,7 @@ function HandleFilters(props) {
             case "component":
                 return <child.component key={index} onChange={onChangeFilter} title={filter.title} value={findValueFromQuery(activatedFilters?.front, filter.slug || filter.title.toLowerCase()).split(",")} valueLabel={props.isCorrectSet ? findValueFromQuery(props.activatedFilters?.chip, filter.slug || filter.title.toLowerCase()).split(",") : []} activatedFilters={props.activatedFilters} refresh={props.refreshFilters} {...child.props} />
             case "divider":
-                return <Divider key={index} />
+                return <Divider key={index} theme={props.theme} />
             default:
                 return null;
         }
@@ -410,8 +410,8 @@ function HandleFilters(props) {
                                 </TreeItem>
                                 {filter.maxChildren && expandIds.includes(filterIndex.toString()) && !expand.find(elem => elem.index === filterIndex) && (
                                     <SeeAllContainer>
-                                        <SeeAllButton onClick={() => onSeeAllClick(filterIndex)}>See all</SeeAllButton>
-                                        <DoubleArrowIcon className="icon-double-arrow" />
+                                        <SeeAllButton onClick={() => onSeeAllClick(filterIndex)} theme={props.theme}>See all</SeeAllButton>
+                                        <DoubleArrowIcon className="icon-double-arrow" theme={props.theme} />
                                     </SeeAllContainer>
                                 )}
 
@@ -431,7 +431,7 @@ function HandleFilters(props) {
                 filtersDrawer
                 : (
                     <>
-                        <OpenDrawerContainer>
+                        <OpenDrawerContainer theme={props.theme}>
                             <OpenMenuIcon onClick={() => setMobileOpen(true)}></OpenMenuIcon>
                         </OpenDrawerContainer>
                         <SwipeableDrawer
@@ -459,7 +459,7 @@ HandleFilters.propTypes = {
     queryFilters: PropTypes.object,
     onChange: PropTypes.func,
     term: PropTypes.string,
-    refresh: PropTypes.number
+    refresh: PropTypes.number,
 }
 
 const actionCreators = {
@@ -476,7 +476,8 @@ function mapStateToProps(state) {
         perspectives: state.filtersReducer.perspectives,
         isCorrectSet: state.uiReducer.isCorrectIds,
         activatedFilters: state.filtersReducer.filters,
-        refreshFilters: state.uiReducer.refreshFilters
+        refreshFilters: state.uiReducer.refreshFilters,
+        theme: state.uiReducer.theme
     };
 }
 
