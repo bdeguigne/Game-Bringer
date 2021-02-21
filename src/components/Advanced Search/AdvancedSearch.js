@@ -9,7 +9,7 @@ import { search, moreSearchResult, setFilters } from '../../redux/actions/filter
 import TermChip from "./ChipFilters";
 import { RouteIndex } from "../../redux/constants/uiConstants";
 import SearchResultCard from "./SearchResultCard";
-import { Padding } from '../../utils/styles';
+import { Padding, MainContent } from '../../utils/styles';
 import HandleFilters from './HandleFilters';
 import { useLocation, withRouter } from "react-router-dom";
 import { generateParams, getFiltersWithQuery, replace, addAndGroupElem } from './Filters'
@@ -236,66 +236,69 @@ const AdvancedSearch = (props) => {
     };
 
     return (
-        <Padding>
-            <Snackbar open={openSnackBar} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical: "top", horizontal: "right" }}>
-                <Alert onClose={handleClose} severity="error">
-                    Sorry, a error occured, please try again.
+        <MainContent>
+            <Padding>
+                <Snackbar open={openSnackBar} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical: "top", horizontal: "right" }}>
+                    <Alert onClose={handleClose} severity="error">
+                        Sorry, a error occured, please try again.
                 </Alert>
-            </Snackbar>
-            <SearchContainer>
-                <SearchBar isActive={isSearchbarActive} theme={props.theme}>
-                    <SearchInput
-                        placeholder={"Search and discover new games"}
-                        onChange={(evt) => { console.log("ON CHANGE TEXT", evt.target.value); setSearchValue(evt.target.value) }}
-                        value={searchValue}
-                        onKeyPress={onKeyPressed}
-                        onClick={() => setIsSearchbarActive(true)}
-                        onBlur={() => setIsSearchbarActive(false)}
-                    />
-                    <SearchButtonContainer onClick={searchInputClick} theme={props.theme}>
-                        <SearchIcon className="icon-search" />
-                    </SearchButtonContainer>
-                </SearchBar>
-            </SearchContainer>
-            <TermChip activatedFilters={JSON.parse(JSON.stringify(activatedFilters))} onChangeFilters={onFiltersChange} />
+                </Snackbar>
+                <SearchContainer>
+                    <SearchBar isActive={isSearchbarActive} theme={props.theme}>
+                        <SearchInput
+                            placeholder={"Search and discover new games"}
+                            onChange={(evt) => { console.log("ON CHANGE TEXT", evt.target.value); setSearchValue(evt.target.value) }}
+                            value={searchValue}
+                            onKeyPress={onKeyPressed}
+                            onClick={() => setIsSearchbarActive(true)}
+                            onBlur={() => setIsSearchbarActive(false)}
+                        />
+                        <SearchButtonContainer onClick={searchInputClick} theme={props.theme}>
+                            <SearchIcon className="icon-search" />
+                        </SearchButtonContainer>
+                    </SearchBar>
+                </SearchContainer>
+                <TermChip activatedFilters={JSON.parse(JSON.stringify(activatedFilters))} onChangeFilters={onFiltersChange} />
 
-            <Row>
-                <FullWidth>
-                    <SortContainer >
-                        <SelectSort onChange={(sort) => handleSortChange(sort)} />
-                    </SortContainer>
-                    <ResultContainer isRequest={props.isRequest}>
-                        {!props.searchResult && Array.from(Array(20), (e, i) => {
-                            return (
-                                <SearchResultCard key={i} loading={true} theme={props.theme}/>
-                            )
-                        })}
-                        {props.searchResult && props.searchResult.map((res, i) => {
-                            return (
-                                <SearchResultCard
-                                    key={i}
-                                    game={res.name}
-                                    developer={res.company?.name}
-                                    date={res.releaseDate}
-                                    platforms={res.platforms}
-                                    coverId={res.coverID}
-                                    rating={res.rating}
-                                    screenshots={res.screenshots}
-                                    genres={res.genres}
-                                    theme={props.theme}
-                                />
-                            )
-                        })}
-                        {props.moreResIsRequest && (
-                            <Center margin={"12px 0"}>
-                                <CircularProgress />
-                            </Center>
-                        )}
-                    </ResultContainer>
-                </FullWidth>
-                <HandleFilters queryFilters={queryFilters} onChange={onFiltersChange} term={searchTerm} refresh={refresh} />
-            </Row>
-        </Padding>
+                <Row>
+                    <FullWidth>
+                        <SortContainer >
+                            <SelectSort onChange={(sort) => handleSortChange(sort)} />
+                        </SortContainer>
+                        <ResultContainer isRequest={props.isRequest}>
+                            {!props.searchResult && Array.from(Array(20), (e, i) => {
+                                return (
+                                    <SearchResultCard key={i} loading={true} theme={props.theme} />
+                                )
+                            })}
+                            {props.searchResult && props.searchResult.map((res, i) => {
+                                return (
+                                    <SearchResultCard
+                                        key={i}
+                                        id={res.id}
+                                        game={res.name}
+                                        developer={res.company?.name}
+                                        date={res.releaseDate}
+                                        platforms={res.platforms}
+                                        coverId={res.coverID}
+                                        rating={res.rating}
+                                        screenshots={res.screenshots}
+                                        genres={res.genres}
+                                        theme={props.theme}
+                                    />
+                                )
+                            })}
+                            {props.moreResIsRequest && (
+                                <Center margin={"12px 0"}>
+                                    <CircularProgress />
+                                </Center>
+                            )}
+                        </ResultContainer>
+                    </FullWidth>
+                    <HandleFilters queryFilters={queryFilters} onChange={onFiltersChange} term={searchTerm} refresh={refresh} />
+                </Row>
+            </Padding>
+        </MainContent>
     );
 }
 

@@ -7,6 +7,7 @@ import { Skeleton } from '@material-ui/lab'
 import FloatingGameDetails from "../FloatingGameDetails";
 import CircularProgressWithLabel from "../CircularProgressWithLabel";
 import ImageLoader from '../ImageLoader';
+import {withRouter} from "react-router-dom"
 
 const Container = styled.div`
   width: 100%;
@@ -179,10 +180,15 @@ const RowContainer = styled.div`
 
 const SearchResultCard = props => {
 
+  const handleClick = () => {
+    let urlTitle = props.game.split(' ').join('_');
+    props.history.push("/" + props.id + "/" + urlTitle);
+  }
+
   const CardContent = () => {
     return (
       <Container theme={props.theme}>
-        <RippleEffect>
+        <RippleEffect onClick={handleClick}>
           <RowContainer>
             <Wrapper>
               <FlexFullWidthHeight>
@@ -293,6 +299,7 @@ const SearchResultCard = props => {
 };
 
 SearchResultCard.propTypes = {
+  id: PropTypes.number,
   game: PropTypes.string,
   developer: PropTypes.string,
   platforms: PropTypes.array,
@@ -305,4 +312,4 @@ SearchResultCard.propTypes = {
   theme: PropTypes.string.isRequired
 };
 
-export default SearchResultCard;
+export default withRouter(SearchResultCard);

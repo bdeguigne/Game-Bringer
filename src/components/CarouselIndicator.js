@@ -3,7 +3,7 @@ import { FiberManualRecordRounded, ArrowBackIos, ArrowForwardIos } from "@materi
 import { ButtonBase, IconButton } from "@material-ui/core";
 import { CircularProgress } from '@material-ui/core';
 import styled from 'styled-components';
-import {appColors, carousel} from '../utils/styles'
+import {appColors} from '../utils/styles'
 
 const ArrowContainer = styled.div`
   display: none;

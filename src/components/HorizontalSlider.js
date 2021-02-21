@@ -134,7 +134,6 @@ const HorizontalSlider = ({ sliderName, title, children, isLoading, imageLoaded,
             slider.on('run.before', (evt) => {
                 const scrollSteps = slider.settings.perView;
                 evt.steps = evt.direction === '>' ? -scrollSteps : scrollSteps;
-                // ... do something cool here
             })
 
         }

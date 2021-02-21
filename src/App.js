@@ -4,8 +4,7 @@ import { ThemeProvider } from '@material-ui/core/styles';
 
 import React, { useEffect } from "react";
 import TopBar from "./components/TopBar";
-import styled from 'styled-components';
-import { appColors, maxWidth } from './utils/styles';
+import { appColors } from './utils/styles';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { routes } from "./routes";
 // REDUX
@@ -17,12 +16,6 @@ import { getTokens } from './redux/services/request'
 import { setIsErrorOccurred } from './redux/actions/UIActions'
 import muiTheme from "./theme";
 
-
-const MainContent = styled.div`
-  margin: 0 auto;
-  width: ${maxWidth};
-  max-width: 100%;
-`
 
 function App(props) {
 
@@ -69,7 +62,7 @@ function App(props) {
                 <div className="app">
                     <div>
                         <TopBar />
-                        <MainContent>
+                        {/* <MainContent> */}
                             <Switch>
                                 {routes.map((route, i) => {
                                     return (
@@ -78,7 +71,7 @@ function App(props) {
                                 }
                                 )}
                             </Switch>
-                        </MainContent>
+                        {/* </MainContent> */}
                     </div>
                 </div>
             </Router>

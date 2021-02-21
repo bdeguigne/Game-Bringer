@@ -6,7 +6,6 @@ import { appColors, Padding, topBarNeonBorder, maxWidth } from "../utils/styles"
 import { withRouter } from "react-router-dom";
 import { compose } from "redux";
 import { connect } from "react-redux";
-import BrushIcon from '@material-ui/icons/Brush';
 import { setTheme } from '../redux/actions/UIActions';
 import ThemePopover from "./Advanced Search/ThemePopover";
 

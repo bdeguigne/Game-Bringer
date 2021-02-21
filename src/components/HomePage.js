@@ -3,7 +3,7 @@ import ShowCarousel from "./ShowCarousel";
 import TopRatedGames from "./TopRatedGames";
 import { connect } from "react-redux";
 import styled from 'styled-components';
-import { Padding, SectionTitle } from '../utils/styles';
+import { Padding, SectionTitle, MainContent } from '../utils/styles';
 import OtherGamesSlider from "./OtherGamesSlider";
 import { setRouteIndex, setIsErrorOccurred } from '../redux/actions/UIActions';
 import { Snackbar } from '@material-ui/core';
@@ -45,7 +45,7 @@ const HomePage = (props) => {
     };
 
     return (
-        <div>
+        <MainContent>
             <Snackbar open={openSnackBar} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical: "top", horizontal: "right" }}>
                 <Alert onClose={handleClose} severity="error">
                     Sorry, a error occured, please try again.
@@ -71,7 +71,7 @@ const HomePage = (props) => {
             <Padding>
                 <OtherGamesSlider sliderName={"coming-soon"} title={"Coming Soon"} data={props.comingSoonGames} theme={props.theme} />
             </Padding>
-        </div>
+        </MainContent>
     )
 }
 

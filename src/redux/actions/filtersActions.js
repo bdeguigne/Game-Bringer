@@ -210,6 +210,7 @@ const grabSearchResult = (res) => {
     let searchResults = [];
 
     res.forEach(game => {
+        const id = game.id;
         const name = game.name;
         const company = findDeveloper(game.involved_companies);
         const releaseDate = getElapsedTime(game.release_dates, game.first_release_date);
@@ -220,6 +221,7 @@ const grabSearchResult = (res) => {
         const genres = game.genres;
 
         searchResults.push({
+            id,
             name,
             company,
             releaseDate,

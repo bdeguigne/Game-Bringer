@@ -168,6 +168,12 @@ export const advancedSearchPadding = "4px 6px 4px 6px";
 
 /* Others */
 
+export const MainContent = styled.div`
+  margin: 0 auto;
+  width: ${maxWidth};
+  max-width: 100%;
+`
+
 export const Padding = styled.div`
     padding-left: 16px;
     padding-right : 16px;
@@ -177,6 +183,7 @@ export const Padding = styled.div`
         padding-left: ${props => props.type === "slider" ? 0 : "80px"};
         padding-right : ${props => props.type === "slider" ? "96px" : "80px"};
     }
+
 `
 
 export const Center = styled.div`
