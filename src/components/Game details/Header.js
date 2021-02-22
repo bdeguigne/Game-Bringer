@@ -29,7 +29,7 @@ const HeaderContainer = styled.div`
 const CoverImg = styled.img`
     margin-right: 16px;
     border-radius: 8px;
-    box-shadow: ${props => `0px 0px 64px -3px ${appColors[props.theme].secondaryTransparent}, inset 0px 0px 41px 5px rgba(255, 255, 255, 0.4)`};
+    box-shadow: ${props => `0px 0px 30px 0px ${appColors[props.theme].secondaryTransparent}, inset 0px 0px 41px 5px rgba(255, 255, 255, 0.4)`};
     filter: drop-shadow(0px 0px 4px #FFFFFF);
     border: 1.5px solid #FFFFFF;
 `

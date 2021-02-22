@@ -46,6 +46,10 @@
     border-radius: 16px !important;
 }
 
+.carousel-highlight .slide iframe {
+    border-radius: 0 !important;
+}
+
 .card-slider-video {
     display: flex !important;
     height: 100% !important;
@@ -133,6 +137,7 @@
 
 
 .carousel-highlight .carousel .thumb {
+    height: 68px;
     border: 2px solid transparent;
     border-radius: 4px;
 }
@@ -144,6 +149,10 @@
 
 .carousel-highlight.ocean .carousel .thumb.selected {
     border: 2px solid #FFF;
+}
+
+.highlight-video div {
+    margin: 0 auto;
 }
 
 /* .carousel-highlight .carousel .control-arrow {

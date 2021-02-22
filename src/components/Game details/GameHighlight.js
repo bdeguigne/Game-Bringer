@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components';
 import { Carousel } from 'react-responsive-carousel';
+import VideoPlayer from '../VideoPlayer';
+import YoutubeThumbnail from './YoutubeThumbnail';
 
 
 const SliderContainer = styled.div`
@@ -22,7 +24,7 @@ function GameHighlight(props) {
                 slideDataTmp.push({
                     type: "video",
                     id: video.video_id,
-                    thumb: `https://img.youtube.com/vi/${video.video_id}/default.jpg`
+                    thumb: `https://img.youtube.com/vi/${video.video_id}/sddefault.jpg`
                 })
             })
         }
@@ -35,9 +37,13 @@ function GameHighlight(props) {
                 })
             })
         }
-
-        console.log("OKAY SETUP", slideDataTmp);
+        setData(slideDataTmp);
     }, [props.videos, props.screenshots])
+
+    const customRenderThumb = (children) =>
+        children.map((item) => {
+            return item.type === "img" ? <img src={item.props.src} alt="thumb"/> : <YoutubeThumbnail videoId={item.props.videoID} size={1.5} quality={"default"} style={{width: "100%", height: "100%", objectFit: "cover"}}/>
+        });
 
     return (
         <SliderContainer>
@@ -45,14 +51,13 @@ function GameHighlight(props) {
                 className="carousel-highlight ocean"
                 showStatus={false}
                 showArrows={true}
+                thumbHeight={68}
                 thumbWidth={115}
-            // renderThumbs={() => customRenderThumb(props.screenshots)}
+                renderThumbs={(children) => customRenderThumb(children)}
             // showIndicators={false}
             >
-                {props.screenshots && props.screenshots.map((screenshot, i) => {
-                    return (
-                        <img key={i} src={`https://images.igdb.com/igdb/image/upload/t_screenshot_big/${screenshot.image_id}.jpg`} alt="screenshot" />
-                    )
+                {data && data.map((element, i) => {
+                    return element.type === "video" ? <VideoPlayer key={i} videoID={element.id} className="highlight-video" volume={100}/> : <img key={i} src={element.thumb} alt="screenshot" />
                 })}
             </Carousel>
         </SliderContainer>
