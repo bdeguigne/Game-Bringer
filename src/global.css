@@ -12,7 +12,7 @@
     background: none !important;
 }
 
-.slider-wrapper.axis-horizontal {
+.main-carousel .slider-wrapper.axis-horizontal {
     /* NEW */
     padding: 24px 16px;
 
@@ -71,21 +71,92 @@
 @media only screen and (min-width: 768px) {
 
     /* For desktop */
-    .slider-wrapper.axis-horizontal {
+    .main-carousel .slider-wrapper.axis-horizontal {
         padding: 55px 50px;
     }
 
-    .carousel-video-player div {
+    .main-carousel .carousel-video-player div {
         height: 357px !important;
     }
 }
 
 
-/*.sideNav-tab svg {*/
-/*    margin-left: 0px;*/
-/*    transition: 0.3s;*/
-/*}*/
+/* Game highlight */
 
-/*.sideNav-tab.icon svg {*/
-/*    margin-left: 11px;*/
-/*}*/
+
+
+.carousel-highlight .carousel .thumbs-wrapper {
+    margin: 8px 0 0 0;
+}
+
+/* .carousel-highlight .thumbs-wrapper::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+.carousel-highlight .thumbs-wrapper::-webkit-scrollbar:horizontal {
+    height: 11px;
+}
+
+.carousel-highlight .thumbs-wrapper::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+}
+
+.carousel-highlight.ocean  .thumbs-wrapper::-webkit-scrollbar-thumb {
+    background-color: var(--ocean-primary);
+}
+
+ .carousel-highlight.ocean .thumbs-wrapper::-webkit-scrollbar-thumb {
+    border: 2px solid --ocean-primary; 
+    background-color: --ocean-background;
+}
+
+.carousel-highlight.ocean .thumbs-wrapper::-webkit-scrollbar-thumb {
+    border: 2px solid --ocean-primary;
+    background-color: --ocean-background;
+}
+.carousel-highlight .thumbs-wrapper::-webkit-scrollbar-corner {
+    background: rgba(255, 255, 255, 0);
+    display: none;
+} 
+
+.carousel-highlight .thumbs-wrapper::-webkit-scrollbar-button {
+    width: 0;
+    height: 0;
+    display: none;
+} */
+
+
+.carousel-highlight .thumbs {
+    padding-left: 0;
+    /* transform: none  !important; */
+}
+
+
+.carousel-highlight .carousel .thumb {
+    border: 2px solid transparent;
+    border-radius: 4px;
+}
+
+.carousel-highlight .carousel .thumb:hover {
+    border: 2px solid #333;
+    border-radius: 4px;
+}
+
+.carousel-highlight.ocean .carousel .thumb.selected {
+    border: 2px solid #FFF;
+}
+
+/* .carousel-highlight .carousel .control-arrow {
+    display: none;
+} */
+
+/* .carousel-highlight::-webkit-scrollbar {
+    width: 7px;
+  }
+    .carousel-highlight::-webkit-scrollbar-thumb {
+    border-radius: 4px;
+    background-color: rgba(255, 255, 255, 0.5);
+    box-shadow:  0 0 1px rgba(255, 255, 255, .5);
+    -webkit-box-shadow: 0 0 1px rgba(255, 255, 255, .5);
+  }
+ */

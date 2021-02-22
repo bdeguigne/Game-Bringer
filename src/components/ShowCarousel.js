@@ -63,6 +63,7 @@ function ShowCarousel({ data, loadingStatus, history, theme }) {
     return (
         <Container>
             <Carousel
+                className="main-carousel"
                 centerMode
                 infiniteLoop
                 showThumbs={false}

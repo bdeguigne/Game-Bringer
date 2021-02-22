@@ -33,7 +33,8 @@ export const getGameDetails = (id) => {
                         aggregated_rating: {
                             rate: Math.round(game.aggregated_rating),
                             count: game.aggregated_rating_count
-                        }
+                        },
+                        videos: game.videos
                     }
 
                     dispatch({

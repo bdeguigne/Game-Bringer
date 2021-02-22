@@ -1,3 +1,10 @@
+
+// Required Core Stylesheet
+import "@glidejs/glide/dist/css/glide.core.min.css";
+
+// Optional Theme Stylesheet
+import "@glidejs/glide/dist/css/glide.theme.min.css";
+
 import './App.css';
 import "./global.css";
 import { ThemeProvider } from '@material-ui/core/styles';

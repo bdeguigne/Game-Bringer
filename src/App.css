@@ -15,6 +15,15 @@ body {
     --bar-boxShadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
     --skeleton-color: var(--app-700);
     height: 100%;
+
+    --midnight-primary: rgb(254,170,69);
+    --midnight-background: #0d0e1b;
+    --ocean-primary: #FFC856;
+    --ocean-background: #0F111A;
+    --natural-primary: #B9E981;
+    --natural-background: #212121;
+    --dracula-primary: rgb(254,170,69);
+    --dracula-background: #290000;
 }
 
 .app {
