@@ -1,6 +1,6 @@
 import { getFilterRequest, searchByNameRequest, searchRequest, correctIdsRequest } from '../services/filtersService';
 import { filtersConstants } from '../constants/filtersConstants'
-import { findDeveloper, getElapsedTime } from '../../utils/requestFormat';
+import { findCompany, getElapsedTime } from '../../utils/requestFormat';
 import { handleError } from '../services/request';
 import moment from 'moment';
 
@@ -212,7 +212,7 @@ const grabSearchResult = (res) => {
     res.forEach(game => {
         const id = game.id;
         const name = game.name;
-        const company = findDeveloper(game.involved_companies);
+        const company = findCompany(game.involved_companies);
         const releaseDate = getElapsedTime(game.release_dates, game.first_release_date);
         const platforms = game.platforms;
         const coverID = game.cover ? game.cover.image_id : null;

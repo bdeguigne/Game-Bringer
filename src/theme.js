@@ -44,12 +44,13 @@ export default function muiTheme(theme) {
                     border: "0.5px solid transparent",
                     backgroundClip: "padding-box",
                     textDecoration: "none",
-                    boxShadow: `0px 0px 64px -20px ${appColors[theme].secondary}, 0px 0px 8px -4px #FFFFFF, inset 0px 0px 32px -15px ${appColors[theme].secondary}`,
+                    boxShadow: `0px 0px 5px -15px ${appColors[theme].secondary}, 0px 0px 2px #FFFFFF`,
+                    // boxShadow: `0px 0px 64px -20px ${appColors[theme].secondary}, 0px 0px 8px -4px #FFFFFF, inset 0px 0px 32px -15px ${appColors[theme].secondary}`,
                     // boxSizing: "border-box",
                     "&:hover": {
                         border: "0.5px solid white",
                         backgroundColor: appColors[theme].backgroundContrast,
-                        boxShadow: `0px 0px 64px 0px ${appColors[theme].secondary}, 0px 0px 21px -4px #FFFFFF, inset 0px 0px 32px -15px ${appColors[theme].secondary};`
+                        boxShadow: `0px 0px 64px -3px ${appColors[theme].secondary}, 0px 0px 21px -4px #FFFFFF, inset 0px 0px 12px -15px ${appColors[theme].secondary};`
                     }
                 }
 

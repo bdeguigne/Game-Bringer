@@ -1,8 +1,7 @@
 import { getGameDetailsRequest } from '../services/gameDetailsService'
 import { handleError } from '../services/request';
 import { gameDetailsConstants } from '../constants/gameDetailsConstants'
-import { getElapsedTime, findDeveloper } from '../../utils/requestFormat'
-
+import { getElapsedTime, findCompany } from '../../utils/requestFormat'
 
 export const getGameDetails = (id) => {
     return (dispatch) => {
@@ -18,6 +17,8 @@ export const getGameDetails = (id) => {
                 if (res && res[0]) {
                     const game = res[0];
 
+
+
                     const gameInfo = {
                         name: game.name,
                         genres: game.genres,
@@ -25,7 +26,9 @@ export const getGameDetails = (id) => {
                         banner: game.screenshots ? (game.screenshots[Math.floor(Math.random() * game.screenshots.length)]).image_id : null,
                         coverId: game.cover.image_id,
                         releaseDate: getElapsedTime(game.release_dates, game.first_release_date),
-                        company: findDeveloper(game.involved_companies),
+                        company: findCompany(game.involved_companies),
+                        developers: findCompany(game.involved_companies, "developer"),
+                        publishers: findCompany(game.involved_companies, "publisher"),
                         userRating: { 
                             rate: Math.round(game.rating),
                             count: game.rating_count
@@ -34,7 +37,9 @@ export const getGameDetails = (id) => {
                             rate: Math.round(game.aggregated_rating),
                             count: game.aggregated_rating_count
                         },
-                        videos: game.videos
+                        videos: game.videos,
+                        platforms: game.platforms,
+                        websites: game.websites
                     }
 
                     dispatch({

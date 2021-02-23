@@ -1,6 +1,6 @@
 import { homePageRequestsConstants } from "../constants/homePageRequestsConstants";
 import { getPopularGameRequest, getRecentlyReleasedRequest, getComingSoonGamesRequest, getBestRatedGamesRequest } from "../services/homePageRequestsServices";
-import { findDeveloper, getElapsedTime, getRandom, getVideoTrailer } from '../../utils/requestFormat'
+import { findCompany, getElapsedTime, getRandom, getVideoTrailer } from '../../utils/requestFormat'
 import { handleError } from '../services/request';
 
 const grabGameData = (games) => {
@@ -62,7 +62,7 @@ export const getPopularGames = () => {
                         const screenshotID = popularGame.screenshots ? (popularGame.screenshots[Math.floor(Math.random() * popularGame.screenshots.length)]).image_id : null;
                         const videoID = getVideoTrailer(popularGame.videos);
                         const releaseDate = getElapsedTime(popularGame.release_dates, popularGame.first_release_date);
-                        const company = findDeveloper(popularGame.involved_companies);
+                        const company = findCompany(popularGame.involved_companies);
                         const screenshots = popularGame.screenshots;
                         const summary = popularGame.summary;
 
@@ -155,7 +155,7 @@ export const getBestRatedGames = (time) => {
                         const rating = Math.round(bestRatedGame.aggregated_rating);
                         const genres = bestRatedGame.genres;
                         const screenshots = bestRatedGame.screenshots;
-                        const company = findDeveloper(bestRatedGame.involved_companies);
+                        const company = findCompany(bestRatedGame.involved_companies);
                         const releaseDate = getElapsedTime(bestRatedGame.release_dates, bestRatedGame.first_release_date);
                         const summary = bestRatedGame.summary;
 

@@ -6,7 +6,7 @@ import Box from '@material-ui/core/Box';
 import styled from 'styled-components';
 
 const Text = styled(Typography)`
-    font-size: ${props => props.fontSize ? props.fontSize  : "1rem" } !important;
+    font-size: ${props => props.fontSize ? props.fontSize : "1rem"} !important;
 
 `
 
@@ -24,9 +24,13 @@ export default function CircularProgressWithLabel(props) {
                 alignItems="center"
                 justifyContent="center"
             >
-                <Text fontSize={props.fontSize} variant="caption" component="div">{`${Math.round(
-                    props.value,
-                )}`}</Text>
+                {!props.value ? (
+                    <Text fontSize={props.fontSize} variant="caption" component="div">N/A</Text>
+                ) : (
+                    <Text fontSize={props.fontSize} variant="caption" component="div">{`${Math.round(
+                        props.value,
+                    )}`}</Text>
+                )}
             </Box>
         </Box>
     );
@@ -39,5 +43,5 @@ CircularProgressWithLabel.propTypes = {
      */
     value: PropTypes.number.isRequired,
     size: PropTypes.number,
-    fontSize: PropTypes.string
+    fontSize: PropTypes.string,
 };

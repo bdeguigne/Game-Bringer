@@ -213,3 +213,13 @@ export const ArrowIcon = styled.span`
     text-shadow: ${props => `0 0 1rem #fff, 0 0 2rem ${appColors[props.theme].secondary}, 0 0 4rem ${appColors[props.theme].secondary}, 0 0 6rem ${appColors[props.theme].secondary}`};
   }
 `
+
+export const Link = styled.a`
+    color: ${props => appColors[props.theme].primarySimple};
+    text-decoration: none;
+    font-size: 13px;
+
+    &:hover {
+        text-decoration: underline;
+    }
+`

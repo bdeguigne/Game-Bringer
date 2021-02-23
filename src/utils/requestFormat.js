@@ -31,11 +31,16 @@ export function getRandom(arr, n) {
     return result;
 }
 
-export function findDeveloper(involved_companies) {
+export function findCompany(involved_companies, type = "developer") {
     let company = null;
     if (involved_companies) {
         involved_companies.forEach(involved_company => {
-            if (involved_company.developer === true) {
+            if (type === "developer" && involved_company.developer === true) {
+                company = {
+                    name: involved_company.company.name,
+                    logoID: involved_company.company.logo ? involved_company.company.logo.image_id : null
+                }
+            } else if (type === "publisher" && involved_company.publisher === true) {
                 company = {
                     name: involved_company.company.name,
                     logoID: involved_company.company.logo ? involved_company.company.logo.image_id : null
@@ -45,6 +50,7 @@ export function findDeveloper(involved_companies) {
     }
     return company;
 }
+
 
 export function getElapsedTime(dates, firstReleaseDateUnix) {
     let releaseDate = null;

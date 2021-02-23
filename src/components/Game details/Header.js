@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { appColors, Center } from '../../utils/styles';
-import CircularProgressWithLabel from '../CircularProgressWithLabel';
+import { appColors } from '../../utils/styles';
+import Ratings from './Ratings';
 
 const Banner = styled.img`
     position: absolute;
@@ -82,52 +82,7 @@ const FullWidth = styled.div`
     display: flex;
 `
 
-const BottomRightContainer = styled.div`
-    display: flex;
-    align-items: flex-end;
-`
 
-const AbsoluteBottomRightContainer = styled.div`
-    position: absolute;
-    bottom: 0;
-    right: 0;
-`
-
-
-const RatingsContainer = styled.div`
-    position: relative;
-    top: -190px;
-    width: 300px;
-    display: flex;
-    align-items: center;
-    height: fit-content;
-`
-
-const RatingWrapper = styled.div`
-    background-color: ${props => appColors[props.theme].backgroundContrast};
-    border-radius: 100%;
-    padding: 10px;
-    height: fit-content;
-`
-
-const CircularRatingWrapper = styled.div`
-    height: 175px;
-    display:flex;
-    align-items: center;
-`
-
-const RatingTextContainer = styled.div`
-    margin-top: 16px;
-    text-align: center;
-    width: 134px;
-    font-size: 13px;
-`
-
-const AlignCenterContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-`
 
 function Header(props) {
     return (
@@ -158,52 +113,8 @@ function Header(props) {
                                 )}
                             </TitleWrapper>
                         </GameTitleContainer>
-                        <AbsoluteBottomRightContainer>
-
-                            <BottomRightContainer>
-                                {!isNaN(props.game.userRating?.rate) && (
-                                    <AlignCenterContainer>
-                                        <CircularRatingWrapper>
-                                            <RatingWrapper theme={props.theme} >
-                                                <CircularProgressWithLabel size={130} value={props.game.userRating.rate} fontSize={"1.75rem"} />
-                                            </RatingWrapper>
-                                        </CircularRatingWrapper>
-                                        {/* <Center >
-                                            <RatingTextContainer>
-                                                <p>Based on {props.game.userRating.count} <span style={{ fontWeight: "bold" }}>IGDB member ratings</span></p>
-                                            </RatingTextContainer>
-                                        </Center> */}
-                                    </AlignCenterContainer>
-                                )}
-                                {!isNaN(props.game.aggregated_rating?.rate) && (
-                                    <AlignCenterContainer>
-                                        <CircularRatingWrapper>
-                                            <RatingWrapper theme={props.theme} style={{ marginLeft: "-3px" }}>
-                                                <CircularProgressWithLabel size={85} value={props.game.aggregated_rating.rate} fontSize={"1.2rem"} />
-                                            </RatingWrapper>
-                                        </CircularRatingWrapper>
-                                        {/* <Center style={{ marginLeft: "-12px" }}>
-                                            <RatingTextContainer>
-                                                <p>Based on {props.game.aggregated_rating.count} <span style={{ fontWeight: "bold" }}>critics ratings</span> </p>
-                                            </RatingTextContainer>
-                                        </Center> */}
-                                    </AlignCenterContainer>
-                                )}
-                            </BottomRightContainer>
-                            <Center>
-                                {!isNaN(props.game.userRating?.rate) && (
-                                    <RatingTextContainer>
-                                        <p>Based on {props.game.userRating.count} <span style={{ fontWeight: "bold" }}>IGDB member ratings</span></p>
-                                    </RatingTextContainer>
-                                )}
-                                {!isNaN(props.game.aggregated_rating?.rate) && (
-                                    <RatingTextContainer>
-                                        <p>Based on {props.game.aggregated_rating.count} <span style={{ fontWeight: "bold" }}>critics ratings</span> </p>
-                                    </RatingTextContainer>
-                                )}
-
-                            </Center>
-                        </AbsoluteBottomRightContainer>
+                        
+                        <Ratings game={props.game} theme={props.theme}/>
                     </FullWidth>
                     {/* </Flex> */}
                 </HeaderContainer>
