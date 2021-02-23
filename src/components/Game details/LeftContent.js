@@ -4,10 +4,7 @@ import styled from 'styled-components';
 import GameHighlight from './GameHighlight';
 
 const GameInfoContainer = styled.div`
-    margin-top: 64px;
-    /* height: px; */
-    /* border: 1px solid white; */
-    max-width: 865px;
+    width: 70%;
 `
 
 function LeftContent(props) {

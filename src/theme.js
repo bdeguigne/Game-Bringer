@@ -246,6 +246,11 @@ export default function muiTheme(theme) {
                 root: {
                     fontFamily: "Montserrat, sans-serif",
                 }
+            },
+            MuiDialog: {
+                paperWidthSm: {
+                    maxWidth: "1100px"
+                }
             }
 
         }

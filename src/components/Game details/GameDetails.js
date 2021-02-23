@@ -15,7 +15,8 @@ const Container = styled.div`
 const Flex = styled.div`
     display: flex;
     width: 100%;
-    justify-content: space-between;
+    /* justify-content: space-between; */
+    margin-top: 64px;
 `
 
 const GameDetails = (props) => {
