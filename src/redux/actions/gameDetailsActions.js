@@ -17,8 +17,6 @@ export const getGameDetails = (id) => {
                 if (res && res[0]) {
                     const game = res[0];
 
-
-
                     const gameInfo = {
                         name: game.name,
                         genres: game.genres,
@@ -39,7 +37,9 @@ export const getGameDetails = (id) => {
                         },
                         videos: game.videos,
                         platforms: game.platforms,
-                        websites: game.websites
+                        websites: game.websites,
+                        summary: game.summary,
+                        storyline: game.storyline
                     }
 
                     dispatch({

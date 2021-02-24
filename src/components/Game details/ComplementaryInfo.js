@@ -6,7 +6,6 @@ import { Button } from '@material-ui/core';
 import { socialIcons } from '../../utils/socialIcons';
 
 const Container = styled.div`
-    margin-left: 12px;
     width: 100%;
     margin-bottom: 16px;
     /* border: 1px solid; */
@@ -81,7 +80,6 @@ function ComplementaryInfo(props) {
         if (props.game?.websites) {
             props.game.websites.forEach((site) => {
                 socialIcons.forEach(icons => {
-                    console.log(icons.id, site.category)
                     if (icons.id === site.category) {
                         iconsArray.push({ icon: icons.icon, name: icons.name , link: site.url});
                     }

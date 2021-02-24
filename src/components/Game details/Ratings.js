@@ -11,7 +11,7 @@ const BottomRightContainer = styled.div`
 
 const AbsoluteBottomRightContainer = styled.div`
     position: absolute;
-    bottom: 0;
+    bottom: -30px;
     right: 0;
 `
 

@@ -5,18 +5,36 @@ import { getGameDetails } from '../../redux/actions/gameDetailsActions';
 import { MainContent, Padding } from '../../utils/styles'
 import styled from 'styled-components';
 import Header from './Header';
-import LeftContent from './LeftContent';
-import RightContent from './RightContent';
+import GameDescription from './GameDescription';
+import GameHighlight from './GameHighlight';
+import ComplementaryInfo from './ComplementaryInfo'
+
 
 const Container = styled.div`
     position: relative;
 `
 
-const Flex = styled.div`
-    display: flex;
+const SpaceTop = styled.div`
+    margin-top: ${props => props.value};
+`
+
+const ResponsiveLeftContainer = styled.div`
     width: 100%;
-    /* justify-content: space-between; */
-    margin-top: 64px;
+    margin-right: 0;
+    @media only screen and (min-width: 992px) {
+        width: 70%;
+        margin-right: 12px;
+    }
+`
+
+const ResponsiveFlex = styled.div`
+    display: flex;
+    flex-direction: column-reverse;
+    width: 100%;
+    
+    @media only screen and (min-width: 992px) {
+        flex-direction: row;
+    }
 `
 
 const GameDetails = (props) => {
@@ -32,11 +50,26 @@ const GameDetails = (props) => {
             <MainContent>
                 <Padding>
                     <Header game={props.game} theme={props.theme} />
-                    <Flex>
-                        <LeftContent game={props.game} theme={props.theme}/>
-                        <RightContent game={props.game} theme={props.theme}/>
-                    </Flex>
-                    {/* <p>test</p> */}
+                    <SpaceTop value={"64px"}>
+                        <ResponsiveFlex>
+                            <ResponsiveLeftContainer>
+                                <GameHighlight screenshots={props.game.screenshots} videos={props.game.videos} />
+                            </ResponsiveLeftContainer>
+
+                            <ComplementaryInfo game={props.game} theme={props.theme} />
+                        </ResponsiveFlex>
+                    </SpaceTop>
+
+                    <SpaceTop value={"16px"}>
+                        <ResponsiveFlex>
+                            <ResponsiveLeftContainer>
+                                <GameDescription game={props.game}/>
+                            </ResponsiveLeftContainer>
+
+                            <p>RIGHT</p>
+                        </ResponsiveFlex>
+                        
+                    </SpaceTop>
                 </Padding>
             </MainContent>
         </Container>

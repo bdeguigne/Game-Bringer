@@ -62,7 +62,7 @@ const Content = styled.div`
   }
 `
 
-const LeftContent = styled.div`
+const GameHighlightWrapper = styled.div`
   margin: 4px 8px;
   display: flex;
   flex-direction: column;
@@ -203,7 +203,7 @@ const SearchResultCard = props => {
                 <Content>
                   <GameContent>
 
-                    <LeftContent>
+                    <GameHighlightWrapper>
                       <div>
                         <Game>
                           {props.game}
@@ -225,7 +225,7 @@ const SearchResultCard = props => {
                           }
                         })}
                       </PlatformsContainer>
-                    </LeftContent>
+                    </GameHighlightWrapper>
 
                     {props.date && (
                       <DateCenter>
