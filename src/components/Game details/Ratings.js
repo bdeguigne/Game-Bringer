@@ -84,11 +84,17 @@ function Ratings(props) {
                     <RatingTextContainer>
                         <p>Based on {props.game.userRating.count} <span style={{ fontWeight: "bold" }}>IGDB member ratings</span></p>
                     </RatingTextContainer>
-                ) : (
-                    <RatingTextContainer>
-                        <p>Need more ratings</p>
-                    </RatingTextContainer>
-                )}
+                ) :
+                    props.game.releaseDate?.isReleased ? (
+                        <RatingTextContainer>
+                            <p>Need more ratings</p>
+                        </RatingTextContainer>
+                    ) : (
+                        <RatingTextContainer>
+                            <p>Not yet released</p>
+                        </RatingTextContainer>
+                    )
+                }
                 {!isNaN(props.game.aggregated_rating?.rate) ? (
                     <RatingTextContainer>
                         <p>Based on {props.game.aggregated_rating.count} <span style={{ fontWeight: "bold" }}>critics ratings</span> </p>

@@ -54,6 +54,7 @@ export function findCompany(involved_companies, type = "developer") {
 
 export function getElapsedTime(dates, firstReleaseDateUnix) {
     let releaseDate = null;
+
     if (dates && Array.isArray(dates) && firstReleaseDateUnix) {
         dates.forEach(date => {
             if (date.date === firstReleaseDateUnix) {
@@ -61,10 +62,12 @@ export function getElapsedTime(dates, firstReleaseDateUnix) {
                     releaseDate = {
                         elapsedTime: moment.unix(date.date).fromNow(),
                         date: date.human,
+                        isReleased: moment().unix() < moment.unix(date.date)
                     }
                 } else {
                     releaseDate = {
-                        date: date.human
+                        date: date.human,
+                        isReleased: false
                     }
                 }
                 return releaseDate;
@@ -76,10 +79,12 @@ export function getElapsedTime(dates, firstReleaseDateUnix) {
             releaseDate = {
                 elapsedTime: moment.unix(dates.date).fromNow(),
                 date: dates.human,
+                isReleased: moment().unix() < dates.date
             }
         } else {
             releaseDate = {
-                date: dates.human
+                date: dates.human,
+                isReleased: false
             }
         }
         return releaseDate;

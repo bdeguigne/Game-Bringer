@@ -8,7 +8,7 @@ import Header from './Header';
 import GameDescription from './GameDescription';
 import GameHighlight from './GameHighlight';
 import ComplementaryInfo from './ComplementaryInfo'
-
+import GameInfo from './GameInfo';
 
 const Container = styled.div`
     position: relative;
@@ -66,7 +66,7 @@ const GameDetails = (props) => {
                                 <GameDescription game={props.game}/>
                             </ResponsiveLeftContainer>
 
-                            <p>RIGHT</p>
+                            <GameInfo game={props.game} theme={props.theme}/>
                         </ResponsiveFlex>
                         
                     </SpaceTop>

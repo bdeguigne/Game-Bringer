@@ -24,6 +24,7 @@ export const getGameDetails = (id) => {
                         banner: game.screenshots ? (game.screenshots[Math.floor(Math.random() * game.screenshots.length)]).image_id : null,
                         coverId: game.cover.image_id,
                         releaseDate: getElapsedTime(game.release_dates, game.first_release_date),
+                        releaseDates:game.release_dates,
                         company: findCompany(game.involved_companies),
                         developers: findCompany(game.involved_companies, "developer"),
                         publishers: findCompany(game.involved_companies, "publisher"),
@@ -39,7 +40,11 @@ export const getGameDetails = (id) => {
                         platforms: game.platforms,
                         websites: game.websites,
                         summary: game.summary,
-                        storyline: game.storyline
+                        storyline: game.storyline,
+                        gameModes: game.game_modes,
+                        themes: game.themes,
+                        playerPerspectives: game.player_perspectives,
+                        gameEngines: game.game_engines
                     }
 
                     dispatch({

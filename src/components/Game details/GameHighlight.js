@@ -7,7 +7,6 @@ import YoutubeThumbnail from './YoutubeThumbnail';
 import { Dialog } from '@material-ui/core';
 import FullscreenSlider from './FullscreenSlider';
 
-
 const SliderContainer = styled.div`
   /* max-width: 700px; */
 
@@ -50,7 +49,9 @@ function GameHighlight(props) {
         });
 
     const handleClick = (key, event) => {
-        setOpenModal(true);
+        if (event.type === "img") {
+            setOpenModal(true);
+        }
         // setCurrentSlide(key);
         console.log("CLICK THUMB", key, event);
     }
@@ -64,9 +65,10 @@ function GameHighlight(props) {
             setCurrentSlide(index);
         }
     };
-
     return (
-        <SliderContainer>
+        <SliderContainer
+           
+        >
             <Carousel
                 className="carousel-highlight"
                 showStatus={false}
@@ -76,11 +78,12 @@ function GameHighlight(props) {
                 renderThumbs={(children) => customRenderThumb(children)}
                 onClickItem={handleClick}
                 onChange={updateCurrentSlide}
+
                 dynamicHeight
             // showIndicators={false}
             >
                 {data && data.map((element, i) => {
-                    return element.type === "video" ? <VideoPlayer key={i} videoID={element.id} className="highlight-video" volume={100} playing={i === currentSlide}  /> : <img key={element.id} src={element.thumb} alt="screenshot"/>
+                    return element.type === "video" ? <VideoPlayer key={i} videoID={element.id} className="highlight-video" volume={0} playing={i === currentSlide} /> : <img key={element.id} src={element.thumb} alt="screenshot" />
                 })}
             </Carousel>
             <Dialog
