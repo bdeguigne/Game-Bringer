@@ -10,9 +10,17 @@ const BottomRightContainer = styled.div`
 `
 
 const AbsoluteBottomRightContainer = styled.div`
-    position: absolute;
+    display:  ${props => props.mobile ? "block" : "none"};
+    position: ${props => props.mobile ? "initial" : "absolute"};
     bottom: -30px;
     right: 0;
+    margin-bottom: 16px;
+
+    @media only screen and (min-width: 768px) {
+        display: ${props => props.mobile ? "none" : "block"};
+        position: absolute;
+    }
+
 `
 
 
@@ -54,7 +62,7 @@ const AlignCenterContainer = styled.div`
 
 function Ratings(props) {
     return (
-        <AbsoluteBottomRightContainer>
+        <AbsoluteBottomRightContainer mobile={props.mobile}>
             <BottomRightContainer>
                 <AlignCenterContainer>
                     <CircularRatingWrapper>
@@ -109,11 +117,16 @@ function Ratings(props) {
     )
 }
 
+Ratings.defaultProps = {
+    mobile: false
+}
+
 Ratings.propTypes = {
     game: PropTypes.oneOfType([
         PropTypes.object, PropTypes.array
     ]),
-    theme: PropTypes.string
+    theme: PropTypes.string,
+    mobile: PropTypes.bool
 }
 
 export default Ratings

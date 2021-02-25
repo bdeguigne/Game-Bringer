@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { appColors, Link } from '../../utils/styles'
+import { Link } from '../../utils/styles'
 
 const Title = styled.div`
     font-size: 18px;

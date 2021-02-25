@@ -7,7 +7,7 @@ import { withRouter } from "react-router-dom";
 import { compose } from "redux";
 import { connect } from "react-redux";
 import { setTheme } from '../redux/actions/UIActions';
-import ThemePopover from "./Advanced Search/ThemePopover";
+import ThemePopover from "./ThemePopover";
 
 const Container = styled.div`
   min-height: 50px;

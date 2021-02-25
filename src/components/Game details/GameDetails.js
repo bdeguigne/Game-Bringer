@@ -15,7 +15,11 @@ const Container = styled.div`
 `
 
 const SpaceTop = styled.div`
-    margin-top: ${props => props.value};
+    margin-top: ${props => props.mobile ? "32px": props.value};
+
+    @media only screen and (min-width: 768px) {
+        margin-top: ${props => props.value};
+    }
 `
 
 const ResponsiveLeftContainer = styled.div`
@@ -50,7 +54,7 @@ const GameDetails = (props) => {
             <MainContent>
                 <Padding>
                     <Header game={props.game} theme={props.theme} />
-                    <SpaceTop value={"64px"}>
+                    <SpaceTop value={"64px"} mobile>
                         <ResponsiveFlex>
                             <ResponsiveLeftContainer>
                                 <GameHighlight screenshots={props.game.screenshots} videos={props.game.videos} />
@@ -63,12 +67,12 @@ const GameDetails = (props) => {
                     <SpaceTop value={"16px"}>
                         <ResponsiveFlex>
                             <ResponsiveLeftContainer>
-                                <GameDescription game={props.game}/>
+                                <GameDescription game={props.game} />
                             </ResponsiveLeftContainer>
 
-                            <GameInfo game={props.game} theme={props.theme}/>
+                            <GameInfo game={props.game} theme={props.theme} />
                         </ResponsiveFlex>
-                        
+
                     </SpaceTop>
                 </Padding>
             </MainContent>

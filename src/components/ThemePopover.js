@@ -2,11 +2,12 @@ import { ButtonBase } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import React from 'react';
 import styled from 'styled-components';
-import { appColors } from '../../utils/styles';
+import { appColors } from '../utils/styles';
 
 const Container = styled.div`
     padding: 12px 8px;
     display: flex;
+    flex-wrap: wrap;
 `
 
 const RoundedColor = styled.div`

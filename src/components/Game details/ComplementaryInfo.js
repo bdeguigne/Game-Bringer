@@ -4,6 +4,8 @@ import styled from 'styled-components';
 import { appColors, Center, Link } from '../../utils/styles';
 import { Button } from '@material-ui/core';
 import { socialIcons } from '../../utils/socialIcons';
+import Ratings from './Ratings';
+import GameTitle from './GameTitle';
 
 const Container = styled.div`
     width: 100%;
@@ -72,6 +74,25 @@ const SocialIconContainer = styled.a`
     }
 `
 
+const RatingsContainer = styled.div`
+    width: fit-content;
+    margin: 0 auto;
+`
+
+const InfoWrapper = styled.div`
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    flex-direction: column-reverse;
+    margin-bottom: 16px;
+
+    @media only screen and (min-width: 576px) {
+        flex-direction: row;
+        align-items: flex-end;
+    }
+`
+
 function ComplementaryInfo(props) {
     const [icons, setIcons] = useState([]);
 
@@ -81,7 +102,7 @@ function ComplementaryInfo(props) {
             props.game.websites.forEach((site) => {
                 socialIcons.forEach(icons => {
                     if (icons.id === site.category) {
-                        iconsArray.push({ icon: icons.icon, name: icons.name , link: site.url});
+                        iconsArray.push({ icon: icons.icon, name: icons.name, link: site.url });
                     }
                 })
             })
@@ -92,42 +113,52 @@ function ComplementaryInfo(props) {
     }, [props.game])
     return (
         <Container>
-            {props.game.platforms && (
-                <InfoContainer>
-                    <p>
-                        <Label>Platform{props.game.platforms.length > 1 && "s"} : </Label>
-                        {props.game.platforms.map((platform, i) => {
-                            return <Link theme={props.theme} href="#">{platform.name}{i !== (props.game.platforms.length - 1) && ", "}</Link>
-                        })}
-                    </p>
-                </InfoContainer>
-            )}
+            <GameTitle game={props.game} mobile/>
 
-            {props.game.developers && (
-                <InfoContainer>
-                    <p>
-                        <Label>Developer : </Label>
-                        <Link theme={props.theme} href="#">{props.game.developers.name}</Link>
-                    </p>
-                </InfoContainer>
-            )}
+            <InfoWrapper>
+                <div>
+                    {props.game.platforms && (
+                        <InfoContainer>
+                            <p>
+                                <Label>Platform{props.game.platforms.length > 1 && "s"} : </Label>
+                                {props.game.platforms.map((platform, i) => {
+                                    return <Link theme={props.theme} href="#">{platform.name}{i !== (props.game.platforms.length - 1) && ", "}</Link>
+                                })}
+                            </p>
+                        </InfoContainer>
+                    )}
 
-            {props.game.publishers && (
-                <InfoContainer>
-                    <p>
-                        <Label>Publisher : </Label>
-                        <Link theme={props.theme} href="#">{props.game.publishers.name}</Link>
-                    </p>
-                </InfoContainer>
-            )}
+                    {props.game.developers && (
+                        <InfoContainer>
+                            <p>
+                                <Label>Developer : </Label>
+                                <Link theme={props.theme} href="#">{props.game.developers.name}</Link>
+                            </p>
+                        </InfoContainer>
+                    )}
 
-            {props.game.genres && (
-                <InfoContainer>
-                    {props.game.genres.map((genre, index) => {
-                        return <Genre key={index} size="small" color="secondary">{genre.name}</Genre>
-                    })}
-                </InfoContainer>
-            )}
+                    {props.game.publishers && (
+                        <InfoContainer>
+                            <p>
+                                <Label>Publisher : </Label>
+                                <Link theme={props.theme} href="#">{props.game.publishers.name}</Link>
+                            </p>
+                        </InfoContainer>
+                    )}
+
+                    {props.game.genres && (
+                        <InfoContainer>
+                            {props.game.genres.map((genre, index) => {
+                                return <Genre key={index} size="small" color="secondary">{genre.name}</Genre>
+                            })}
+                        </InfoContainer>
+                    )}
+                </div>
+                <RatingsContainer>
+                    <Ratings game={props.game} theme={props.theme} mobile />
+                </RatingsContainer>
+            </InfoWrapper>
+
 
             <Center>
                 <Separator></Separator>
@@ -144,6 +175,7 @@ function ComplementaryInfo(props) {
                 })
                 }
             </SocialContainer>
+
         </Container>
     )
 }
