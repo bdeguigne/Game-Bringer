@@ -224,3 +224,7 @@ export const Link = styled.a`
         text-decoration: underline;
     }
 `
+
+export function isEmpty(obj) {
+  return Object.keys(obj).length === 0;
+}

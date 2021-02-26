@@ -173,8 +173,8 @@
 }
 
 .highlight-video {
-    width: 100% !important;
-    height: 100% !important;
+    width: 100%;
+    min-height: 100%;
 }
 
 .carousel .control-dots .dot {

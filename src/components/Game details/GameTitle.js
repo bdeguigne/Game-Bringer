@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { isEmpty } from '../../utils/styles';
+import { Skeleton } from '@material-ui/lab';
 
 const GameTitleContainer = styled.div`
     display: ${props => props.mobile ? "block" : "none"};
@@ -11,7 +13,7 @@ const GameTitleContainer = styled.div`
 
     @media only screen and (min-width: 576px) {
         display: ${props => props.mobile ? "none" : "flex"};
-        position: absolute;
+        /* position: absolute; */
         height: 258px;
     }
 `
@@ -62,9 +64,27 @@ function GameTitle(props) {
     return (
         <GameTitleContainer mobile={props.mobile}>
             <TitleWrapper>
+                {isEmpty(props.game) ? (
+                    <>
+                        <Skeleton variant="text" width={250} height={80} animation="wave" />
+                        <DateContainer>
+                            <DateHeading>
+                                <Skeleton variant="text" width={100} animation="wave" />
+                            </DateHeading>
+                            <DateHeading>
 
-                <Title>{props.game.name}</Title>
-                {props.game.releaseDate && (
+                                <Skeleton variant="text" width={110} animation="wave" />
+                            </DateHeading>
+                        </DateContainer>
+
+                        <CompanyHeading>
+                            <Skeleton variant="text" width={170} animation="wave" />
+                        </CompanyHeading>
+                    </>
+                ) : (
+                    <Title>{props.game.name}</Title>
+                )}
+                {props.game?.releaseDate && (
                     <DateContainer>
                         {props.game.releaseDate.date && (
                             <DateHeading>{props.game.releaseDate.date}</DateHeading>
@@ -74,7 +94,7 @@ function GameTitle(props) {
                         )}
                     </DateContainer>
                 )}
-                {props.game.company?.name && (
+                {props.game?.company?.name && (
                     <CompanyHeading>{props.game.company.name}</CompanyHeading>
                 )}
             </TitleWrapper>

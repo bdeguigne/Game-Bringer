@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { appColors, Center, Link } from '../../utils/styles';
+import { appColors, Center, isEmpty, Link } from '../../utils/styles';
 import { Button } from '@material-ui/core';
 import { socialIcons } from '../../utils/socialIcons';
 import Ratings from './Ratings';
 import GameTitle from './GameTitle';
+import { Skeleton } from '@material-ui/lab';
 
 const Container = styled.div`
     width: 100%;
@@ -93,6 +94,11 @@ const InfoWrapper = styled.div`
     }
 `
 
+const SkeletonIcon = styled(Skeleton)`
+    border-radius: 4px !important;
+    margin-right: 8px;
+`
+
 function ComplementaryInfo(props) {
     const [icons, setIcons] = useState([]);
 
@@ -113,16 +119,25 @@ function ComplementaryInfo(props) {
     }, [props.game])
     return (
         <Container>
-            <GameTitle game={props.game} mobile/>
+            <GameTitle game={props.game} mobile />
 
             <InfoWrapper>
                 <div>
+
+                    {isEmpty(props.game) && (
+                        <>
+                            <InfoContainer>
+                                <Skeleton animation="wave" variant="pulse" width={250} height={200} />
+                            </InfoContainer>
+                        </>
+                    )}
+
                     {props.game.platforms && (
                         <InfoContainer>
                             <p>
                                 <Label>Platform{props.game.platforms.length > 1 && "s"} : </Label>
                                 {props.game.platforms.map((platform, i) => {
-                                    return <Link theme={props.theme} href="#">{platform.name}{i !== (props.game.platforms.length - 1) && ", "}</Link>
+                                    return <Link key={i} theme={props.theme} href="#">{platform.name}{i !== (props.game.platforms.length - 1) && ", "}</Link>
                                 })}
                             </p>
                         </InfoContainer>
@@ -165,14 +180,30 @@ function ComplementaryInfo(props) {
             </Center>
 
             <SocialContainer>
-                {icons && icons.map((icon) => {
+                {!isEmpty(props.game) ? icons && icons.map((icon, i) => {
                     return (
-                        <SocialIconContainer theme={props.theme} href={icon.link} target="_blank">
+                        <SocialIconContainer key={i} theme={props.theme} href={icon.link} target="_blank">
                             <img src={icon.icon} alt="social icons" />
                             {icon.name}
                         </SocialIconContainer>
                     )
-                })
+                }) : (
+                    <>
+                        <SocialIconContainer theme={props.theme}>
+                            <SkeletonIcon variant="rect" width={35} height={35} />
+                            <SkeletonIcon variant="text" width={65} />
+                        </SocialIconContainer>
+                        <SocialIconContainer theme={props.theme}>
+                            <SkeletonIcon variant="rect" width={35} height={35} />
+                            <SkeletonIcon variant="text" width={65} />
+                        </SocialIconContainer>
+                        <SocialIconContainer theme={props.theme}>
+                            <SkeletonIcon variant="rect" width={35} height={35} />
+                            <SkeletonIcon variant="text" width={65} />
+                        </SocialIconContainer>
+
+                    </>
+                )
                 }
             </SocialContainer>
 

@@ -24,11 +24,11 @@ export const getGameDetails = (id) => {
                         banner: game.screenshots ? (game.screenshots[Math.floor(Math.random() * game.screenshots.length)]).image_id : null,
                         coverId: game.cover.image_id,
                         releaseDate: getElapsedTime(game.release_dates, game.first_release_date),
-                        releaseDates:game.release_dates,
+                        releaseDates: game.release_dates,
                         company: findCompany(game.involved_companies),
                         developers: findCompany(game.involved_companies, "developer"),
                         publishers: findCompany(game.involved_companies, "publisher"),
-                        userRating: { 
+                        userRating: {
                             rate: Math.round(game.rating),
                             count: game.rating_count
                         },
@@ -53,5 +53,14 @@ export const getGameDetails = (id) => {
                     })
                 }
             })
+    }
+}
+
+export const clearGameDetails = () => {
+    return dispatch => {
+        dispatch({
+            type: gameDetailsConstants.SET_GAME,
+            data: {}
+        })
     }
 }

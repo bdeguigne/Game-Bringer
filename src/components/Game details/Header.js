@@ -1,11 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { appColors } from '../../utils/styles';
 import Ratings from './Ratings';
 import GameTitle from './GameTitle';
+import { Skeleton } from '@material-ui/lab'
+import { isEmpty } from '../../utils/styles';
 
-const Banner = styled.img`
+const BannerStyle = css`
     position: absolute;
     top: 0;
     left: 0;
@@ -18,6 +20,20 @@ const Banner = styled.img`
 
     @media only screen and (min-width: 768px) {
         height: 442px;
+    }
+`
+
+const Banner = styled.img`
+   ${BannerStyle}
+`
+
+const SkeletonBanner = styled(Skeleton)`
+    ${BannerStyle}
+    position: absolute !important;
+    height: 281px !important;
+
+    @media only screen and (min-width: 768px) {
+        height: 442px !important;
     }
 `
 
@@ -43,12 +59,23 @@ const HeaderContainer = styled.div`
     }
 `
 
+const CoverStyle = css`
+   margin-right: 16px;
+    border-radius: 8px;
+    filter: drop-shadow(0px 0px 4px #FFFFFF);
+    border: 1.5px solid #FFFFFF;
+`;
+
 const CoverImg = styled.img`
-    margin-right: 16px;
+    ${CoverStyle}
+    width: 264px;
+    box-shadow: ${props => `0px 0px 30px 0px ${appColors[props.theme].secondaryTransparent}, inset 0px 0px 41px 5px rgba(255, 255, 255, 0.4)`};
+    height: 352px;
+    /* margin-right: 16px;
     border-radius: 8px;
     box-shadow: ${props => `0px 0px 30px 0px ${appColors[props.theme].secondaryTransparent}, inset 0px 0px 41px 5px rgba(255, 255, 255, 0.4)`};
     filter: drop-shadow(0px 0px 4px #FFFFFF);
-    border: 1.5px solid #FFFFFF;
+    border: 1.5px solid #FFFFFF; */
 `
 
 
@@ -57,17 +84,35 @@ const FullWidth = styled.div`
     display: flex;
 `
 
+const SkeletonCover = styled(Skeleton)`
+  ${CoverStyle}
+  min-width: 264px;
+  box-shadow: ${props => `0px 0px 30px 0px ${appColors[props.theme].secondaryTransparent}, inset 0px 0px 41px 5px rgba(255, 255, 255, 0.4)`};
+  min-height:  352px;
+
+`
+
+
 
 
 function Header(props) {
     return (
         <div>
-            <Banner src={"https://images.igdb.com/igdb/image/upload/t_screenshot_big/" + props.game.banner + ".jpg"} alt="banner" />
+            {!isEmpty(props.game) ? props.game.banner && (
+                <Banner src={"https://images.igdb.com/igdb/image/upload/t_screenshot_big/" + props.game.banner + ".jpg"} alt="banner" />
+            ) : (
+                <SkeletonBanner animation="wave" variant="rect" />
+            )}
 
             <Content>
                 <HeaderContainer>
                     {/* <Flex> */}
-                    <CoverImg src={"https://images.igdb.com/igdb/image/upload/t_cover_big/" + props.game.coverId + ".jpg"} alt="cover" theme={props.theme} />
+                    {!isEmpty(props.game) ? (
+                        <CoverImg src={"https://images.igdb.com/igdb/image/upload/t_cover_big/" + props.game.coverId + ".jpg"} alt="cover" theme={props.theme} />
+                    ) : (
+                        <SkeletonCover variant="rect" animation="pulse" theme={props.theme} />
+                    )}
+
                     <FullWidth>
                         <GameTitle game={props.game} />
 

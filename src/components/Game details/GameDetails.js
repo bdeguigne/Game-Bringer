@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { useParams } from "react-router-dom";
-import { getGameDetails } from '../../redux/actions/gameDetailsActions';
+import { getGameDetails, clearGameDetails } from '../../redux/actions/gameDetailsActions';
 import { MainContent, Padding } from '../../utils/styles'
 import styled from 'styled-components';
 import Header from './Header';
@@ -47,6 +47,11 @@ const GameDetails = (props) => {
     useEffect(() => {
         props.getGameDetails(id);
         // eslint-disable-next-line react-hooks/exhaustive-deps
+
+        return () => {
+            props.clearGameDetails();
+        }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (
@@ -81,7 +86,8 @@ const GameDetails = (props) => {
 }
 
 const actionCreators = {
-    getGameDetails
+    getGameDetails,
+    clearGameDetails
 }
 
 function mapStateToProps(state) {

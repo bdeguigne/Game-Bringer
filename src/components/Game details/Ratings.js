@@ -1,8 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { appColors, Center } from '../../utils/styles';
+import { appColors, Center, isEmpty } from '../../utils/styles';
 import styled from 'styled-components';
 import CircularProgressWithLabel from '../CircularProgressWithLabel';
+import { Skeleton } from '@material-ui/lab';
 
 const BottomRightContainer = styled.div`
     display: flex;
@@ -20,24 +21,13 @@ const AbsoluteBottomRightContainer = styled.div`
         display: ${props => props.mobile ? "none" : "block"};
         position: absolute;
     }
-
-`
-
-
-const RatingsContainer = styled.div`
-    position: relative;
-    top: -190px;
-    width: 300px;
-    display: flex;
-    align-items: center;
-    height: fit-content;
 `
 
 const RatingWrapper = styled.div`
     display: flex;
     background-color: ${props => appColors[props.theme].backgroundContrast};
     border-radius: 100%;
-    padding: 10px;
+    padding: ${props => props.loading ? 0 : "10px"};
     height: fit-content;
 `
 
@@ -66,22 +56,26 @@ function Ratings(props) {
             <BottomRightContainer>
                 <AlignCenterContainer>
                     <CircularRatingWrapper>
-                        <RatingWrapper theme={props.theme} >
-                            {!isNaN(props.game.userRating?.rate) ? (
+                        <RatingWrapper theme={props.theme} loading={isEmpty(props.game)} >
+                            {!isEmpty(props.game) ? !isNaN(props.game.userRating?.rate) ? (
                                 <CircularProgressWithLabel size={130} value={props.game.userRating.rate} fontSize={"1.75rem"} />
                             ) : (
                                 <CircularProgressWithLabel size={130} fontSize={"1.75rem"} />
+                            ) : (
+                                <Skeleton variant="circle" animation="wave" width={130} height={130} />
                             )}
                         </RatingWrapper>
                     </CircularRatingWrapper>
                 </AlignCenterContainer>
                 <AlignCenterContainer>
                     <CircularRatingWrapper>
-                        <RatingWrapper theme={props.theme} style={{ marginLeft: "-3px" }}>
-                            {!isNaN(props.game.aggregated_rating?.rate) ? (
+                        <RatingWrapper theme={props.theme} style={{ marginLeft: "-3px" }} loading={isEmpty(props.game)}>
+                            {!isEmpty(props.game) ? !isNaN(props.game.aggregated_rating?.rate) ? (
                                 <CircularProgressWithLabel size={85} value={props.game.aggregated_rating.rate} fontSize={"1.2rem"} />
                             ) : (
                                 <CircularProgressWithLabel size={85} fontSize={"1.2rem"} />
+                            ) : (
+                                <Skeleton variant="circle" animation="wave" width={85} height={85} />
                             )}
                         </RatingWrapper>
                     </CircularRatingWrapper>
@@ -92,7 +86,8 @@ function Ratings(props) {
                     <RatingTextContainer>
                         <p>Based on {props.game.userRating.count} <span style={{ fontWeight: "bold" }}>IGDB member ratings</span></p>
                     </RatingTextContainer>
-                ) :
+                ) : !isEmpty(props.game) ? (
+
                     props.game.releaseDate?.isReleased ? (
                         <RatingTextContainer>
                             <p>Need more ratings</p>
@@ -102,14 +97,22 @@ function Ratings(props) {
                             <p>Not yet released</p>
                         </RatingTextContainer>
                     )
-                }
+                ) : (
+                    <RatingTextContainer>
+                        <Skeleton variant="text" animation="wave" width={120} height={25} />
+                    </RatingTextContainer>
+                )}
                 {!isNaN(props.game.aggregated_rating?.rate) ? (
                     <RatingTextContainer>
                         <p>Based on {props.game.aggregated_rating.count} <span style={{ fontWeight: "bold" }}>critics ratings</span> </p>
                     </RatingTextContainer>
-                ) : (
+                ) : !isEmpty(props.game) ? (
                     <RatingTextContainer>
                         <p>Critics score unavailable</p>
+                    </RatingTextContainer>
+                ) : (
+                    <RatingTextContainer>
+                        <Skeleton variant="text" animation="wave" width={70} height={25} />
                     </RatingTextContainer>
                 )}
             </Center>

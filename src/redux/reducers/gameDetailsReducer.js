@@ -1,7 +1,7 @@
 import { gameDetailsConstants } from "../constants/gameDetailsConstants";
 
 let defaultState = {
-    game: []
+    game: {}
 }
 
 function gameDetailsReducer(state = defaultState, action) {

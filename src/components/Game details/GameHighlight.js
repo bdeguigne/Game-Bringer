@@ -6,6 +6,7 @@ import VideoPlayer from '../VideoPlayer';
 import YoutubeThumbnail from './YoutubeThumbnail';
 import { Dialog } from '@material-ui/core';
 import FullscreenSlider from './FullscreenSlider';
+import { Skeleton } from '@material-ui/lab';
 
 const SliderContainer = styled.div`
   /* max-width: 700px; */
@@ -40,12 +41,13 @@ function GameHighlight(props) {
                 })
             })
         }
+        console.log("DATA", slideDataTmp);
         setData(slideDataTmp);
     }, [props.videos, props.screenshots])
 
     const customRenderThumb = (children) =>
-        children.map((item) => {
-            return item.type === "img" ? <img src={item.props.src} alt="thumb" /> : <YoutubeThumbnail videoId={item.props.videoID} size={1.5} quality={"default"} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+        children.map((item, i) => {
+            return item.type === "img" ? <img src={item.props.src} key={i} alt="thumb" /> : <YoutubeThumbnail key={i} videoId={item.props.videoID} size={1.5} quality={"default"} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
         });
 
     const handleClick = (key, event) => {
@@ -53,7 +55,6 @@ function GameHighlight(props) {
             setOpenModal(true);
         }
         // setCurrentSlide(key);
-        console.log("CLICK THUMB", key, event);
     }
 
     const handleClose = () => {
@@ -67,7 +68,7 @@ function GameHighlight(props) {
     };
     return (
         <SliderContainer
-           
+
         >
             <Carousel
                 className="carousel-highlight"
@@ -75,16 +76,18 @@ function GameHighlight(props) {
                 showArrows={true}
                 thumbHeight={68}
                 thumbWidth={115}
-                renderThumbs={(children) => customRenderThumb(children)}
+                renderThumbs={(children) => data.length > 0 ? customRenderThumb(children) : null}
                 onClickItem={handleClick}
                 onChange={updateCurrentSlide}
 
                 dynamicHeight
             // showIndicators={false}
             >
-                {data && data.map((element, i) => {
+                {data.length > 0 ? data.map((element, i) => {
                     return element.type === "video" ? <VideoPlayer key={i} videoID={element.id} className="highlight-video" volume={0} playing={i === currentSlide} /> : <img key={element.id} src={element.thumb} alt="screenshot" />
-                })}
+                }) :
+                      <Skeleton variant="rect" width={1000} height={380} animation="wave"/>
+                }
             </Carousel>
             <Dialog
                 open={openModal}
