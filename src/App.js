@@ -21,6 +21,7 @@ import { getFilters } from './redux/actions/filtersActions';
 import { bestRatedGames } from "./redux/constants/homePageRequestsConstants"
 import { getTokens } from './redux/services/request'
 import { setIsErrorOccurred } from './redux/actions/UIActions'
+import { getStores } from './redux/actions/priceActions';
 import muiTheme from "./theme";
 
 
@@ -31,6 +32,7 @@ function App(props) {
         props.getRecentlyReleasedGames();
         props.getComingSoonGames();
         props.getBestRatedGames(bestRatedGames.THIS_MONTH);
+        props.getStores();
         props.getFilters();
     }
 
@@ -70,14 +72,14 @@ function App(props) {
                     <div>
                         <TopBar />
                         {/* <MainContent> */}
-                            <Switch>
-                                {routes.map((route, i) => {
-                                    return (
-                                        <Route key={i} path={route.path} render={() => <route.component />} />
-                                    )
-                                }
-                                )}
-                            </Switch>
+                        <Switch>
+                            {routes.map((route, i) => {
+                                return (
+                                    <Route key={i} path={route.path} render={() => <route.component />} />
+                                )
+                            }
+                            )}
+                        </Switch>
                         {/* </MainContent> */}
                     </div>
                 </div>
@@ -92,7 +94,8 @@ const actionCreators = {
     getComingSoonGames,
     getBestRatedGames,
     getFilters,
-    setIsErrorOccurred
+    setIsErrorOccurred,
+    getStores
 }
 
 function mapStateToProps(state) {

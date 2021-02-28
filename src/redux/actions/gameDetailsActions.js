@@ -1,7 +1,55 @@
 import { getGameDetailsRequest } from '../services/gameDetailsService'
 import { handleError } from '../services/request';
 import { gameDetailsConstants } from '../constants/gameDetailsConstants'
-import { getElapsedTime, findCompany } from '../../utils/requestFormat'
+import { getElapsedTime, findCompany } from '../../utils/requestFormat';
+import { getBestPriceRequest } from '../services/priceService';
+import { priceConstants } from '../constants/priceConstants'
+
+const getBestPrice = (steamId, dispatch) => {
+    console.log("STEAM ID", steamId);
+    getBestPriceRequest(steamId)
+        .then(res => {
+            if (handleError("more search error", res, dispatch)) {
+                return;
+            }
+            return res.json();
+        })
+        .then(res => {
+            console.log("DEALS", res);
+            const deals = [];
+            let normalPrice = null;
+
+            res.forEach(deal => {
+                normalPrice = deal.normalPrice;
+
+                deals.push({
+                    storeID: deal.storeID,
+                    salePrice: deal.salePrice,
+                    dealID: deal.dealID
+                })
+            })
+
+            dispatch({
+                type: priceConstants.SET_BEST_PRICES,
+                data: {
+                    normalPrice,
+                    deals
+                }
+            })
+        })
+
+}
+
+const getSteamId = (websites, dispatch) => {
+    if (websites) {
+        websites.forEach(website => {
+            if (website.category === 13) { // Category 13 = Steam
+                const steamId = website?.url.substring(website.url.lastIndexOf("/") + 1);
+                getBestPrice(steamId, dispatch);
+            }
+        })
+    }
+}
 
 export const getGameDetails = (id) => {
     return (dispatch) => {
@@ -16,6 +64,8 @@ export const getGameDetails = (id) => {
                 console.log("RESSS", res);
                 if (res && res[0]) {
                     const game = res[0];
+
+                    getSteamId(game.websites, dispatch);
 
                     const gameInfo = {
                         name: game.name,
@@ -44,7 +94,7 @@ export const getGameDetails = (id) => {
                         gameModes: game.game_modes,
                         themes: game.themes,
                         playerPerspectives: game.player_perspectives,
-                        gameEngines: game.game_engines
+                        gameEngines: game.game_engines,
                     }
 
                     dispatch({

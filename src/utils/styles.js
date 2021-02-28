@@ -217,7 +217,7 @@ export const ArrowIcon = styled.span`
 export const Link = styled.a`
     color: ${props => appColors[props.theme].primarySimple};
     text-decoration: none;
-    font-size: 13px;
+    font-size: ${props => props.size ? props.size : "13px"};
     cursor: pointer;
 
     &:hover {

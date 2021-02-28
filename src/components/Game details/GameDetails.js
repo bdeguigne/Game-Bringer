@@ -65,7 +65,7 @@ const GameDetails = (props) => {
                                 <GameHighlight screenshots={props.game.screenshots} videos={props.game.videos} />
                             </ResponsiveLeftContainer>
 
-                            <ComplementaryInfo game={props.game} theme={props.theme} />
+                            <ComplementaryInfo game={props.game} theme={props.theme} deals={props.deals} stores={props.stores}/>
                         </ResponsiveFlex>
                     </SpaceTop>
 
@@ -93,7 +93,9 @@ const actionCreators = {
 function mapStateToProps(state) {
     return {
         game: state.gameDetailsReducer.game,
-        theme: state.uiReducer.theme
+        theme: state.uiReducer.theme,
+        deals: state.priceReducer.bestPrices,
+        stores: state.priceReducer.stores
     };
 }
 

@@ -7,6 +7,7 @@ import { socialIcons } from '../../utils/socialIcons';
 import Ratings from './Ratings';
 import GameTitle from './GameTitle';
 import { Skeleton } from '@material-ui/lab';
+import Deals from './Deals';
 
 const Container = styled.div`
     width: 100%;
@@ -99,6 +100,13 @@ const SkeletonIcon = styled(Skeleton)`
     margin-right: 8px;
 `
 
+const CheapShark = styled.span`
+    font-size: 12px;
+    color: #C4C4C4;
+    margin-top: 16px;
+`
+
+
 function ComplementaryInfo(props) {
     const [icons, setIcons] = useState([]);
 
@@ -122,7 +130,7 @@ function ComplementaryInfo(props) {
             <GameTitle game={props.game} mobile />
 
             <InfoWrapper>
-                <div>
+                <div style={{width: "100%", paddingRight: "8px"}}>
 
                     {isEmpty(props.game) && (
                         <>
@@ -166,6 +174,15 @@ function ComplementaryInfo(props) {
                             {props.game.genres.map((genre, index) => {
                                 return <Genre key={index} size="small" color="secondary">{genre.name}</Genre>
                             })}
+                        </InfoContainer>
+                    )}
+
+                    {props.deals && (
+                        <InfoContainer>
+                            <div style={{height: 80}}>
+                                <Deals deals={props.deals} stores={props.stores} theme={props.theme}/>
+                            </div>
+                            <CheapShark>Powered by <Link theme={props.theme} href="https://www.cheapshark.com/" target="_blank">Cheapshark</Link></CheapShark>
                         </InfoContainer>
                     )}
                 </div>
@@ -213,7 +230,9 @@ function ComplementaryInfo(props) {
 
 ComplementaryInfo.propTypes = {
     game: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
-    theme: PropTypes.string
+    theme: PropTypes.string,
+    deals: PropTypes.array,
+    stores: PropTypes.array
 }
 
 export default ComplementaryInfo

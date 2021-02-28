@@ -252,6 +252,31 @@ export default function muiTheme(theme) {
                 paperWidthSm: {
                     maxWidth: "1100px"
                 }
+            }, 
+            MuiAccordion: {
+                root: {
+                    zIndex: 3,
+                    border: "1px solid",
+                    boxShadow: `0px 0px 18px -8px ${appColors[theme].secondary}, 0px 0px 4px #FFFFFF !important`,
+                }
+            },
+            MuiAccordionSummary: {
+                root: {
+                    transition: "background-color 0.3s",
+                    // cursor: "pointer",
+                    "&:hover": {
+                        backgroundColor: appColors[theme].hover + "!important"
+                    },
+                }
+            },
+            MuiAccordionDetails: {
+                root: {
+                    transition: "background-color 0.3s",
+                    // cursor: "pointer",
+                    "&:hover": {
+                        backgroundColor: appColors[theme].hover + "!important"
+                    },
+                }
             }
 
         }

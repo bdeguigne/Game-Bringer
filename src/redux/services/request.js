@@ -24,7 +24,14 @@ export const doRequest = (url, query) => {
     //Proxy configurations located in : /functions/node-fetch/node-fetch.js
     const token = JSON.parse(localStorage.getItem("token"))?.access_token
 
-    return (fetch(`/.netlify/functions/node-fetch?url=${encodeURIComponent(url)}&query=${encodeURIComponent(query)}&access_token=${token}`));
+    return (fetch(`/.netlify/functions/node-fetch?url=${encodeURIComponent(url)}&query=${encodeURIComponent(query)}&access_token=${token}&type=igdb`));
+}
+
+export const doRequestCheapshark = (url) => {
+    //Request to the proxy server made by netflify function (proxy dev and production mode)
+    //Proxy configurations located in : /functions/node-fetch/node-fetch.js
+
+    return (fetch(`/.netlify/functions/node-fetch?url=${encodeURIComponent(url)}&type=cheapshark`));
 }
 
 export const getTokens = () => {
