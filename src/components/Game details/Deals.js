@@ -95,7 +95,7 @@ function Deals(props) {
                                         {props.stores[parseInt(bestPrice.storeID) - 1].storeName}</StoreName>
                                 </Flex>
                                 <Flex>
-                                    {/* <NormalPrice>${props.deals.normalPrice}</NormalPrice> */}
+                                    <NormalPrice>${props.deals.normalPrice}</NormalPrice>
                                     <SalePrice best theme={props.theme}>${bestPrice.salePrice}</SalePrice>
                                 </Flex>
                             </DealContainer>

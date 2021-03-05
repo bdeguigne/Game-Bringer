@@ -92,14 +92,21 @@ const SkeletonCover = styled(Skeleton)`
 
 `
 
+const ColorBaner = styled.div`
+    ${BannerStyle};
+    background: ${props => appColors[props.theme].secondaryDarker};
+`
+
 
 
 
 function Header(props) {
     return (
         <div>
-            {!isEmpty(props.game) ? props.game.banner && (
+            {!isEmpty(props.game) ? props.game.banner ? (
                 <Banner src={"https://images.igdb.com/igdb/image/upload/t_screenshot_big/" + props.game.banner + ".jpg"} alt="banner" />
+            ) : (
+                <ColorBaner theme={props.theme} />
             ) : (
                 <SkeletonBanner animation="wave" variant="rect" />
             )}

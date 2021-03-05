@@ -223,66 +223,66 @@ function CarouselItem({ imageId, isSelected, title, genres, rate, isLoading, com
     )
   }
   else {
-  return (
-    <Tooltip title={
-      <FloatingGameDetails title={title} date={releaseDate.date} elapsedTime={releaseDate.elapsedTime} genres={genres} screenshots={screenshots} summary={summary} theme={theme} />
-    } placement={"right"} TransitionComponent={Fade} arrow={true} disableHoverListener={!isSelected} disableTouchListener={true} >
+    return (
+      <Tooltip title={
+        <FloatingGameDetails title={title} date={releaseDate.date} elapsedTime={releaseDate.elapsedTime} genres={genres} screenshots={screenshots} summary={summary} theme={theme} />
+      } placement={"right"} TransitionComponent={Fade} arrow={true} disableHoverListener={!isSelected} disableTouchListener={true} >
 
-      <Slide isSelected={isSelected} onMouseEnter={onSlideHover} onMouseLeave={onSlideLeave} videoReady={!hide} onClick={onClickItem} theme={theme}>
-        <Shine active={isHover && !hide && width >= 768} borderColor={hide ? appColors[theme].shine : appColors[theme].secondaryDarker} childrenStyle={{ top: "0.75%", left: "0.75%", height: "98.5%", width: "98.5%" }} theme={theme}>
-          <div style={{ position: "relative", borderRadius: "45px !important" }}>
-            {isHover && width >= 768 && (
-              <VideoPlayer className="carousel-video-player" videoID={videoId} onReady={() => setHide(true)} playtime="15" />
-            )}
-            <Image onLoad={() => setImageLoaded(true)} isSelected={isSelected} isHover={width >= 768 ? isHover : false} hide={imageLoaded ? hide : true} alt="slider" src={"https://images.igdb.com/igdb/image/upload/t_screenshot_huge/" + imageId + ".jpg"} />
+        <Slide isSelected={isSelected} onMouseEnter={onSlideHover} onMouseLeave={onSlideLeave} videoReady={!hide} onClick={onClickItem} theme={theme}>
+          <Shine active={isHover && !hide && width >= 768} borderColor={hide ? appColors[theme].shine : appColors[theme].secondaryDarker} childrenStyle={{ top: "0.75%", left: "0.75%", height: "98.5%", width: "98.5%" }} theme={theme}>
+            <div style={{ position: "relative", borderRadius: "45px !important" }}>
+              {isHover && width >= 768 && (
+                <VideoPlayer className="carousel-video-player" videoID={videoId} onReady={() => setHide(true)} playtime="15" />
+              )}
+              <Image onLoad={() => setImageLoaded(true)} isSelected={isSelected} isHover={width >= 768 ? isHover : false} hide={imageLoaded ? hide : true} alt="slider" src={"https://images.igdb.com/igdb/image/upload/t_screenshot_huge/" + imageId + ".jpg"} />
 
-          </div>
-          <SkeletonContainer hide={imageLoaded}>
-            <ScreenshotSkeleton variant="rect" animation={imageLoaded ? false : "wave"} style={{ borderRadius: "16px" }} theme={theme}/>
-          </SkeletonContainer>
-        </Shine>
-
-
-        <Legend isSelected={isSelected} hide={hide}>
-
-          <LegendBottom>
-            <div>
-              <GameName>{title}</GameName>
-              <Date>
-                {company && (
-                  <CompanyName>{company.name} - </CompanyName>
-                )}
-                <span style={{ color: "#e0e0e0" }}>{releaseDate.elapsedTime ? releaseDate.elapsedTime : releaseDate.date}</span>
-                {/*{releaseDate.date} {releaseDate.elapsedTime !== undefined && (`(${releaseDate.elapsedTime})`)}*/}
-              </Date>
             </div>
-            {genres &&
-              <FlexContainer>
-                {genres.map((genre, index) => {
-                  if (index < 3) {
-                    return <Genre key={index} size="small" color="secondary">{genre.name}</Genre>
-                  }
-                  return null
-                })}
+            <SkeletonContainer hide={imageLoaded}>
+              <ScreenshotSkeleton variant="rect" animation={imageLoaded ? false : "wave"} style={{ borderRadius: "16px" }} theme={theme} />
+            </SkeletonContainer>
+          </Shine>
 
-              </FlexContainer>
-            }
-            <ButtonContainer>
-              <SeeMoreButton color="primary">See more</SeeMoreButton>
-              {!isNaN(rate) &&
-                <RateContainer>
-                  <CircularProgressWithLabel value={rate} />
-                </RateContainer>
+
+          <Legend isSelected={isSelected} hide={hide}>
+
+            <LegendBottom>
+              <div>
+                <GameName>{title}</GameName>
+                <Date>
+                  {company && (
+                    <CompanyName>{company.name} - </CompanyName>
+                  )}
+                  <span style={{ color: "#e0e0e0" }}>{releaseDate.elapsedTime ? releaseDate.elapsedTime : releaseDate.date}</span>
+                  {/*{releaseDate.date} {releaseDate.elapsedTime !== undefined && (`(${releaseDate.elapsedTime})`)}*/}
+                </Date>
+              </div>
+              {genres &&
+                <FlexContainer>
+                  {genres.map((genre, index) => {
+                    if (index < 3) {
+                      return <Genre key={index} size="small" color="secondary">{genre.name}</Genre>
+                    }
+                    return null
+                  })}
+
+                </FlexContainer>
               }
-            </ButtonContainer>
-          </LegendBottom>
+              <ButtonContainer>
+                <SeeMoreButton color="primary">See more</SeeMoreButton>
+                {!isNaN(rate) &&
+                  <RateContainer>
+                    <CircularProgressWithLabel value={rate} />
+                  </RateContainer>
+                }
+              </ButtonContainer>
+            </LegendBottom>
 
-        </Legend>
+          </Legend>
 
-      </Slide>
-    </Tooltip>
-  )
-}
+        </Slide>
+      </Tooltip>
+    )
+  }
 }
 
 CarouselItem.prototype = {

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import styled from "styled-components";
-import { appColors, Center } from "../../utils/styles";
+import { appColors, Center, isEmpty } from "../../utils/styles";
 import { InputBase, CircularProgress, Snackbar } from "@material-ui/core";
 import { Alert } from '@material-ui/lab';
 import { setRouteIndex, setIsCorrectIds, setActivatedFiltersAction, setIsErrorOccurred } from "../../redux/actions/UIActions";
-import { search, moreSearchResult, setFilters } from '../../redux/actions/filtersActions';
+import { search, moreSearchResult, setFilters, setFiltersUrl } from '../../redux/actions/filtersActions';
 import TermChip from "./ChipFilters";
 import { RouteIndex } from "../../redux/constants/uiConstants";
 import SearchResultCard from "./SearchResultCard";
@@ -96,9 +96,14 @@ const AdvancedSearch = (props) => {
     const [activatedFilters, setActivatedFilters] = useState(null)
     const [refresh, setRefresh] = useState(0);
     const [isSearchbarActive, setIsSearchbarActive] = useState(false);
+    const [isLinkFilters, setisLinkFilters] = useState(false);
 
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
+
+        props.setFiltersUrl(location.search);
+
+        console.log("LOCATION CHANGE");
         setQueryFilters(getFiltersWithQuery(queryParams));
 
         // if (!query) {
@@ -112,25 +117,28 @@ const AdvancedSearch = (props) => {
     }, [location])
 
     const onFiltersChange = (activatedFilters) => {
-        // console.log("FIND TERM", findValueFromQuery(activatedFilters.chip, "term"))
-        console.log("ON FILTERS CHANGE", activatedFilters);
-        console.log("ON FILTERS CHANGE PROPS", props.activatedFilters);
-        // const term = findValueFromQuery(activatedFilters?.chip, "term");
+        if (isEmpty(props.linkFilters)) {
 
-        // if (!term || term === "") {
-        //     setSearchValue("")
-        // }
-        setRefresh(prev => prev + 1);
+            // console.log("FIND TERM", findValueFromQuery(activatedFilters.chip, "term"))
+            console.log("ON FILTERS CHANGE", activatedFilters);
+            console.log("ON FILTERS CHANGE PROPS", props.activatedFilters);
+            // const term = findValueFromQuery(activatedFilters?.chip, "term");
 
-        const copyFilters = JSON.parse(JSON.stringify(activatedFilters));
-        props.setFilters(copyFilters);
+            // if (!term || term === "") {
+            //     setSearchValue("")
+            // }
+            setRefresh(prev => prev + 1);
 
-        props.search(copyFilters?.front);
+            const copyFilters = JSON.parse(JSON.stringify(activatedFilters));
+            props.setFilters(copyFilters);
 
-        setActivatedFilters(copyFilters);
-        props.setActivatedFiltersAction(copyFilters);
-        const url = props.match.path + "?" + generateParams(copyFilters?.front);
-        props.history.replace(url);
+            props.search(copyFilters?.front);
+
+            setActivatedFilters(copyFilters);
+            props.setActivatedFiltersAction(copyFilters);
+            const url = props.match.path + "?" + generateParams(copyFilters?.front);
+            props.history.replace(url);
+        }
     }
 
     const searchInputClick = () => {
@@ -147,6 +155,8 @@ const AdvancedSearch = (props) => {
 
     useEffect(() => {
         if (props.correctIds.length > 0 && activatedFilters) {
+            console.log("CORRECT IDSSS", props.correctIds);
+
             const alreadyCorrectIds = [];
 
             Object.keys(activatedFilters?.chip).forEach(filterKey => {
@@ -224,6 +234,26 @@ const AdvancedSearch = (props) => {
             setOpenSnackBar(props.isErrorOccurred)
         }
     }, [props.isErrorOccurred])
+
+    useEffect(() => {
+        if (props.linkFilters && isLinkFilters === false) {
+            const copyFilters = JSON.parse(JSON.stringify(props.linkFilters));
+            console.log("DKZDJKZDJZJD", props.linkFilters)
+            props.setFilters(copyFilters)
+            props.search(copyFilters.front);
+
+            setActivatedFilters(copyFilters);
+            setisLinkFilters(false);
+            props.setActivatedFiltersAction(copyFilters);
+            // const url = props.match.path + "?" + generateParams(copyFilters?.front);
+            // props.history.replace(url);
+
+            setisLinkFilters(true);
+
+            // onFiltersChange(props.linkFilters);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [props.linkFilters])
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -309,7 +339,8 @@ const actionCreators = {
     moreSearchResult,
     setActivatedFiltersAction,
     setFilters,
-    setIsErrorOccurred
+    setIsErrorOccurred,
+    setFiltersUrl,
 }
 
 function mapStateToProps(state) {
@@ -319,6 +350,7 @@ function mapStateToProps(state) {
         moreResIsRequest: state.filtersReducer.moreResIsRequest,
         isRequest: state.filtersReducer.isRequest,
         activatedFilters: state.filtersReducer.filters,
+        linkFilters: state.filtersReducer.linkFilters,
         isFiltersLoaded: state.filtersReducer.isFiltersLoaded,
         isErrorOccurred: state.uiReducer.isErrorOccurred,
         theme: state.uiReducer.theme

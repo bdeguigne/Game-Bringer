@@ -26,7 +26,7 @@ code {
     font-weight: normal;
     font-style: normal;
     font-display: block;
-  }
+    }
   
   [class^="icon-"], [class*=" icon-"] {
     /* use !important to prevent issues with browser extensions that change fonts */
@@ -68,4 +68,9 @@ code {
     content: "\e902";
   }
   
-  
+  @font-face {
+    font-family: 'neon';
+    src: url('fonts/neon/neon-webfont.woff2') format('woff2'),
+         url('fonts/neon/neon-webfont.woff') format('woff'),
+         url('fonts/neon/neon.ttf') format('truetype');
+    }

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { appColors, Center, isEmpty } from '../../utils/styles';
+import { appColors, Center, isEmpty, Link } from '../../utils/styles';
 import styled from 'styled-components';
 import CircularProgressWithLabel from '../CircularProgressWithLabel';
 import { Skeleton } from '@material-ui/lab';
@@ -84,7 +84,7 @@ function Ratings(props) {
             <Center>
                 {!isNaN(props.game.userRating?.rate) ? (
                     <RatingTextContainer>
-                        <p>Based on {props.game.userRating.count} <span style={{ fontWeight: "bold" }}>IGDB member ratings</span></p>
+                        <p>Based on <Link href={props.game.url + "/reviews"} target="_blank" white theme={props.theme}>{props.game.userRating.count} <span style={{ fontWeight: "bold" }}>IGDB member ratings</span></Link></p>
                     </RatingTextContainer>
                 ) : !isEmpty(props.game) ? (
 
@@ -104,7 +104,7 @@ function Ratings(props) {
                 )}
                 {!isNaN(props.game.aggregated_rating?.rate) ? (
                     <RatingTextContainer>
-                        <p>Based on {props.game.aggregated_rating.count} <span style={{ fontWeight: "bold" }}>critics ratings</span> </p>
+                        <p>Based on <Link href={props.game.url + "/reviews"} target="_blank" white theme={props.theme}>{props.game.aggregated_rating.count} <span style={{ fontWeight: "bold" }}>critics ratings</span> </Link></p>
                     </RatingTextContainer>
                 ) : !isEmpty(props.game) ? (
                     <RatingTextContainer>

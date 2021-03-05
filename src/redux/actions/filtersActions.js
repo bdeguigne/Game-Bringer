@@ -190,6 +190,7 @@ function generateFilterQuery(filters) {
                     break;
                 default:
                     if (filters[key] !== "") {
+                        console.log("HEYYYY3", filters, filters[key])
                         const formatFilters = key + " = [" + filters[key].split(",").map(filter => `${filter}`).join(',') + "]";
                         filtersQueryArray.push(formatFilters);
                     }
@@ -290,6 +291,11 @@ export const search = (filters) => {
                             type: filtersConstants.SET_IS_REQUEST,
                             state: false
                         })
+
+                        dispatch({
+                            type: filtersConstants.SET_LINK_FILTERS,
+                            data: {}
+                        })
                     }
                 })
         }
@@ -352,5 +358,23 @@ export const moreSearchResult = () => {
                     }
                 })
         }
+    }
+}
+
+export const setFiltersUrl = (url) => {
+    return dispatch => {
+        dispatch({
+            type: filtersConstants.SET_URL,
+            url
+        })
+    }
+}
+
+export const setLinkFilters = (filters) => {
+    return  dispatch => {
+        dispatch({
+            type: filtersConstants.SET_LINK_FILTERS,
+            data: filters
+        })
     }
 }

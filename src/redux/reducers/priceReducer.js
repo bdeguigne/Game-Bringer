@@ -2,7 +2,7 @@ import { priceConstants } from '../constants/priceConstants';
 
 let defaultState = {
     stores: JSON.parse(localStorage.getItem("stores")) || [],
-    bestPrices: []
+    bestPrices: {}
 }
 
 function priceReducer(state = defaultState, action) {
@@ -13,6 +13,11 @@ function priceReducer(state = defaultState, action) {
                 stores: action.stores
             }
         case priceConstants.SET_BEST_PRICES:
+            return {
+                ...state,
+                bestPrices: action.data
+            }
+        case priceConstants.CLEAR_BEST_PRICES:
             return {
                 ...state,
                 bestPrices: action.data

@@ -215,13 +215,15 @@ export const ArrowIcon = styled.span`
 `
 
 export const Link = styled.a`
-    color: ${props => appColors[props.theme].primarySimple};
+    color: ${props => props.white ? "white" : appColors[props.theme].primarySimple};
     text-decoration: none;
     font-size: ${props => props.size ? props.size : "13px"};
     cursor: pointer;
+    transition: color 0.2s;
 
     &:hover {
         text-decoration: underline;
+        color: ${props => props.white && appColors[props.theme].primarySimple};
     }
 `
 

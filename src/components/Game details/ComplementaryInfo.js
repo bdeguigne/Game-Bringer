@@ -10,7 +10,7 @@ import { Skeleton } from '@material-ui/lab';
 import Deals from './Deals';
 
 const Container = styled.div`
-    width: 100%;
+    /* width: 100%; */
     margin-bottom: 16px;
     /* border: 1px solid; */
 `
@@ -177,7 +177,7 @@ function ComplementaryInfo(props) {
                         </InfoContainer>
                     )}
 
-                    {props.deals && (
+                    {!isEmpty(props.deals) && (
                         <InfoContainer>
                             <div style={{height: 80}}>
                                 <Deals deals={props.deals} stores={props.stores} theme={props.theme}/>

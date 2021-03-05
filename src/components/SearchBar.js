@@ -1,8 +1,17 @@
-import React, {useState} from "react"
+import React, { useState } from "react"
 import { IconButton, InputBase } from "@material-ui/core"
 import { SearchOutlined } from "@material-ui/icons";
 import styled from 'styled-components';
-import {withRouter} from "react-router-dom";
+import { withRouter } from "react-router-dom";
+import PropTypes from 'prop-types';
+
+const SearchBarContainer = styled.div`
+    display: ${props => props.isPopover ? "block" : "none"};
+
+    @media only screen and (min-width: 768px) {
+        display: block;
+    }
+`
 
 const Icon = styled(SearchOutlined)`
   color: white;
@@ -31,9 +40,9 @@ function SearchBar(props) {
     }
 
     return (
-        <div>
+        <SearchBarContainer isPopover={props.isPopover}>
             <IconButton onClick={submit} type="submit">
-                <Icon/>
+                <Icon />
             </IconButton>
             <Input
                 inputRef={inputRef}
@@ -41,8 +50,12 @@ function SearchBar(props) {
                 onChange={(evt) => setInputValue(evt.target.value)}
                 onKeyPress={onKeyPressed}
             />
-        </div>
+        </SearchBarContainer>
     )
+}
+
+SearchBar.propTypes = {
+    isPopover: PropTypes.bool
 }
 
 export default withRouter(SearchBar);

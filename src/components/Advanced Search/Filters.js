@@ -177,7 +177,7 @@ export function filters(genres, modes, perspectives) {
                 {
                     type: "component",
                     component: TextFieldFilter,
-                        props: { label: "Companies", placeholder: "Select companies", slug: "companies", endpoint: "/companies", onTypeSuggestion: true }
+                    props: { label: "Companies", placeholder: "Select companies", slug: "companies", endpoint: "/companies", onTypeSuggestion: true }
                 }
             ]
         },
@@ -197,7 +197,7 @@ export function filters(genres, modes, perspectives) {
 }
 
 function checkEmptyObject(obj) {
-   return obj && Object.keys(obj).length === 0 && obj.constructor === Object ? true : false
+    return obj && Object.keys(obj).length === 0 && obj.constructor === Object ? true : false
 }
 
 // Utils function
@@ -209,7 +209,7 @@ export function getFiltersWithQuery(query) {
         result[key] = value;
     }
 
-    
+
     return checkEmptyObject(result) ? null : result;
 }
 
@@ -360,6 +360,7 @@ export const replace = (toReplace, replaceKey, replaceValue) => {
 
 export const removeTerm = (toRemoveId, toRemoveLabel, title, filters, isDelete) => {
     if (toRemoveId && filters) {
+        console.log("RREEEEEMMOVE", filters);
         let splitFiltersFront = filters.front[title].split(",");
         let splitFiltersChip = filters.chip[title].split(",");
 
@@ -375,14 +376,17 @@ export const removeTerm = (toRemoveId, toRemoveLabel, title, filters, isDelete) 
 
         filters.chip[title] = splitFiltersChip.join(",")
 
-        
+
     }
 
-    if (filters.front[title] === "" || isDelete === true)
+    if (filters) {
+        if (filters?.front[title] === "" || isDelete === true)
             delete filters.front[title];
         if (filters.chip[title] === "" || isDelete === true)
             delete filters.chip[title];
 
-        return filters;
+    }
+
+    return filters;
 
 }

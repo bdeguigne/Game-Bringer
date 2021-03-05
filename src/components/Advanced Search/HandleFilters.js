@@ -137,6 +137,8 @@ function HandleFilters(props) {
             props.setFilters(
                 { front: JSON.parse(JSON.stringify(props.queryFilters)), chip: JSON.parse(JSON.stringify(props.queryFilters)) },
             );
+
+            onChange({ front: JSON.parse(JSON.stringify(props.queryFilters)), chip: JSON.parse(JSON.stringify(props.queryFilters)) })
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -19,23 +19,26 @@ const getBestPrice = (steamId, dispatch) => {
             const deals = [];
             let normalPrice = null;
 
-            res.forEach(deal => {
-                normalPrice = deal.normalPrice;
+            if (res.length > 0) {
 
-                deals.push({
-                    storeID: deal.storeID,
-                    salePrice: deal.salePrice,
-                    dealID: deal.dealID
+                res.forEach(deal => {
+                    normalPrice = deal.normalPrice;
+
+                    deals.push({
+                        storeID: deal.storeID,
+                        salePrice: deal.salePrice,
+                        dealID: deal.dealID
+                    })
                 })
-            })
 
-            dispatch({
-                type: priceConstants.SET_BEST_PRICES,
-                data: {
-                    normalPrice,
-                    deals
-                }
-            })
+                dispatch({
+                    type: priceConstants.SET_BEST_PRICES,
+                    data: {
+                        normalPrice,
+                        deals
+                    }
+                })
+            }
         })
 
 }
@@ -44,8 +47,24 @@ const getSteamId = (websites, dispatch) => {
     if (websites) {
         websites.forEach(website => {
             if (website.category === 13) { // Category 13 = Steam
-                const steamId = website?.url.substring(website.url.lastIndexOf("/") + 1);
-                getBestPrice(steamId, dispatch);
+                const url = website?.url;
+                const find = "/app/";
+                var res = null;
+
+                if (url) {
+                    res = url.slice(url.indexOf(find) + find.length);
+                    console.log('URL', url);
+                    console.log('res', res);
+                }
+
+                console.log("SLASH POS", res.indexOf("/"));
+
+                if (res.indexOf("/") !== - 1) {
+                    res = res.substring(0, res.indexOf("/"));
+                }
+                if (res) {
+                    getBestPrice(res, dispatch);
+                }
             }
         })
     }
@@ -72,7 +91,7 @@ export const getGameDetails = (id) => {
                         genres: game.genres,
                         screenshots: game.screenshots,
                         banner: game.screenshots ? (game.screenshots[Math.floor(Math.random() * game.screenshots.length)]).image_id : null,
-                        coverId: game.cover.image_id,
+                        coverId: game.cover?.image_id,
                         releaseDate: getElapsedTime(game.release_dates, game.first_release_date),
                         releaseDates: game.release_dates,
                         company: findCompany(game.involved_companies),
@@ -95,6 +114,7 @@ export const getGameDetails = (id) => {
                         themes: game.themes,
                         playerPerspectives: game.player_perspectives,
                         gameEngines: game.game_engines,
+                        url: game.url
                     }
 
                     dispatch({

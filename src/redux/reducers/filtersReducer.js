@@ -16,7 +16,9 @@ let defaultState = {
     reachEnd: false,
     isRequest: false,
     isFiltersLoaded: false,
-    lastRequestFilters: []
+    lastRequestFilters: [],
+    url: "",
+    linkFilters: {}
 }
 
 function filtersReducer(state = defaultState, action) {
@@ -101,6 +103,16 @@ function filtersReducer(state = defaultState, action) {
             return {
                 ...state,
                 lastRequestFilters: action.data
+            }
+        case filtersConstants.SET_URL:
+            return {
+                ...state,
+                url: action.url
+            }
+        case filtersConstants.SET_LINK_FILTERS:
+            return {
+                ...state,
+                linkFilters: action.data
             }
         default:
             return state

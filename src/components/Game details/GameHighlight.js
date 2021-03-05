@@ -15,6 +15,10 @@ const SliderContainer = styled.div`
   border: 1 px solid white;
 `
 
+const VideoSkeleton = styled(Skeleton)`
+    min-width: 70% !important;
+`
+
 function GameHighlight(props) {
     const [data, setData] = useState([]);
     const [openModal, setOpenModal] = useState(false);
@@ -70,31 +74,36 @@ function GameHighlight(props) {
         <SliderContainer
 
         >
-            <Carousel
-                className="carousel-highlight"
-                showStatus={false}
-                showArrows={true}
-                thumbHeight={68}
-                thumbWidth={115}
-                renderThumbs={(children) => data.length > 0 ? customRenderThumb(children) : null}
-                onClickItem={handleClick}
-                onChange={updateCurrentSlide}
+            {props.screenshots ? (
 
-                dynamicHeight
-            // showIndicators={false}
-            >
-                {data.length > 0 ? data.map((element, i) => {
-                    return element.type === "video" ? <VideoPlayer key={i} videoID={element.id} className="highlight-video" volume={0} playing={i === currentSlide} /> : <img key={element.id} src={element.thumb} alt="screenshot" />
-                }) :
-                      <Skeleton variant="rect" width={1000} height={380} animation="wave"/>
-                }
-            </Carousel>
+                <Carousel
+                    className="carousel-highlight"
+                    showStatus={false}
+                    showArrows={true}
+                    thumbHeight={68}
+                    thumbWidth={115}
+                    renderThumbs={(children) => data.length > 0 ? customRenderThumb(children) : null}
+                    onClickItem={handleClick}
+                    onChange={updateCurrentSlide}
+
+                    dynamicHeight
+                // showIndicators={false}
+                >
+                    {data.length > 0 && data.map((element, i) => {
+                        return element.type === "video" ? <VideoPlayer key={i} videoID={element.id} className="highlight-video" volume={0} playing={i === currentSlide} /> : <img key={element.id} src={element.thumb} alt="screenshot" />
+                    })}
+                </Carousel>
+            ) : (
+                <VideoSkeleton variant="rect" width={700} height={380} animation="wave" />
+            )}
+
             <Dialog
                 open={openModal}
                 onClose={handleClose}
             >
                 <FullscreenSlider data={data} currentSlide={currentSlide} />
             </Dialog>
+
         </SliderContainer>
     )
 }

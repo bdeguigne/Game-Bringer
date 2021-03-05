@@ -25,3 +25,12 @@ export const getStores = () => {
         }
     }
 }
+
+export const clearPrices = () => {
+    return dispatch => {
+        dispatch({
+            type: priceConstants.CLEAR_BEST_PRICES,
+            data: {}
+        })
+    }
+}
