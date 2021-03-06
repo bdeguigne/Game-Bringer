@@ -109,30 +109,14 @@ const AdvancedSearch = (props) => {
 
         props.setFiltersUrl(location.search);
 
-        console.log("LOCATION CHANGE");
         setQueryFilters(getFiltersWithQuery(queryParams));
 
-        // if (!query) {
-        //     props.search();
-        // }
-
-        // if (searchValue === "") {
-        //     setSearchValue(findValueFromQuery(queryFilters, "term"));
-        // }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [location])
 
     const onFiltersChange = (activatedFilters) => {
         if (isEmpty(props.linkFilters)) {
 
-            // console.log("FIND TERM", findValueFromQuery(activatedFilters.chip, "term"))
-            console.log("ON FILTERS CHANGE", activatedFilters);
-            console.log("ON FILTERS CHANGE PROPS", props.activatedFilters);
-            // const term = findValueFromQuery(activatedFilters?.chip, "term");
-
-            // if (!term || term === "") {
-            //     setSearchValue("")
-            // }
             setRefresh(prev => prev + 1);
 
             const copyFilters = JSON.parse(JSON.stringify(activatedFilters));
@@ -148,7 +132,6 @@ const AdvancedSearch = (props) => {
     }
 
     const searchInputClick = () => {
-        console.log("VALID", searchValue)
         setSearchTerm(searchValue);
     }
 
@@ -162,8 +145,6 @@ const AdvancedSearch = (props) => {
 
     useEffect(() => {
         if (props.correctIds.length > 0 && activatedFilters) {
-            console.log("CORRECT IDSSS", props.correctIds);
-
             const alreadyCorrectIds = [];
 
             Object.keys(activatedFilters?.chip).forEach(filterKey => {
@@ -196,20 +177,13 @@ const AdvancedSearch = (props) => {
                     }
                 })
             })
-            console.log("EEEND", activatedFilters)
             props.setIsCorrectIds(true);
             onFiltersChange(activatedFilters);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.correctIds, activatedFilters])
 
-    // useEffect(() => {
-    //     console.log("ACTIVATED FILTERS", activatedFilters, queryFilters);
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [activatedFilters, queryFilters])
-
     const handleScroll = () => {
-        // console.log("OFFSET HEIGHT", document.body.offsetHeight)
         if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 600) {
             props.moreSearchResult();
         }
@@ -222,7 +196,6 @@ const AdvancedSearch = (props) => {
 
 
     useEffect(() => {
-        // props.search();
         window.addEventListener("scroll", handleScroll);
 
         props.setRouteIndex(RouteIndex.SEARCH);
@@ -237,7 +210,6 @@ const AdvancedSearch = (props) => {
 
     useEffect(() => {
         if (props.isErrorOccurred) {
-            console.log("ERROR SHOW SNACKBAR", props.isErrorOccurred)
             setOpenSnackBar(props.isErrorOccurred)
         }
     }, [props.isErrorOccurred])
@@ -245,19 +217,13 @@ const AdvancedSearch = (props) => {
     useEffect(() => {
         if (props.linkFilters && isLinkFilters === false) {
             const copyFilters = JSON.parse(JSON.stringify(props.linkFilters));
-            console.log("DKZDJKZDJZJD", props.linkFilters)
             props.search(copyFilters.front);
 
             setActivatedFilters(props.linkFilters);
             props.setFilters(props.linkFilters)
             setisLinkFilters(false);
             props.setActivatedFiltersAction(props.linkFilters);
-            // const url = props.match.path + "?" + generateParams(copyFilters?.front);
-            // props.history.replace(url);
-
             setisLinkFilters(true);
-
-            // onFiltersChange(props.linkFilters);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.linkFilters])
@@ -284,7 +250,7 @@ const AdvancedSearch = (props) => {
                     <SearchBar isActive={isSearchbarActive} theme={props.theme}>
                         <SearchInput
                             placeholder={"Search and discover new games"}
-                            onChange={(evt) => { console.log("ON CHANGE TEXT", evt.target.value); setSearchValue(evt.target.value) }}
+                            onChange={(evt) => { setSearchValue(evt.target.value) }}
                             value={searchValue}
                             onKeyPress={onKeyPressed}
                             onClick={() => setIsSearchbarActive(true)}

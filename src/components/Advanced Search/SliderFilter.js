@@ -102,9 +102,6 @@ function SliderFilter(props) {
     }
 
     const sendSliderValue = (inputValue) => {
-        // setIsAnyMin(inputValue[0] < 0 ? true : false);
-        // setIsAnyMax(inputValue[1] < 0 ? true : false);
-
         let results = {
             title: props.title,
             type: "slider",
@@ -132,18 +129,6 @@ function SliderFilter(props) {
             setIsAnyMax(true);
         }
     }, [props.refresh, props.activatedFilters])
-
-    // useEffect(() => {
-    //     if (inputValue[1]) {
-    //         setSliderValue([0, inputValue[1]])
-    //     }
-    // }, [isAnyMin])
-
-    // useEffect(() => {
-    //     if (inputValue[0]) {
-    //         setSliderValue([inputValue[0], 100])
-    //     }
-    // }, [isAnyMax])
 
     return (
         <Container>

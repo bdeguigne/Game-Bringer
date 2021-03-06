@@ -161,7 +161,6 @@ const StyledSkeleton = styled(Skeleton)`
   width: 100% !important;
   height: 483px !important;
   
-  //height: 100% !important;
   display: block;
   object-fit: cover;
   border-radius: ${borderRadius};

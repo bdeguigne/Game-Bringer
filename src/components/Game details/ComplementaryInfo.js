@@ -123,15 +123,6 @@ function ComplementaryInfo(props) {
         props.history.push("/search")
     }
 
-    // function devClick(id, name) {
-    //     props.setLinkFilters({
-    //         front: { platforms: `${id}` },
-    //         chip: { platforms: name }
-    //     })
-
-    //     props.history.push("/search")
-    // }
-
     useEffect(() => {
         const iconsArray = [];
         if (props.game?.websites) {
@@ -157,7 +148,7 @@ function ComplementaryInfo(props) {
                     {isEmpty(props.game) && (
                         <>
                             <InfoContainer>
-                                <Skeleton animation="wave" variant="pulse" width={250} height={200} />
+                                <Skeleton animation="wave" variant="rect" width={250} height={200} />
                             </InfoContainer>
                         </>
                     )}
@@ -253,7 +244,7 @@ function ComplementaryInfo(props) {
 ComplementaryInfo.propTypes = {
     game: PropTypes.oneOfType([PropTypes.object, PropTypes.array]),
     theme: PropTypes.string,
-    deals: PropTypes.array,
+    deals: PropTypes.object,
     stores: PropTypes.array
 }
 

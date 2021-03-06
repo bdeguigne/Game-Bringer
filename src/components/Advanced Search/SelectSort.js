@@ -24,26 +24,19 @@ function SelectSort(props) {
     };
 
     useEffect(() => {
-        // if (manuelSet === false) {
             props.onChange(sort);
-        // }else {
-        //     setManuelSet(false);
-        // }
+     
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [sort])
 
     useEffect(() => {
-        // if (props.activatedFilters)
         props.onChange(sort);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
-        console.log("IN SLEECRT", props.activatedFilters)
         if (props.activatedFilters?.chip?.sort) {
-            console.log("IN SELECT TRUUUEE", props.activatedFilters?.chip?.sort)
             setSort(props.activatedFilters?.chip?.sort)
-            // setManuelSet(true);
         }
     }, [props.activatedFilters])
 
@@ -62,7 +55,6 @@ function SelectSort(props) {
                     <MenuItem value={"first_release_date-desc"}>Release date descending</MenuItem>
                     <MenuItem value={"first_release_date-asc"}>Release date ascending</MenuItem>
                     <MenuItem value={"aggregated_rating-desc"}>Reviews</MenuItem>
-                    {/* <MenuItem value={"name÷-desc"}>Name</MenuItem> */}
                 </Select>
             </SelectContainer>
         </Container>

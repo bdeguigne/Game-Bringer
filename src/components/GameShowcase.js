@@ -23,13 +23,10 @@ export const FullWidthContainer = styled.div`
 export const Container = styled.div`
   width: 100%;
   height: 620px;
-  //width: 1130px;
-  //border: 0.5px solid #FFFFFF;
   border-radius: 32px;
   background: ${props => appColors[props.theme].backgroundContrast};
   display: flex;
   flex-direction: column;
-  //justify-content: space-between;
 
   @media only screen and (min-width: 768px) {
     flex-direction: row;
@@ -115,34 +112,6 @@ const SeeMoreContainer = styled.div`
   align-items: center;
 `
 
-// const SeeAllGamesButton = styled(Button)`
-//   width: 100%;
-//   margin-left: 0 !important;
-//   padding: 12px 24px !important;
-//   font-size: 14px !important;
-//   background: ${props => appColors[props.theme].backgroundContrast} !important;
-//   border-radius: 0 !important;
-//   box-shadow: ${props => `0 0 44px -20px ${appColors[props.theme].secondaryDarker},inset 30px -17px 32px -31px ${appColors[props.theme].secondaryDarker}, inset -30px -17px 32px -31px ${appColors[props.theme].secondaryDarker} !important`} ;
-
-//   font-weight: 500 !important;
-//   color: white !important;
-//   border-bottom: none !important;
-//   border-right: none !important;
-//   transition: all 0.3s ease;
-
-//   &:hover {
-//     box-shadow: ${props => `0 0 64px -5px ${appColors[props.theme].secondary}, 0px 0px 8px #FFFFFF, inset -18px -22px 32px -31px ${appColors[props.theme].secondary} !important`} ;
-//   }
-
-//   @media only screen and (min-width: 768px) {
-//     width: auto;
-//     margin-left: auto !important;
-//     border-top-left-radius: 32px !important;
-//     border-bottom-right-radius: 32px !important;
-//     box-shadow: ${props => `0 0 44px -20px ${appColors[props.theme].secondary}, inset -18px -22px 32px -31px ${appColors[props.theme].secondary} !important`};
-//   }
-// `
-
 const BottomDarker = styled.div`
   display: none;
   position: absolute;
@@ -199,7 +168,6 @@ function GameShowcase(props) {
         <FullWidthContainer>
           <Container theme={props.theme}>
             <ScreenshotContainer>
-              {/*<Screenshot src={`https://images.igdb.com/igdb/image/upload/t_screenshot_huge/${props.data.screenshots[0].image_id}.jpg`} />*/}
               {props.data.screenshots ? (
                 <CrossFadeImages active={props.showed} style={{ borderRadius: width >= 738 ? 32 : 0 }} images={props.data.screenshots} prefixUrl={"https://images.igdb.com/igdb/image/upload/t_screenshot_huge/"} interval={3000} onLoad={onLoad} theme={props.theme} />
               ) : (

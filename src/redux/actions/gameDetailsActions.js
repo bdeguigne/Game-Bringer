@@ -6,7 +6,6 @@ import { getBestPriceRequest } from '../services/priceService';
 import { priceConstants } from '../constants/priceConstants'
 
 const getBestPrice = (steamId, dispatch) => {
-    console.log("STEAM ID", steamId);
     getBestPriceRequest(steamId)
         .then(res => {
             if (handleError("more search error", res, dispatch)) {
@@ -15,7 +14,6 @@ const getBestPrice = (steamId, dispatch) => {
             return res.json();
         })
         .then(res => {
-            console.log("DEALS", res);
             const deals = [];
             let normalPrice = null;
 
@@ -53,11 +51,7 @@ const getSteamId = (websites, dispatch) => {
 
                 if (url) {
                     res = url.slice(url.indexOf(find) + find.length);
-                    console.log('URL', url);
-                    console.log('res', res);
                 }
-
-                console.log("SLASH POS", res.indexOf("/"));
 
                 if (res.indexOf("/") !== - 1) {
                     res = res.substring(0, res.indexOf("/"));
@@ -71,8 +65,6 @@ const getSteamId = (websites, dispatch) => {
 }
 
 const getSimilarGameData = (games) => {
-    console.log("GAMES", games);
-
     let storedIds = [];
     let gamesData = [];
 
@@ -117,7 +109,6 @@ export const getGameDetails = (id) => {
                 return res.json();
             })
             .then(res => {
-                console.log("RESSS", res);
                 if (res && res[0]) {
                     const game = res[0];
 

@@ -22,7 +22,6 @@ const SmallCheckBox = styled(Checkbox)`
 `
 
 function CheckboxFilter(props) {
-    // const [isActiveByUrl] = useState(props.active)
     const [checked, setChecked] = useState(props.active)
     const [exclude, setExclude] = useState(false)
 
@@ -71,14 +70,7 @@ function CheckboxFilter(props) {
         }
     }
 
-    // const handleChangeExclude = (evt) => {
-    //     let state = evt.target.checked;
-    //     setExclude(state);
-    //     if (checked === true) {
-    //         setChecked(false);
-
-    //     }
-    // }
+  
 
     useEffect(() => {
         let isExist = isFiltersExist(props.activatedFilters?.chip, props.titleSlug, props.label);
@@ -122,7 +114,6 @@ CheckboxFilter.propTypes = {
     active: PropTypes.bool.isRequired,
     titleSlug: PropTypes.string,
     id: PropTypes.number,
-    // activatedFilters: PropTypes.object,
     refresh: PropTypes.number
 }
 

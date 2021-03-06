@@ -27,7 +27,7 @@ const RatingWrapper = styled.div`
     display: flex;
     background-color: ${props => appColors[props.theme].backgroundContrast};
     border-radius: 100%;
-    padding: ${props => props.loading ? 0 : "10px"};
+    padding: ${props => props.loading === "true" ? 0 : "10px"};
     height: fit-content;
 `
 
@@ -56,7 +56,7 @@ function Ratings(props) {
             <BottomRightContainer>
                 <AlignCenterContainer>
                     <CircularRatingWrapper>
-                        <RatingWrapper theme={props.theme} loading={isEmpty(props.game)} >
+                        <RatingWrapper theme={props.theme} loading={isEmpty(props.game).toString()} >
                             {!isEmpty(props.game) ? !isNaN(props.game.userRating?.rate) ? (
                                 <CircularProgressWithLabel size={130} value={props.game.userRating.rate} fontSize={"1.75rem"} />
                             ) : (
@@ -69,7 +69,7 @@ function Ratings(props) {
                 </AlignCenterContainer>
                 <AlignCenterContainer>
                     <CircularRatingWrapper>
-                        <RatingWrapper theme={props.theme} style={{ marginLeft: "-3px" }} loading={isEmpty(props.game)}>
+                        <RatingWrapper theme={props.theme} style={{ marginLeft: "-3px" }} loading={isEmpty(props.game).toString()}>
                             {!isEmpty(props.game) ? !isNaN(props.game.aggregated_rating?.rate) ? (
                                 <CircularProgressWithLabel size={85} value={props.game.aggregated_rating.rate} fontSize={"1.2rem"} />
                             ) : (

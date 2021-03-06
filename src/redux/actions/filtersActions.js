@@ -29,7 +29,6 @@ export const getFilters = () => {
                         } else if (element.name === "Perspectives") {
                             perspective = element.result;
                         } else {
-                            console.log("getFilters error");
                         }
                     });
 
@@ -147,8 +146,6 @@ function generateFilterQuery(filters) {
 
     if (filters) {
         Object.keys(filters).forEach(key => {
-            // ("OBJ", key);
-
             switch (key) {
                 case "sort":
                     sortValue = filters[key].replace("-", " ");
@@ -190,7 +187,6 @@ function generateFilterQuery(filters) {
                     break;
                 default:
                     if (filters[key] !== "") {
-                        console.log("HEYYYY3", filters, filters[key])
                         const formatFilters = key + " = [" + filters[key].split(",").map(filter => `${filter}`).join(',') + "]";
                         filtersQueryArray.push(formatFilters);
                     }
@@ -200,7 +196,6 @@ function generateFilterQuery(filters) {
 
     const filtersQuery = filtersQueryArray.join(" & ");
 
-    // return filtersQuery !== "" ? {query : filtersQuery, sort: "test"} : null;
     return {
         query: filtersQuery !== "" ? filtersQuery : null,
         sort: sortValue

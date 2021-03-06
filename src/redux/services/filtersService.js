@@ -41,8 +41,6 @@ export const searchRequest = (filterQuery, sort, offset) => {
     limit 20;
     offset ${offsetValue};`
 
-    console.log("QUERY", query);
-
     return doRequest("/games", query)
 }
 

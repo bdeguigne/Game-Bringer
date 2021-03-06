@@ -5,8 +5,6 @@ import FloatingGameDetails from "./FloatingGameDetails";
 import {withRouter} from "react-router-dom"
 
 const Image = styled.img`
-  //box-shadow: 2px 2px 16px rgba(0, 0, 0, 0.527);
-  //transition: all ease 300ms;
   position: absolute;
   top: 0;
   left: 0;
@@ -56,8 +54,6 @@ const Wrapper = styled.div`
 
   &:hover {
     &::before {
-      //box-shadow: 0px 7px 16px rgba(0, 0, 0, 0.527);
-
       opacity: 0;
     }
   }

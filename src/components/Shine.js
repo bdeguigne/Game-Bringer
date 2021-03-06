@@ -2,8 +2,6 @@ import React from "react";
 import styled from "styled-components";
 import { appColors } from "../utils/styles";
 
-// const activeBackground = `linear-gradient(to right, ${appColors[props.theme].secondaryDarker} 20%, ${appColors[props.theme].secondaryDarker} 40%, ${appColors["dracula"].shine} 50%, ${appColors["dracula"].primarySimple} 55%, ${appColors["dracula"].secondaryDarker} 70%, ${appColors["dracula"].secondaryDarker} 100%);`
-
 const BorderPulse = styled.div`
   position: absolute;
   top: -50%;

@@ -45,8 +45,6 @@ export default function muiTheme(theme) {
                     backgroundClip: "padding-box",
                     textDecoration: "none",
                     boxShadow: `0px 0px 5px -15px ${appColors[theme].secondary}, 0px 0px 2px #FFFFFF`,
-                    // boxShadow: `0px 0px 64px -20px ${appColors[theme].secondary}, 0px 0px 8px -4px #FFFFFF, inset 0px 0px 32px -15px ${appColors[theme].secondary}`,
-                    // boxSizing: "border-box",
                     "&:hover": {
                         border: "0.5px solid white",
                         backgroundColor: appColors[theme].backgroundContrast,
@@ -130,7 +128,6 @@ export default function muiTheme(theme) {
                     paddingBottom: "16px",
                 },
                 indicator: {
-                    // width: "100%",
                     backgroundColor: appColors[theme].primarySimple,
                     boxShadow: "rgb(255 255 255) 0px 0px 20px 0px, rgb(254,170,69) 0px 0px 5px 0px;"
                 }
@@ -138,8 +135,6 @@ export default function muiTheme(theme) {
             MuiTab: {
                 root: {
                     fontFamily: "Montserrat, sans-serif",
-                    // borderRadius: 10,
-                    // padding: `12px 0px 12px ${sideNavPaddingLeft} !important`,
                     textTransform: "inherit",
                     fontSize: "1rem",
                     transition: "0.3s ease",
@@ -148,14 +143,12 @@ export default function muiTheme(theme) {
                     }
                 },
                 wrapper: {
-                    // minWidth: "50px",
                     display: "flex",
                     alignItems: "center",
                     flexDirection: "row",
                     justifyContent: "flex-start"
                 },
                 labelIcon: {
-                    // paddingLeft: "22px !important",
                     minHeight: "48px",
                 },
                 textColorInherit: {
@@ -228,7 +221,6 @@ export default function muiTheme(theme) {
                 paper: {
                     fontFamily: "Montserrat, sans-serif",
                     backgroundColor: appColors[theme].backgroundContrast,
-                    // boxShadow: `0px 0px 64px -24px ${appColors[theme].secondary}, 0px 0px 8px #FFFFFF, inset 0px 0px 32px -15px ${appColors[theme].secondary};`
                 }
             },
             MuiDrawer: {
@@ -263,7 +255,6 @@ export default function muiTheme(theme) {
             MuiAccordionSummary: {
                 root: {
                     transition: "background-color 0.3s",
-                    // cursor: "pointer",
                     "&:hover": {
                         backgroundColor: appColors[theme].hover + "!important"
                     },
@@ -272,7 +263,6 @@ export default function muiTheme(theme) {
             MuiAccordionDetails: {
                 root: {
                     transition: "background-color 0.3s",
-                    // cursor: "pointer",
                     "&:hover": {
                         backgroundColor: appColors[theme].hover + "!important"
                     },

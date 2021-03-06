@@ -1,8 +1,6 @@
 const fetch = require('node-fetch')
 require('dotenv').config();
 
-// VIEUX TOKEN i7vmph6ootlnq25jw6t8whrzoh38pq
-
 const handler = async function (event) {
     try {
         let query = event.queryStringParameters.query;
@@ -18,10 +16,6 @@ const handler = async function (event) {
                 response = await fetch(`https://id.twitch.tv/oauth2/token?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&grant_type=client_credentials`, {
                     method: "POST"
                 })
-                // return {
-                //     statusCode: 200,
-                //     body: JSON.stringify(process.env.CLIENT_ID)
-                // }
             } else {
                 let requestOptions = {
                     method: 'POST',
@@ -56,7 +50,6 @@ const handler = async function (event) {
         }
     } catch (error) {
         // output to netlify function log
-        console.log("IN NODE FETCH", error)
         return {
             statusCode: 500,
             // Could be a custom message or object i.e. JSON.stringify(err)

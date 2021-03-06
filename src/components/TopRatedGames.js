@@ -17,11 +17,6 @@ const Header = styled.div`
   justify-content: space-between;
 `
 
-// const Title = styled.h3`
-//   margin-top: 32px;
-//   margin-bottom: 48px;
-// `;
-
 const SliderWrapper = styled.div`
   transition: box-shadow,border 1s;
   z-index: 10;
@@ -34,8 +29,6 @@ const Slider = styled.div`
   border-radius: 32px;
   overflow: hidden;
   user-select: none;
-  //height: 225px;
-  //padding-top: 16px;
   width: 100%;
   height: 620px;
   position: relative;

@@ -7,7 +7,6 @@ function FullscreenSlider(props) {
     const [currentSlide, setCurrentSlide] = useState(props.currentSlide);
 
     useEffect(() => {
-        // console.log("CURERNT SLIDE", props.currentSlide)
         setCurrentSlide(props.currentSlide);
     }, [props.currentSlide])
 
@@ -27,7 +26,6 @@ function FullscreenSlider(props) {
             onChange={updateCurrentSlide}
         >
             {props.data.map((item, i) => {
-                // return <img alt="" key={i} src={`https://images.igdb.com/igdb/image/upload/t_screenshot_huge/${item.image_id}.jpg`} />
                 return item.type === "video" ? <VideoPlayer key={i} videoID={item.id} className="modal-video" volume={100} playing={i === currentSlide} /> : <img key={item.id} src={`https://images.igdb.com/igdb/image/upload/t_screenshot_huge/${item.id}.jpg`} alt="screenshot" />
             })}
         </Carousel>

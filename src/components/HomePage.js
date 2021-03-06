@@ -24,13 +24,11 @@ const HomePage = (props) => {
 
     useEffect(() => {
         props.setRouteIndex(0);
-        console.log("OKOKAOAK", props.anticipatedGames)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.anticipatedGames]);
 
     useEffect(() => {
         if (props.isErrorOccurred) {
-            console.log("ERROR SHOW SNACKBAR", props.isErrorOccurred)
             setOpenSnackBar(props.isErrorOccurred)
         }
     }, [props.isErrorOccurred])

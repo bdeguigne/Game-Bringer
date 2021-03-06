@@ -34,7 +34,6 @@ const ChipFilters = props => {
     if (props.isFiltersLoaded && props.isNeedRequest) {
       setShowFilters(true);
     } else {
-      // setShowFilters(props.isFiltersLoaded);
       setShowFilters(props.isFiltersLoaded);
     }
   }, [props.isFiltersLoaded, props.isCorrectIds])
@@ -87,7 +86,6 @@ function mapStateToProps(state) {
 }
 
 ChipFilters.propTypes = {
-  // activatedFilters: PropTypes.object,
   onChangeFilters: PropTypes.func
 };
 

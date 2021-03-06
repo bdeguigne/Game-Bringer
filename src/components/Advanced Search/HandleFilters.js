@@ -106,8 +106,6 @@ function HandleFilters(props) {
 
         const res = addAndGroupElem(JSON.parse(JSON.stringify(props.activatedFilters)), filter.type, filter.data, filter.label, replace);
 
-        console.log("RRRRREEEESSSSS", res);
-        console.log("DKJZDJZJDKZ", props.activatedFilters);
         props.setFilters(res);
         setActivatedFilters(res);
         onChange(res)
@@ -126,7 +124,6 @@ function HandleFilters(props) {
 
     useEffect(() => {
         if (props.queryFilters && Object.keys(props.queryFilters).length !== 0 && !activatedFilters) {
-            console.log("IN HANDLE QUERRYYRYRYRYR", props.queryFilters);
             setActivatedFilters(
                 { front: JSON.parse(JSON.stringify(props.queryFilters)), chip: JSON.parse(JSON.stringify(props.queryFilters)) },
             );
@@ -141,24 +138,16 @@ function HandleFilters(props) {
     }, [props.queryFilters])
 
     useEffect(() => {
-        console.log("PROPS.TERM", props.term, props.activatedFilters)
         if (props.term !== "") {
-            // setActivatedFilters(replaceTerm(activatedFilters, props.term));
-            // props.setFilters(replaceTerm(props.activatedFilters, props.term));
             props.setFilters(replaceTerm(JSON.parse(JSON.stringify(props.activatedFilters)), props.term));
             onChange(replaceTerm(props.activatedFilters, props.term));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.term])
 
-    // useEffect(() => {
-    //     onChange()
-    // }, [onChange])
-
     const onChangeFilter = (data) => {
         switch (data.type) {
             case "checkbox":
-                console.log("CHECKBOX ADD", data);
                 if (data.data.checked === true) {
                     addActivatedFilters({
                         front: {
@@ -303,8 +292,6 @@ function HandleFilters(props) {
                 }
             })
 
-            console.log("IDSSSS ", ids);
-
             setCollapseIds(ids);
             setExpandIds(ids);
             setLoadedFilters(filtersData);
@@ -313,7 +300,6 @@ function HandleFilters(props) {
     }, [isFiltersLoaded, activatedFilters])
 
     useEffect(() => {
-        console.log("SET IS FILTERS LOADED", correctChipIds);
         props.setIsFiltersLoaded(correctChipIds);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [correctChipIds])
@@ -376,10 +362,6 @@ function HandleFilters(props) {
             </div>
         )
     }
-
-    // useEffect(() => {
-    //     // setActivatedFilters(props.activatedFilters)
-    // }, [props.refresh, props.activatedFilters])
 
     const filtersDrawer = (
         <FiltersContainer>

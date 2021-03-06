@@ -39,14 +39,11 @@ const Slide = styled.div`
   display: flex;
   width: 90%;
   padding: 10px 0px;
-  //opacity: ${props => props.hide ? 0 : 1};
-  //transition: opacity,transform 0.5s ease-in-out !important;
 `
 
 const Slider = styled.div`
   overflow-x: hidden;
   user-select: none;
-  //height: 225px;
   width: 100%;
   position: absolute;
   top: 0;

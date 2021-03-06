@@ -20,24 +20,6 @@ const getYears = () => {
     return years
 }
 
-// const getMonths = () => {
-//     const months = []
-//     const dateStart = moment()
-//     const dateEnd = moment().add(12, "month")
-//     let i = 0;
-//     while (dateEnd.diff(dateStart, "months") > 0) {
-//         months.push({
-//             type: "checkbox",
-//             label: dateStart.format("MMMM"),
-//             slug: dateStart.format("MMMM").toLowerCase(),
-//             id: i
-//         })
-//         i += 1;
-//         dateStart.add(1, "month");
-//     }
-//     return months
-// }
-
 export function filters(genres, modes, perspectives) {
     const renderedGenres = [];
     const renderedModes = [];
@@ -246,7 +228,6 @@ export const addAndGroupElem = (toAdd, type, data, label, replace) => {
                         if (!toAdd || toAdd.front[type] === "") {
                             separator = "";
                         }
-                        // toAdd[type] = toAdd[type] + separator + data;
                         toAdd.front[type] = toAdd.front[type] + separator + data;
                         toAdd.chip[type] = toAdd.chip[type] + separator + label;
 
@@ -258,14 +239,12 @@ export const addAndGroupElem = (toAdd, type, data, label, replace) => {
         if (isNew === true) {
             toAdd.front[type] = data;
             toAdd.chip[type] = label || data;
-            // add.front[type] = data;
         }
     } else {
         toAdd = {
             front: { [type]: data },
             chip: { [type]: label || data }
         }
-        // toAdd = { [type]: data };
     }
 
     if (toAdd.front[type] === "")
@@ -304,8 +283,6 @@ export const isFiltersExist = (toCheck, type, data) => {
 export const replaceTerm = (toReplace, replaceValue) => {
     let hasTerm = false;
 
-    console.log("TO REPLACE", toReplace);
-
     if (toReplace?.front) {
         Object.entries(toReplace.front).forEach(
             ([key, value]) => {
@@ -320,7 +297,6 @@ export const replaceTerm = (toReplace, replaceValue) => {
             toReplace.chip["term"] = replaceValue;
 
             return toReplace;
-            // toReplace =  {"term" : replaceValue};
         }
     }
 
@@ -362,7 +338,6 @@ export const replace = (toReplace, replaceKey, replaceValue) => {
 
 export const removeTerm = (toRemoveId, toRemoveLabel, title, filters, isDelete) => {
     if (toRemoveId && filters) {
-        console.log("RREEEEEMMOVE", filters);
         let splitFiltersFront = filters.front[title].split(",");
         let splitFiltersChip = filters.chip[title].split(",");
 

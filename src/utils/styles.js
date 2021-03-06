@@ -1,9 +1,5 @@
 import styled from "styled-components";
 
-//RED THEME
-//secondary : "rgb(238,13,13)"
-//background : "--background-color: #290000;"
-
 export const appColors = {
   "midnight": {
     "900": "#131d25",
@@ -103,22 +99,7 @@ export const appColors = {
   }
 };
 
-/* Carousel */
-
-// const selectedShadowColor = "rgba(109,93,211,0.17)";
-// const shadowColor = "rgba(0,0,0,0.19)";
-
 export const maxWidth = "1152px";
-
-// export const carousel = {
-//   // hoveredNeonBoxShadow: `0 0 0.5rem ${appColors["midnight"].secondary}, 0 0 2rem -21px ${appColors["midnight"].secondary}, inset 12px -20px 2rem -24px ${appColors["midnight"].secondary}, 0 0 4rem -15px ${appColors["midnight"].secondary};`,
-//   // hoveredNeonBoxShadowMobile: `0 0 0.5rem ${appColors["midnight"].secondary}, 0 0 2rem -14px ${appColors["midnight"].secondary}, inset 12px -24px 2rem -24px ${appColors["midnight"].secondary}, 0 0 4rem -45px ${appColors["midnight"].secondary};`,
-//   // hoveredBoxShadow: `12px 6px 14px -3px ${selectedShadowColor}, -12px 6px 14px -3px ${selectedShadowColor};`,
-//   // selectedBoxShadow: "0px 0px 20px 4px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.19);",
-//   // boxShadow: `0 10px 20px ${shadowColor}, 0 6px 6px ${shadowColor};`,
-//   // border: `3px solid ${appColors["midnight"].secondaryTransparent};`,
-//   // indicatorBoxShadow: `0 0 50px -5px #fff, 0 0 50px -9px ${appColors["midnight"].secondary}, inset 0px 0px 30px -31px rgb(255 255 255), 0 0 4rem -15px ${appColors["midnight"].secondary}`
-// }
 
 /* Side Nav */
 export const sideNavWidth = {
@@ -127,44 +108,15 @@ export const sideNavWidth = {
 };
 export const sideNavPaddingLeft = "24px";
 export const sideNavNeonBorder = "2px solid #fff;";
-// export const sideNavNeonBoxShadow = `0 0 0.5rem #fff, 10px 0px 2rem -21px ${appColors["midnight"].secondary}, inset -12px 0px 2rem -24px ${appColors["midnight"].secondary}, -16px 0px 4rem -15px ${appColors["midnight"].secondary}`
-// export const sideNavNeonBoxShadowSoft = `1px 0px 27px -20px #fff, inset -16px 0px 3rem -63px ${appColors["midnight"].secondary}, -5px 0px 6rem -27px ${appColors["midnight"].secondary};`;
-// export const sideNavIndicatorBoxShadow = `rgb(255 255 255) 0px 0px 20px 0px, ${appColors["midnight"].primarySimple} 0px 0px 20px 1px;`
 
 /* Top Bar */
 export const barBoxShadow = "0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)";
-// export const topBarNeonBoxShadow = `0 0 0.5rem #fff, 0 0 2rem -21px ${appColors["midnight"].secondary}, inset 0px -20px 2rem -24px ${appColors["midnight"].secondary}, 0 0 4rem -15px ${appColors["midnight"].secondary};`
-// export const topBarNeonBoxShadowSoft = `0 0 20px -11px #fff, 0 0 0rem -12px ${appColors["midnight"].secondary}, inset 0px -7px 3rem -31px ${appColors["midnight"].secondary}, 0px 0px 5rem -22px ${appColors["midnight"].secondary};`;
 export const topBarNeonBorder = "2px solid #fff;";
-
-
-/* Game Showcase */
-// export const gameShowNeonBoxShadow = `0px 0px 64px -24px ${appColors["midnight"].secondary}, 0px 0px 8px #FFFFFF, inset 0px 0px 32px -15px ${appColors["midnight"].secondary};`
-
-// export const SkeletonColor = appColors["midnight"][900];
-// export const toolTipBoxShadow = `0px 0px 0.5rem -4px #fff, 0 0 2rem 0px ${appColors["midnight"].secondary}, inset 12px -20px 2rem -45px ${appColors["midnight"].secondary}, 0 0 4rem -39px ${appColors["midnight"].secondary};`
-
-/* CrossFade Component */
-
-// export const crossFadeImagesBoxShadow = `0px 0px 0.5rem -6px #000, 0 0 2rem -29px ${appColors["midnight"].secondary}, 0 0 4rem -36px ${appColors["midnight"].secondary};`
-
-/* Buttons */
-
-/* Primary Button */
-// export const PrimaryNeonBoxShadow = `0px 0px 64px -23px ${appColors["midnight"].primarySimple};`
-// export const PrimaryNeonBoxShadowHover = `0px 0px 64px -15px ${appColors["midnight"].primarySimple}, 0px 0px 32px -14px #FFFFFF, inset 0px 0px 32px -14px #FFFFFF;`
-
-/* Genres */
-// export const genresNeonBoxShadow = `0px 0px 64px -20px ${appColors["midnight"].secondary}, 0px 0px 8px -4px #FFFFFF, inset 0px 0px 32px -15px ${appColors["midnight"].secondary}`
-// export const genresNeonBoxShadowHover = `0px 0px 64px 0px ${appColors["midnight"].secondary}, 0px 0px 21px -4px #FFFFFF, inset 0px 0px 32px -15px ${appColors["midnight"].secondary};`
-
 
 /* Advanced Search */
 
 export const resultItemBoxShadow = "0px 4px 4px rgba(0, 0, 0, 0.25);"
 export const advancedSearchPadding = "4px 6px 4px 6px";
-
-// export const openDrawerButton = `0px 0px 30px 0px ${appColors["midnight"].secondary}, 0px 0px 12px -11px #ffffff, inset 0px 0px 32px -5px ${appColors["midnight"].secondary}`;
 
 /* Others */
 

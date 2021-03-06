@@ -9,9 +9,6 @@ import FullscreenSlider from './FullscreenSlider';
 import { Skeleton } from '@material-ui/lab';
 
 const SliderContainer = styled.div`
-  /* max-width: 700px; */
-
-  /* position: relative; */
   border: 1 px solid white;
 `
 
@@ -45,7 +42,6 @@ function GameHighlight(props) {
                 })
             })
         }
-        console.log("DATA", slideDataTmp);
         setData(slideDataTmp);
     }, [props.videos, props.screenshots])
 
@@ -58,7 +54,6 @@ function GameHighlight(props) {
         if (event.type === "img") {
             setOpenModal(true);
         }
-        // setCurrentSlide(key);
     }
 
     const handleClose = () => {
@@ -87,7 +82,6 @@ function GameHighlight(props) {
                     onChange={updateCurrentSlide}
 
                     dynamicHeight
-                // showIndicators={false}
                 >
                     {data.length > 0 && data.map((element, i) => {
                         return element.type === "video" ? <VideoPlayer key={i} videoID={element.id} className="highlight-video" volume={0} playing={i === currentSlide} /> : <img key={element.id} src={element.thumb} alt="screenshot" />

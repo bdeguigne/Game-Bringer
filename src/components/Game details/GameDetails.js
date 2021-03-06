@@ -74,7 +74,6 @@ const GameDetails = (props) => {
 
     useEffect(() => {
         if (props.isErrorOccurred) {
-            console.log("ERROR SHOW SNACKBAR", props.isErrorOccurred)
             setOpenSnackBar(props.isErrorOccurred)
         }
     }, [props.isErrorOccurred])

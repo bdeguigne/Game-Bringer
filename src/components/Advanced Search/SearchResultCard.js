@@ -194,7 +194,6 @@ const SearchResultCard = props => {
               <FlexFullWidthHeight>
                 <CoverContainer>
                   {props.coverId ? (
-                    // <Cover alt={"Result game cover"} src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${props.coverId}.jpg`} />
                     <ImageLoader src={`https://images.igdb.com/igdb/image/upload/t_cover_big/${props.coverId}.jpg`} style={{ objectFit: "cover", width: "100%", height: "100px", borderRadius: "16px", transform: "scale(0.95)" }} theme={props.theme} />
                   ) : (
                     <Cover alt={"Result game cover"} src={process.env.PUBLIC_URL + "/assets/placeholder-cover.png"} />

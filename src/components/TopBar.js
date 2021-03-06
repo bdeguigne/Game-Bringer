@@ -12,7 +12,6 @@ import { setLinkFilters } from '../redux/actions/filtersActions'
 
 const Container = styled.div`
   min-height: 50px;
-    //border-bottom: 1px solid ${appColors[700]};
   border-bottom: ${topBarNeonBorder};
   padding-top: 18px;
   padding-bottom: 18px;
@@ -37,7 +36,6 @@ const Wrapper = styled(Padding)`
 
 const RightLayout = styled.div`
   display: flex;
-  //border: 1px solid white;
 `;
 
 const TabsIcon = styled.span`

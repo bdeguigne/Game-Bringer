@@ -102,7 +102,7 @@ function Deals(props) {
                         </AccordionSummary>
                         {props.deals.deals.map((deal, i) => {
                             return i !== 0 ? (
-                                <AccordionDetails>
+                                <AccordionDetails key={i}>
                                     <DealContainer>
                                         <Flex>
                                             <StoreLogo src={`https://www.cheapshark.com${props.stores[parseInt(deal.storeID) - 1]?.images?.logo}`} alt="storeLogo" />
@@ -132,7 +132,7 @@ function Deals(props) {
 }
 
 Deals.propTypes = {
-    deals: PropTypes.array,
+    deals: PropTypes.object,
     stores: PropTypes.array,
     theme: PropTypes.string
 }

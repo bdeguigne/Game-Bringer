@@ -53,7 +53,6 @@ export const getPopularGames = () => {
             .then(res => {
                 if (res) {
                     const popularGamesData = [];
-                    // ("POPULAR RES ", res);
                     res.forEach(popularGame => {
                         const id = popularGame.id;
                         const game = popularGame.name;
@@ -193,7 +192,6 @@ export const getMostAnticipatedGames = () => {
                 if (res) {
                     let storedIds = [];
                     let gamesData = [];
-                    console.log('RES', res);
 
                     res.forEach(game => {
                         if (game) {
@@ -225,7 +223,6 @@ export const getMostAnticipatedGames = () => {
                 
                     })
 
-                    console.log("GAME DATA", gamesData);
                     dispatch({
                         type: homePageRequestsConstants.SET_ANTICIPATED_GAMES,
                         games: gamesData

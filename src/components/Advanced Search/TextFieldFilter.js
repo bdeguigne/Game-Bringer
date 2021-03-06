@@ -18,7 +18,6 @@ const Container = styled.div`
 const TextFieldFilter = (props) => {
     const [suggestionsData, setSuggestionsData] = useState([]);
     const [value, setValue] = useState([]);
-    // const [defaultSet, setDefaultSet] = useState(false);
     const [correctDefault, setcorrectDefault] = useState(false);
     const [excludeData, setExcludeData] = useState([]);
     const [excludeDataLabel, setExcludeDataLabel] = useState([]);
@@ -38,9 +37,6 @@ const TextFieldFilter = (props) => {
     }
 
     const onInputChange = (evt, value, reason) => {
-        // if (props.searchResults.length === 0) {
-        //     props.searchByName(props.endpoint, "", props.slug, props.exclude);
-        // }
         if (props.onTypeSuggestion) {
             props.searchByName(props.endpoint, evt.target.value, props.slug, props.exclude);
         }
@@ -122,15 +118,6 @@ const TextFieldFilter = (props) => {
     }, [props.searchResults, props.slug])
 
     useEffect(() => {
-        // if (defaultSet === false) {
-        //     props.valueLabel.forEach(element => {
-        //         if (element !== "") {
-        //             !isExclude(element) && setValue(value => [...value, { name: element, id: element }])
-        //         }
-        //     });
-
-        //     setDefaultSet(true)
-        // }
         if (props.exclude && props.excludeLabel) {
             let excludeValue = [];
             let excludeLabel = [];
