@@ -7,7 +7,8 @@ let defaultState = {
     bestRatedGamesThisMonth: [],
     bestRatedGamesLast6Months: [],
     bestRatedGamesThisYear: [],
-    bestRatedGamesAllTime: []
+    bestRatedGamesAllTime: [],
+    anticipatedGames: []
 }
 
 function homePageRequestsReducer(state = defaultState, action) {
@@ -46,6 +47,11 @@ function homePageRequestsReducer(state = defaultState, action) {
             return {
                 ...state,
                 bestRatedGamesAllTime: action.games
+            }
+        case homePageRequestsConstants.SET_ANTICIPATED_GAMES:
+            return {
+                ...state,
+                anticipatedGames: action.games
             }
         default:
             return state

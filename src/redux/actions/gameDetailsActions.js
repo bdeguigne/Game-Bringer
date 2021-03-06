@@ -70,6 +70,43 @@ const getSteamId = (websites, dispatch) => {
     }
 }
 
+const getSimilarGameData = (games) => {
+    console.log("GAMES", games);
+
+    let storedIds = [];
+    let gamesData = [];
+
+    games.forEach(game => {
+        if (game) {
+
+            const gameID = game.id;
+
+            //Check if the game is not already added
+            if (gameID && !storedIds.includes(gameID)) {
+                const id = game.id;
+                const gameName = game.name;
+                const coverID = game.cover ? game.cover.image_id : null;
+                const genres = game.genres;
+                const screenshots = game.screenshots;
+                const releasedDate = getElapsedTime(game.release_dates, game.first_release_date);
+
+                gamesData.push({
+                    gameName,
+                    coverID,
+                    genres,
+                    screenshots,
+                    releasedDate,
+                    id
+                })
+                storedIds.push(gameID);
+            }
+        }
+
+    })
+
+    return gamesData;
+}
+
 export const getGameDetails = (id) => {
     return (dispatch) => {
         getGameDetailsRequest(id)
@@ -114,7 +151,8 @@ export const getGameDetails = (id) => {
                         themes: game.themes,
                         playerPerspectives: game.player_perspectives,
                         gameEngines: game.game_engines,
-                        url: game.url
+                        url: game.url,
+                        similarGames: getSimilarGameData(game.similar_games)
                     }
 
                     dispatch({

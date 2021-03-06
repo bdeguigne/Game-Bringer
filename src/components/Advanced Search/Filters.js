@@ -304,6 +304,8 @@ export const isFiltersExist = (toCheck, type, data) => {
 export const replaceTerm = (toReplace, replaceValue) => {
     let hasTerm = false;
 
+    console.log("TO REPLACE", toReplace);
+
     if (toReplace?.front) {
         Object.entries(toReplace.front).forEach(
             ([key, value]) => {

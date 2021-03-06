@@ -38,11 +38,15 @@ const SearchBar = styled.div`
 const SearchInput = styled(InputBase)`
   width: 100%;
   background: transparent;
-  font-size: 34px !important;
+  font-size: 4.2vw !important;
   font-weight: 600 !important;
   color: white;
   outline: none;
   padding: 4px 12px;
+
+  @media only screen and (min-width: 768px) {
+       font-size: 2rem !important;
+    }
 `
 
 const SearchButtonContainer = styled.div`
@@ -74,6 +78,8 @@ const ResultContainer = styled.div`
   max-width: 740px;
   opacity: ${props => props.isRequest ? 0.5 : 1};
   transition: opacity 0.3s;
+
+ 
 `
 
 const SortContainer = styled.div`
@@ -142,6 +148,7 @@ const AdvancedSearch = (props) => {
     }
 
     const searchInputClick = () => {
+        console.log("VALID", searchValue)
         setSearchTerm(searchValue);
     }
 
@@ -239,12 +246,12 @@ const AdvancedSearch = (props) => {
         if (props.linkFilters && isLinkFilters === false) {
             const copyFilters = JSON.parse(JSON.stringify(props.linkFilters));
             console.log("DKZDJKZDJZJD", props.linkFilters)
-            props.setFilters(copyFilters)
             props.search(copyFilters.front);
 
-            setActivatedFilters(copyFilters);
+            setActivatedFilters(props.linkFilters);
+            props.setFilters(props.linkFilters)
             setisLinkFilters(false);
-            props.setActivatedFiltersAction(copyFilters);
+            props.setActivatedFiltersAction(props.linkFilters);
             // const url = props.match.path + "?" + generateParams(copyFilters?.front);
             // props.history.replace(url);
 

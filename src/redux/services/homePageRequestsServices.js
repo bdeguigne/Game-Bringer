@@ -1,14 +1,15 @@
-import {doRequest} from "./request";
+import { doRequest } from "./request";
 import moment from "moment";
-import {bestRatedGames} from "../constants/homePageRequestsConstants"
+import { bestRatedGames } from "../constants/homePageRequestsConstants"
 
 // Popular Game = follows > 1 || external rating > 1 for the last 3 months
 export const getPopularGameRequest = () => {
+    const now = moment().unix();
     const last3MonthsUnix = moment().subtract(3, "months").unix();
 
     let query = `fields name, follows, genres.name, involved_companies.developer, involved_companies.company.name, involved_companies.company.logo.image_id, aggregated_rating, screenshots.image_id, videos.video_id, videos.name, rating_count, first_release_date, release_dates.human, release_dates.date, release_dates.category, summary;
                 sort follows desc;
-                where first_release_date > ${last3MonthsUnix} & (follows > 1 | rating_count > 1);
+                where first_release_date > ${last3MonthsUnix} & first_release_date < ${now} & (follows > 1 | rating_count > 1);
                 limit 500;`
 
     return doRequest("/games", query);
@@ -56,4 +57,15 @@ export const getBestRatedGamesRequest = (time, limit) => {
 
     return doRequest("/games", query);
 
+}
+
+export const getMostAnticipatedGamesRequest = () => {
+    const now = moment().unix();
+
+    const query = `fields name, hypes, genres.name, first_release_date, release_dates.human,release_dates.date, involved_companies.developer, involved_companies.company.name, involved_companies.company.logo.image_id, screenshots.image_id, release_dates.category, cover.image_id;
+    where first_release_date > ${now} & hypes != null;
+    sort hypes desc;
+    limit 100;`
+
+    return doRequest("/games", query);
 }

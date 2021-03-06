@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Accordion, AccordionSummary, AccordionDetails } from '@material-ui/core';
 import { ExpandMore } from '@material-ui/icons';
-import { appColors, Link } from '../../utils/styles';
+import { appColors } from '../../utils/styles';
 
 
 const Label = styled.span`

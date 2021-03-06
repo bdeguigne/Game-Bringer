@@ -1,6 +1,6 @@
 
 
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled from "styled-components";
 // import Collapsable from './Collapsable';
@@ -118,15 +118,11 @@ function HandleFilters(props) {
         onChange();
     }
 
-    const onChange = useCallback(
-        (res) => {
-            if (props.onChange) {
-                props.onChange(res || activatedFilters);
-            }
-        },
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [activatedFilters],
-    )
+    const onChange = (res) => {
+        if (props.onChange) {
+            props.onChange(res || activatedFilters);
+        }
+    }
 
     useEffect(() => {
         if (props.queryFilters && Object.keys(props.queryFilters).length !== 0 && !activatedFilters) {
@@ -145,10 +141,12 @@ function HandleFilters(props) {
     }, [props.queryFilters])
 
     useEffect(() => {
+        console.log("PROPS.TERM", props.term, props.activatedFilters)
         if (props.term !== "") {
             // setActivatedFilters(replaceTerm(activatedFilters, props.term));
             // props.setFilters(replaceTerm(props.activatedFilters, props.term));
-            onChange(replaceTerm(JSON.parse(JSON.stringify(props.activatedFilters)), props.term));
+            props.setFilters(replaceTerm(JSON.parse(JSON.stringify(props.activatedFilters)), props.term));
+            onChange(replaceTerm(props.activatedFilters, props.term));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [props.term])

@@ -7,6 +7,11 @@ import { DateRange } from "@material-ui/icons";
 
 const Container = styled.div`
   padding: 16px;
+  display: none;
+
+  @media only screen and (min-width: 992px) {
+        display: block;
+    }
 `
 
 const Title = styled.h4`

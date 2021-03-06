@@ -3,6 +3,10 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { isEmpty, Link } from '../../utils/styles'
 import { Skeleton } from '@material-ui/lab'
+import { withRouter } from "react-router-dom"
+import { compose } from "redux";
+import { connect } from "react-redux";
+import { setLinkFilters } from "../../redux/actions/filtersActions"
 
 const Title = styled.div`
     font-size: 18px;
@@ -40,6 +44,16 @@ const TextSkeleton = styled(Skeleton)`
 
 
 function GameInfo(props) {
+
+    function linkClick(type, id, name) {
+        props.setLinkFilters({
+            front: { [type]: `${id}` },
+            chip: { [type]: name }
+        })
+
+        props.history.push("/search")
+    }
+
     return (
         <div>
             <Title>
@@ -53,7 +67,7 @@ function GameInfo(props) {
                     </SubTitle>
                     <Paragraph>
                         {props.game.releaseDates.map((date, i) => {
-                            return <div key={i}>{date.human} - <Link theme={props.theme}>{date.platform.name}</Link></div>
+                            return <div key={i}>{date.human} - <Link theme={props.theme} onClick={() => linkClick("platforms", date.platform.id, date.platform.name)}>{date.platform.name}</Link></div>
                         })}
                     </Paragraph>
                 </Container>
@@ -69,7 +83,7 @@ function GameInfo(props) {
                         Developer:
                     </SubTitle>
                     <Paragraph>
-                        <Link theme={props.theme}>{props.game.developers.name}</Link>
+                        <Link theme={props.theme} onClick={() => linkClick("companies", props.game.developers.id, props.game.developers.name)}>{props.game.developers.name}</Link>
                     </Paragraph>
                 </Container>
             ) : (
@@ -84,7 +98,7 @@ function GameInfo(props) {
                         Publisher:
                     </SubTitle>
                     <Paragraph>
-                        <Link theme={props.theme}>{props.game.publishers.name}</Link>
+                        <Link theme={props.theme} onClick={() => linkClick("companies", props.game.publishers.id, props.game.publishers.name)}>{props.game.publishers.name}</Link>
                     </Paragraph>
                 </Container>
             ) : (
@@ -100,7 +114,7 @@ function GameInfo(props) {
                     </SubTitle>
                     <Paragraph>
                         {props.game.gameModes.map((mode, i) => {
-                            return <div key={i}><Link theme={props.theme}>{mode.name}</Link></div>
+                            return <div key={i}><Link theme={props.theme} onClick={() => linkClick("game_modes", mode.id, mode.name)}>{mode.name}</Link></div>
                         })}
                     </Paragraph>
                 </Container>
@@ -113,7 +127,7 @@ function GameInfo(props) {
                     </SubTitle>
                     <Paragraph>
                         {props.game.genres.map((genre, i) => {
-                            return <div key={i}><Link theme={props.theme}>{genre.name}</Link></div>
+                            return <div key={i}><Link  onClick={() => linkClick("genres", genre.id, genre.name)} theme={props.theme}>{genre.name}</Link></div>
                         })}
                     </Paragraph>
                 </Container>
@@ -126,7 +140,7 @@ function GameInfo(props) {
                     </SubTitle>
                     <Paragraph>
                         {props.game.themes.map((theme, i) => {
-                            return <div key={i}><Link theme={props.theme}>{theme.name}</Link></div>
+                            return <div key={i}>{theme.name}</div>
                         })}
                     </Paragraph>
                 </Container>
@@ -143,7 +157,7 @@ function GameInfo(props) {
                     </SubTitle>
                     <Paragraph>
                         {props.game.playerPerspectives.map((persp, i) => {
-                            return <div key={i}><Link theme={props.theme}>{persp.name}</Link></div>
+                            return <div key={i}><Link theme={props.theme} onClick={() => linkClick("player_perspectives", persp.id, persp.name)}>{persp.name}</Link></div>
                         })}
                     </Paragraph>
                 </Container>
@@ -161,7 +175,7 @@ function GameInfo(props) {
                     </SubTitle>
                     <Paragraph>
                         {props.game.gameEngines.map((persp, i) => {
-                            return <div key={i}><Link theme={props.theme}>{persp.name}</Link></div>
+                            return <div key={i}><Link theme={props.theme} onClick={() => linkClick("game_engines", persp.id, persp.name)}>{persp.name}</Link></div>
                         })}
                     </Paragraph>
                 </Container>
@@ -183,5 +197,17 @@ GameInfo.propTypes = {
     theme: PropTypes.string
 }
 
-export default GameInfo
+const actionCreator = {
+    setLinkFilters
+  }
+  
+  function mapStateToProps(state) {
+    return {
+    }
+  }
+
+export default compose(
+    withRouter,
+    connect(mapStateToProps, actionCreator)
+)(GameInfo)
 

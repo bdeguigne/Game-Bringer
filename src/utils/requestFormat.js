@@ -37,11 +37,13 @@ export function findCompany(involved_companies, type = "developer") {
         involved_companies.forEach(involved_company => {
             if (type === "developer" && involved_company.developer === true) {
                 company = {
+                    id:  involved_company.company.id,
                     name: involved_company.company.name,
                     logoID: involved_company.company.logo ? involved_company.company.logo.image_id : null
                 }
             } else if (type === "publisher" && involved_company.publisher === true) {
                 company = {
+                    id:  involved_company.company.id,
                     name: involved_company.company.name,
                     logoID: involved_company.company.logo ? involved_company.company.logo.image_id : null
                 }

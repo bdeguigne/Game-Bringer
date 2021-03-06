@@ -32,6 +32,7 @@ export const CardStyleContainer = styled.div`
   overflow-y: hidden;
   box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.527);
   transition: all ease 500ms;
+  cursor: pointer;
 
   &:hover {
     box-shadow: 0 7px 16px rgba(0, 0, 0, 0.527);
@@ -85,12 +86,13 @@ function SimpleCard({ coverID, onLoad, game, history, theme }) {
 
     const onClick = () => {
         let urlTitle = game.gameName.split(' ').join('_');
-        history.push("/" + game.id + "/" + urlTitle);
+        history.replace("/" + game.id + "/" + urlTitle);
+        history.go();
     }
 
     return (
         <HoverInfo title={
-            <FloatingGameDetails title={game.gameName} date={game.releasedDate.date} elapsedTime={game.releasedDate.elapsedTime} screenshots={game.screenshots} genres={game.genres} theme={theme}/>
+            <FloatingGameDetails title={game.gameName} date={game.releasedDate?.date} elapsedTime={game.releasedDate?.elapsedTime} screenshots={game.screenshots} genres={game.genres} theme={theme}/>
         } placement={"right"} TransitionComponent={Fade} arrow={true}>
 
             <CardStyleContainer onClick={onClick}>

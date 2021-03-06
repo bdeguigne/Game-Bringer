@@ -3,7 +3,10 @@ import { IconButton, InputBase } from "@material-ui/core"
 import { SearchOutlined } from "@material-ui/icons";
 import styled from 'styled-components';
 import { withRouter } from "react-router-dom";
+import { compose } from "redux";
+import { connect } from "react-redux";
 import PropTypes from 'prop-types';
+import { setLinkFilters } from '../redux/actions/filtersActions'
 
 const SearchBarContainer = styled.div`
     display: ${props => props.isPopover ? "block" : "none"};
@@ -27,7 +30,15 @@ function SearchBar(props) {
     const submit = () => {
         if (inputValue !== "") {
             let value = inputValue.split(' ').join('+');
-            props.history.push(`/search/?term=${value}`);
+
+            if (props.setLinkFilters) {
+                props.setLinkFilters({
+                    front: { term: value },
+                    chip: { term: value }
+                })
+            }
+
+            props.history.push(`/search/`);
         }
     }
 
@@ -55,7 +66,23 @@ function SearchBar(props) {
 }
 
 SearchBar.propTypes = {
-    isPopover: PropTypes.bool
+    isPopover: PropTypes.bool,
 }
 
-export default withRouter(SearchBar);
+const actionCreator = {
+	setLinkFilters
+}
+
+function mapStateToProps(state) {
+	return {
+		tabIndex: state.uiReducer.index,
+		theme: state.uiReducer.theme,
+		url: state.filtersReducer.url
+	}
+}
+
+export default compose(
+    withRouter,
+    connect(mapStateToProps, actionCreator)
+
+)(SearchBar);

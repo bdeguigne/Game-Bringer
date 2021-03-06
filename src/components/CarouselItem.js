@@ -8,7 +8,11 @@ import VideoPlayer from "./VideoPlayer";
 import { appColors } from "../utils/styles";
 import Shine from "./Shine";
 import FloatingGameDetails from "./FloatingGameDetails";
+import { withRouter } from "react-router-dom"
 import useWindowDimensions from "../utils/useWindowDimensions";
+import { compose } from 'redux';
+import { connect } from "react-redux";
+import { setLinkFilters } from '../redux/actions/filtersActions'
 
 const borderRadius = "16px";
 
@@ -16,7 +20,7 @@ const Slide = styled.div`
   user-select: none;
   height: 490px !important;
   position: relative;
-  cursor: pointer;
+  cursor: ${props => !props.videoReady ? "pointer" : "default"} ;
   transition: all 500ms ease;
   margin-left: 8px;
   margin-right: 8px;
@@ -187,11 +191,12 @@ const ScreenshotSkeleton = styled(Skeleton)`
   border-radius: 32px;
 `
 
-function CarouselItem({ imageId, isSelected, title, genres, rate, isLoading, company, videoId, releaseDate, screenshots, summary, id, onClick, theme }) {
+function CarouselItem({ imageId, isSelected, title, genres, rate, isLoading, company, videoId, releaseDate, screenshots, summary, id, onClick, theme, history, setLinkFilters }) {
   const [isHover, setIsHover] = useState(false);
   const [hide, setHide] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const { width } = useWindowDimensions();
+  const [imageError, setImageError] = useState(false);
 
   const onSlideHover = () => {
     if (isSelected === true && videoId != null) {
@@ -212,6 +217,24 @@ function CarouselItem({ imageId, isSelected, title, genres, rate, isLoading, com
     }
   }
 
+  function genreClick(id, name) {
+    setLinkFilters({
+      front: { genres: `${id}` },
+      chip: { genres: name }
+    })
+
+    history.push("/search")
+  }
+
+  function companiesClick(id, name) {
+    setLinkFilters({
+      front: { companies: `${id}` },
+      chip: { companies: name }
+    })
+
+    history.push("/search")
+  }
+
 
   if (isLoading) {
     return (
@@ -228,14 +251,19 @@ function CarouselItem({ imageId, isSelected, title, genres, rate, isLoading, com
         <FloatingGameDetails title={title} date={releaseDate.date} elapsedTime={releaseDate.elapsedTime} genres={genres} screenshots={screenshots} summary={summary} theme={theme} />
       } placement={"right"} TransitionComponent={Fade} arrow={true} disableHoverListener={!isSelected} disableTouchListener={true} >
 
-        <Slide isSelected={isSelected} onMouseEnter={onSlideHover} onMouseLeave={onSlideLeave} videoReady={!hide} onClick={onClickItem} theme={theme}>
+        <Slide onClick={() => hide && onClickItem()} isSelected={isSelected} onMouseEnter={onSlideHover} onMouseLeave={onSlideLeave} videoReady={!hide} theme={theme}>
           <Shine active={isHover && !hide && width >= 768} borderColor={hide ? appColors[theme].shine : appColors[theme].secondaryDarker} childrenStyle={{ top: "0.75%", left: "0.75%", height: "98.5%", width: "98.5%" }} theme={theme}>
-            <div style={{ position: "relative", borderRadius: "45px !important" }}>
+            <div style={{ position: "relative", borderRadius: "45px !important" }} >
               {isHover && width >= 768 && (
                 <VideoPlayer className="carousel-video-player" videoID={videoId} onReady={() => setHide(true)} playtime="15" />
               )}
-              <Image onLoad={() => setImageLoaded(true)} isSelected={isSelected} isHover={width >= 768 ? isHover : false} hide={imageLoaded ? hide : true} alt="slider" src={"https://images.igdb.com/igdb/image/upload/t_screenshot_huge/" + imageId + ".jpg"} />
+              {!imageError && (
+                <Image onLoad={() => setImageLoaded(true)} onError={() => setImageError(true)} isSelected={isSelected} isHover={width >= 768 ? isHover : false} hide={imageLoaded ? hide : true} alt="slider" src={"https://images.igdb.com/igdb/image/upload/t_screenshot_huge/" + imageId + ".jpg"} />
+              )}
 
+              {imageError && (
+                <Image onLoad={() => setImageLoaded(true)} isSelected={isSelected} isHover={width >= 768 ? isHover : false}  hide={imageLoaded ? hide : true} src={process.env.PUBLIC_URL + "/assets/placeholder-cover.png"} alt="placeholder" />
+              )}
             </div>
             <SkeletonContainer hide={imageLoaded}>
               <ScreenshotSkeleton variant="rect" animation={imageLoaded ? false : "wave"} style={{ borderRadius: "16px" }} theme={theme} />
@@ -250,7 +278,7 @@ function CarouselItem({ imageId, isSelected, title, genres, rate, isLoading, com
                 <GameName>{title}</GameName>
                 <Date>
                   {company && (
-                    <CompanyName>{company.name} - </CompanyName>
+                    <CompanyName onClick={() => companiesClick(company.id, company.name)}>{company.name} - </CompanyName>
                   )}
                   <span style={{ color: "#e0e0e0" }}>{releaseDate.elapsedTime ? releaseDate.elapsedTime : releaseDate.date}</span>
                   {/*{releaseDate.date} {releaseDate.elapsedTime !== undefined && (`(${releaseDate.elapsedTime})`)}*/}
@@ -260,7 +288,7 @@ function CarouselItem({ imageId, isSelected, title, genres, rate, isLoading, com
                 <FlexContainer>
                   {genres.map((genre, index) => {
                     if (index < 3) {
-                      return <Genre key={index} size="small" color="secondary">{genre.name}</Genre>
+                      return <Genre key={index} size="small" color="secondary" onClick={() => genreClick(genre.id, genre.name)}>{genre.name}</Genre>
                     }
                     return null
                   })}
@@ -268,7 +296,7 @@ function CarouselItem({ imageId, isSelected, title, genres, rate, isLoading, com
                 </FlexContainer>
               }
               <ButtonContainer>
-                <SeeMoreButton color="primary">See more</SeeMoreButton>
+                <SeeMoreButton color="primary" onClick={onClickItem}>See more</SeeMoreButton>
                 {!isNaN(rate) &&
                   <RateContainer>
                     <CircularProgressWithLabel value={rate} />
@@ -285,7 +313,8 @@ function CarouselItem({ imageId, isSelected, title, genres, rate, isLoading, com
   }
 }
 
-CarouselItem.prototype = {
+CarouselItem.propTypes = {
+  id: PropTypes.number,
   imageId: PropTypes.string,
   isSelected: PropTypes.bool,
   title: PropTypes.string,
@@ -296,4 +325,17 @@ CarouselItem.prototype = {
   theme: PropTypes.string.isRequired
 }
 
-export default CarouselItem;
+const actionCreator = {
+  setLinkFilters
+}
+
+function mapStateToProps(state) {
+  return {
+  }
+}
+
+
+export default compose(
+  withRouter,
+  connect(mapStateToProps, actionCreator)
+)(CarouselItem)

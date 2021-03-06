@@ -17,7 +17,7 @@ const OtherGamesSlider = props => {
     }
 
     return (
-        <HorizontalSlider sliderName={props.sliderName} title={props.title} isLoading={props.data.length === 0} imageLoaded={sliderLoaded} removeSkeleton={removeSkeleton} >
+        <HorizontalSlider sliderName={props.sliderName} title={props.title} isLoading={props.data.length === 0} imageLoaded={sliderLoaded} removeSkeleton={removeSkeleton} perView={props.perView} >
             {props.data.map((game, i) => {
                     return (
                         <SimpleCard onLoad={sliderOnLoad} key={i} coverID={game.coverID} game={game} theme={props.theme}/>
@@ -28,11 +28,16 @@ const OtherGamesSlider = props => {
     );
 };
 
+OtherGamesSlider.defaultProps = {
+    perView: 5
+}
+
 OtherGamesSlider.propTypes = {
     sliderName: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     data : PropTypes.array.isRequired,
-    theme : PropTypes.string.isRequired
+    theme : PropTypes.string.isRequired,
+    perView: PropTypes.number
 };
 
 export default OtherGamesSlider;

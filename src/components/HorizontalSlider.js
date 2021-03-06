@@ -5,7 +5,7 @@ import { ArrowBackIos, ArrowForwardIos } from "@material-ui/icons"
 import Skeleton from '@material-ui/lab/Skeleton';
 import styled from 'styled-components';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
-import {SectionTitle, appColors} from "../utils/styles";
+import { SectionTitle, appColors } from "../utils/styles";
 import { connect } from 'react-redux';
 
 const Container = styled.div`
@@ -89,37 +89,41 @@ const CardStyleSkeleton = styled(Skeleton)`
   }
 `
 
-const sliderConfiguration = {
-    type: "slider",
-    startAt: 0,
-    animationTimingFunc: "ease-in-out",
-    perView: 5,
-    focusAt: 0,
-    gap: 16,
-    bound: true,
-    breakpoints: {
-        1380: {
-            perView: 5
+const sliderConfiguration = (perView) => {
+    const cfg = {
+        type: "slider",
+        startAt: 0,
+        animationTimingFunc: "ease-in-out",
+        perView,
+        focusAt: 0,
+        gap: 16,
+        bound: true,
+        breakpoints: {
+            1380: {
+                perView: 5
+            },
+            1160: {
+                perView: 4
+            },
+            960: {
+                perView: 3
+            },
+            540: {
+                perView: 2
+            },
+            374: {
+                perView: 1
+            }
         },
-        1160: {
-            perView: 4
-        },
-        960: {
-            perView: 3
-        },
-        540: {
-            perView: 2
-        },
-        374: {
-            perView: 1
-        }
-    },
-    animationDuration: 500
+        animationDuration: 500
+    }
+
+    return cfg;
 };
 
-const HorizontalSlider = ({ sliderName, title, children, isLoading, imageLoaded, removeSkeleton, theme }) => {
-    const [slider] = useState(new Glide(`#${sliderName}`, sliderConfiguration));
-    const [sliderSkeleton] = useState(new Glide(`#${sliderName}-skeleton`, sliderConfiguration));
+const HorizontalSlider = ({ sliderName, title, children, isLoading, imageLoaded, removeSkeleton, theme, perView}) => {
+    const [slider] = useState(new Glide(`#${sliderName}`, sliderConfiguration(perView)));
+    const [sliderSkeleton] = useState(new Glide(`#${sliderName}-skeleton`, sliderConfiguration(perView)));
 
     useEffect(() => {
         if (removeSkeleton === false) {
@@ -162,10 +166,10 @@ const HorizontalSlider = ({ sliderName, title, children, isLoading, imageLoaded,
             </Header>
             <SliderContainer >
                 {isLoading === false && (
-                    <Slider id={sliderName}  hide={!imageLoaded}>
+                    <Slider id={sliderName} hide={!imageLoaded}>
                         <div className="glide__track" data-glide-el="track">
                             <Slide className="glide__slides">
-                                { children }
+                                {children}
                             </Slide>
                         </div>
                     </Slider>

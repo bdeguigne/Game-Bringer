@@ -16,7 +16,7 @@ import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { routes } from "./routes";
 // REDUX
 import { connect } from "react-redux";
-import { getPopularGames, getRecentlyReleasedGames, getComingSoonGames, getBestRatedGames } from './redux/actions/homePageRequestsActions';
+import { getPopularGames, getRecentlyReleasedGames, getComingSoonGames, getBestRatedGames, getMostAnticipatedGames } from './redux/actions/homePageRequestsActions';
 import { getFilters } from './redux/actions/filtersActions';
 import { bestRatedGames } from "./redux/constants/homePageRequestsConstants"
 import { getTokens } from './redux/services/request'
@@ -32,6 +32,7 @@ function App(props) {
         props.getRecentlyReleasedGames();
         props.getComingSoonGames();
         props.getBestRatedGames(bestRatedGames.THIS_MONTH);
+        props.getMostAnticipatedGames();
         props.getStores();
         props.getFilters();
     }
@@ -95,7 +96,8 @@ const actionCreators = {
     getBestRatedGames,
     getFilters,
     setIsErrorOccurred,
-    getStores
+    getStores,
+    getMostAnticipatedGames
 }
 
 function mapStateToProps(state) {

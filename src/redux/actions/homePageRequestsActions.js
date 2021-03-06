@@ -1,5 +1,5 @@
 import { homePageRequestsConstants } from "../constants/homePageRequestsConstants";
-import { getPopularGameRequest, getRecentlyReleasedRequest, getComingSoonGamesRequest, getBestRatedGamesRequest } from "../services/homePageRequestsServices";
+import { getPopularGameRequest, getRecentlyReleasedRequest, getComingSoonGamesRequest, getBestRatedGamesRequest, getMostAnticipatedGamesRequest } from "../services/homePageRequestsServices";
 import { findCompany, getElapsedTime, getRandom, getVideoTrailer } from '../../utils/requestFormat'
 import { handleError } from '../services/request';
 
@@ -176,6 +176,61 @@ export const getBestRatedGames = (time) => {
                     })
                 }
 
+            })
+    }
+}
+
+export const getMostAnticipatedGames = () => {
+    return dispatch => {
+        getMostAnticipatedGamesRequest()
+            .then(res => {
+                if (handleError("getMostAnticipatedGames ", res, dispatch)) {
+                    return;
+                }
+                return res.json();
+            })
+            .then(res => {
+                if (res) {
+                    let storedIds = [];
+                    let gamesData = [];
+                    console.log('RES', res);
+
+                    res.forEach(game => {
+                        if (game) {
+                
+                            const gameID = game.id;
+                
+                            //Check if the game is not already added
+                            if (gameID && !storedIds.includes(gameID)) {
+                                const id = game.id;
+                                const gameName = game.name;
+                                const coverID = game.cover ? game.cover.image_id : null;
+                                const genres = game.genres;
+                                const screenshots = game.screenshots;
+                                const releasedDate = getElapsedTime(game.release_dates, game.first_release_date);
+                                const rating = Math.round(game.aggregated_rating);
+                
+                                gamesData.push({
+                                    gameName,
+                                    coverID,
+                                    genres,
+                                    screenshots,
+                                    releasedDate,
+                                    rating,
+                                    id
+                                })
+                                storedIds.push(gameID);
+                            }
+                        }
+                
+                    })
+
+                    console.log("GAME DATA", gamesData);
+                    dispatch({
+                        type: homePageRequestsConstants.SET_ANTICIPATED_GAMES,
+                        games: gamesData
+                    })
+                }
             })
     }
 }

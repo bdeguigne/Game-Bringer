@@ -8,6 +8,10 @@ import Ratings from './Ratings';
 import GameTitle from './GameTitle';
 import { Skeleton } from '@material-ui/lab';
 import Deals from './Deals';
+import { withRouter } from "react-router-dom"
+import { connect } from "react-redux";
+import { compose } from "redux";
+import { setLinkFilters } from '../../redux/actions/filtersActions'
 
 const Container = styled.div`
     /* width: 100%; */
@@ -110,6 +114,24 @@ const CheapShark = styled.span`
 function ComplementaryInfo(props) {
     const [icons, setIcons] = useState([]);
 
+    function platformClick(type, id, name) {
+        props.setLinkFilters({
+            front: { [type]: `${id}` },
+            chip: { [type]: name }
+        })
+
+        props.history.push("/search")
+    }
+
+    // function devClick(id, name) {
+    //     props.setLinkFilters({
+    //         front: { platforms: `${id}` },
+    //         chip: { platforms: name }
+    //     })
+
+    //     props.history.push("/search")
+    // }
+
     useEffect(() => {
         const iconsArray = [];
         if (props.game?.websites) {
@@ -130,7 +152,7 @@ function ComplementaryInfo(props) {
             <GameTitle game={props.game} mobile />
 
             <InfoWrapper>
-                <div style={{width: "100%", paddingRight: "8px"}}>
+                <div style={{ width: "100%", paddingRight: "8px" }}>
 
                     {isEmpty(props.game) && (
                         <>
@@ -145,7 +167,7 @@ function ComplementaryInfo(props) {
                             <p>
                                 <Label>Platform{props.game.platforms.length > 1 && "s"} : </Label>
                                 {props.game.platforms.map((platform, i) => {
-                                    return <Link key={i} theme={props.theme} href="#">{platform.name}{i !== (props.game.platforms.length - 1) && ", "}</Link>
+                                    return <Link key={i} theme={props.theme} onClick={() => platformClick("platforms", platform.id, platform.name)}>{platform.name}{i !== (props.game.platforms.length - 1) && ", "}</Link>
                                 })}
                             </p>
                         </InfoContainer>
@@ -155,7 +177,7 @@ function ComplementaryInfo(props) {
                         <InfoContainer>
                             <p>
                                 <Label>Developer : </Label>
-                                <Link theme={props.theme} href="#">{props.game.developers.name}</Link>
+                                <Link theme={props.theme} onClick={() => platformClick("companies", props.game.developers.id, props.game.developers.name)}>{props.game.developers.name}</Link>
                             </p>
                         </InfoContainer>
                     )}
@@ -164,7 +186,7 @@ function ComplementaryInfo(props) {
                         <InfoContainer>
                             <p>
                                 <Label>Publisher : </Label>
-                                <Link theme={props.theme} href="#">{props.game.publishers.name}</Link>
+                                <Link theme={props.theme} onClick={() => platformClick("companies", props.game.publishers.id, props.game.publishers.name)}>{props.game.publishers.name}</Link>
                             </p>
                         </InfoContainer>
                     )}
@@ -172,15 +194,15 @@ function ComplementaryInfo(props) {
                     {props.game.genres && (
                         <InfoContainer>
                             {props.game.genres.map((genre, index) => {
-                                return <Genre key={index} size="small" color="secondary">{genre.name}</Genre>
+                                return <Genre key={index} size="small" color="secondary" onClick={() => platformClick("genres", genre.id, genre.name)}>{genre.name}</Genre>
                             })}
                         </InfoContainer>
                     )}
 
                     {!isEmpty(props.deals) && (
                         <InfoContainer>
-                            <div style={{height: 80}}>
-                                <Deals deals={props.deals} stores={props.stores} theme={props.theme}/>
+                            <div style={{ height: 80 }}>
+                                <Deals deals={props.deals} stores={props.stores} theme={props.theme} />
                             </div>
                             <CheapShark>Powered by <Link theme={props.theme} href="https://www.cheapshark.com/" target="_blank">Cheapshark</Link></CheapShark>
                         </InfoContainer>
@@ -235,5 +257,19 @@ ComplementaryInfo.propTypes = {
     stores: PropTypes.array
 }
 
-export default ComplementaryInfo
+
+const actionCreator = {
+    setLinkFilters
+}
+
+function mapStateToProps(state) {
+    return {
+    }
+}
+
+export default compose(
+    withRouter,
+    connect(mapStateToProps, actionCreator)
+
+)(ComplementaryInfo)
 

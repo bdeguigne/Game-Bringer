@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { isEmpty } from '../../utils/styles';
 import { Skeleton } from '@material-ui/lab';
+import OtherGamesSlider from "../OtherGamesSlider";
 
 const Title = styled.div`
     font-size: 18px;
@@ -51,7 +52,7 @@ function GameDescription(props) {
                         About this game
                     </Title>
                     <Separator></Separator>
-                   <TextSkeleton variant="rect" animation="pulse" height={220}/>
+                    <TextSkeleton variant="rect" animation="pulse" height={220} />
                 </>
             )}
 
@@ -66,6 +67,10 @@ function GameDescription(props) {
                     </AboutContainer>
                 </>
             )}
+
+            {props.game.similarGames && (
+                <OtherGamesSlider sliderName={"recommendations"} title={"Recommendations"} data={props.game.similarGames} theme={props.theme} perView={4}/>
+            )}
         </div>
     )
 }
@@ -74,6 +79,7 @@ GameDescription.propTypes = {
     game: PropTypes.oneOfType([
         PropTypes.object, PropTypes.array
     ]),
+    theme: PropTypes.string
 }
 
 export default GameDescription

@@ -24,8 +24,9 @@ const HomePage = (props) => {
 
     useEffect(() => {
         props.setRouteIndex(0);
+        console.log("OKOKAOAK", props.anticipatedGames)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [props.anticipatedGames]);
 
     useEffect(() => {
         if (props.isErrorOccurred) {
@@ -71,6 +72,10 @@ const HomePage = (props) => {
             <Padding>
                 <OtherGamesSlider sliderName={"coming-soon"} title={"Coming Soon"} data={props.comingSoonGames} theme={props.theme} />
             </Padding>
+
+            <Padding>
+                <OtherGamesSlider sliderName={"most-anticipated-games"} title={"Most anticipated games"} data={props.anticipatedGames} theme={props.theme} />
+            </Padding>
         </MainContent>
     )
 }
@@ -83,6 +88,7 @@ const actionCreators = {
 function mapStateToProps(state) {
     return {
         popularGames: state.homePageRequests.popularGames,
+        anticipatedGames: state.homePageRequests.anticipatedGames,
         recentlyReleasedGames: state.homePageRequests.recentlyReleasedGames,
         comingSoonGames: state.homePageRequests.comingSoonGames,
         bestRatedGames: state.homePageRequests.bestRatedGamesThisMonth,

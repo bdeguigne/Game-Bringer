@@ -71,6 +71,7 @@ export const GameInfoContainer = styled.div`
 
 const GameInfoPadding = styled.div`
   padding: 24px;
+  white-space: pre-wrap;
 `
 
 const Space = styled.div`
@@ -108,44 +109,39 @@ const Summary = styled.p`
   }
 `
 
-const BottomContainer = styled.div`
-  display: flex;
-`
-
 const SeeMoreContainer = styled.div`
   display: flex;
   justify-content: space-between;
-  //height: 100%;
   align-items: center;
 `
 
-const SeeAllGamesButton = styled(Button)`
-  width: 100%;
-  margin-left: 0 !important;
-  padding: 12px 24px !important;
-  font-size: 14px !important;
-  background: ${props => appColors[props.theme].backgroundContrast} !important;
-  border-radius: 0 !important;
-  box-shadow: ${props => `0 0 44px -20px ${appColors[props.theme].secondaryDarker},inset 30px -17px 32px -31px ${appColors[props.theme].secondaryDarker}, inset -30px -17px 32px -31px ${appColors[props.theme].secondaryDarker} !important`} ;
+// const SeeAllGamesButton = styled(Button)`
+//   width: 100%;
+//   margin-left: 0 !important;
+//   padding: 12px 24px !important;
+//   font-size: 14px !important;
+//   background: ${props => appColors[props.theme].backgroundContrast} !important;
+//   border-radius: 0 !important;
+//   box-shadow: ${props => `0 0 44px -20px ${appColors[props.theme].secondaryDarker},inset 30px -17px 32px -31px ${appColors[props.theme].secondaryDarker}, inset -30px -17px 32px -31px ${appColors[props.theme].secondaryDarker} !important`} ;
 
-  font-weight: 500 !important;
-  color: white !important;
-  border-bottom: none !important;
-  border-right: none !important;
-  transition: all 0.3s ease;
+//   font-weight: 500 !important;
+//   color: white !important;
+//   border-bottom: none !important;
+//   border-right: none !important;
+//   transition: all 0.3s ease;
 
-  &:hover {
-    box-shadow: ${props => `0 0 64px -5px ${appColors[props.theme].secondary}, 0px 0px 8px #FFFFFF, inset -18px -22px 32px -31px ${appColors[props.theme].secondary} !important`} ;
-  }
+//   &:hover {
+//     box-shadow: ${props => `0 0 64px -5px ${appColors[props.theme].secondary}, 0px 0px 8px #FFFFFF, inset -18px -22px 32px -31px ${appColors[props.theme].secondary} !important`} ;
+//   }
 
-  @media only screen and (min-width: 768px) {
-    width: auto;
-    margin-left: auto !important;
-    border-top-left-radius: 32px !important;
-    border-bottom-right-radius: 32px !important;
-    box-shadow: ${props => `0 0 44px -20px ${appColors[props.theme].secondary}, inset -18px -22px 32px -31px ${appColors[props.theme].secondary} !important`};
-  }
-`
+//   @media only screen and (min-width: 768px) {
+//     width: auto;
+//     margin-left: auto !important;
+//     border-top-left-radius: 32px !important;
+//     border-bottom-right-radius: 32px !important;
+//     box-shadow: ${props => `0 0 44px -20px ${appColors[props.theme].secondary}, inset -18px -22px 32px -31px ${appColors[props.theme].secondary} !important`};
+//   }
+// `
 
 const BottomDarker = styled.div`
   display: none;

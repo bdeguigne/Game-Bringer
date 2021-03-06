@@ -8,6 +8,7 @@ import { compose } from "redux";
 import { connect } from "react-redux";
 import { setTheme } from '../redux/actions/UIActions';
 import ThemePopover from "./ThemePopover";
+import { setLinkFilters } from '../redux/actions/filtersActions'
 
 const Container = styled.div`
   min-height: 50px;
@@ -60,12 +61,14 @@ const TabsIcon = styled.span`
 const LogoContainer = styled.div`
 	display: flex;
 	align-items: center;
+	cursor: pointer;
 	flex-direction: column;
+	justify-content: center;
 `;
 
 const Logo = css`
 	font-family: 'neon', Fallback, sans-serif;
-	font-size: 28px;
+	font-size: 24px;
 	margin-bottom: 4px;
 	justify-content: center;
 `
@@ -110,7 +113,7 @@ function TopBar(props) {
 
 	function searchIconClick() {
 		setTabValue(1);
-		props.history.push(props.url ? `/search/${props.url}` : "/search");
+		props.history.push("/search");
 	}
 
 	function themeIconClick(event) {
@@ -134,11 +137,11 @@ function TopBar(props) {
 		<Container theme={props.theme}>
 			<Center>
 				<Wrapper>
-					<LogoContainer>
+					<LogoContainer onClick={() => props.history.push("/")}>
 						<LogoGame theme={props.theme}>Game</LogoGame>
 						<LogoBringer theme={props.theme}>Bringer</LogoBringer>
 					</LogoContainer>
-					<SearchBar />
+					<SearchBar/>
 					<RightLayout>
 						<SearchButtonContainer>
 
@@ -204,7 +207,8 @@ function TopBar(props) {
 }
 
 const actionCreator = {
-	setTheme
+	setTheme,
+	setLinkFilters
 }
 
 function mapStateToProps(state) {

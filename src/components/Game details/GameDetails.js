@@ -12,6 +12,7 @@ import ComplementaryInfo from './ComplementaryInfo'
 import GameInfo from './GameInfo';
 import { Snackbar } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
+import { setIsErrorOccurred } from '../../redux/actions/UIActions'
 
 const Container = styled.div`
     position: relative;
@@ -101,7 +102,7 @@ const GameDetails = (props) => {
                     <SpaceTop value={"16px"}>
                         <ResponsiveFlex>
                             <ResponsiveLeftContainer hasScreenshots={true}>
-                                <GameDescription game={props.game} />
+                                <GameDescription game={props.game} theme={props.theme}  />
                             </ResponsiveLeftContainer>
 
                             <GameInfo game={props.game} theme={props.theme} />
@@ -117,7 +118,8 @@ const GameDetails = (props) => {
 const actionCreators = {
     getGameDetails,
     clearGameDetails,
-    clearPrices
+    clearPrices,
+    setIsErrorOccurred
 }
 
 function mapStateToProps(state) {
