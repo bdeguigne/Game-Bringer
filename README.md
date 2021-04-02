@@ -2,7 +2,7 @@
 
 Personal Project. An app that uses the IGDB API to provide game informations from all platform.
 
-# https://game-bringer.netlify.app/
+# [Live demo](https://game-bringer.netlify.app/)
 
 ## Features
 
