@@ -9,10 +9,15 @@ const handler = async function (event) {
         let accessToken = event.queryStringParameters.access_token;
         let type = event.queryStringParameters.type;
 
+        console.log("TOKEN", token);
+        console.log("TOKEN", type);
+
         let response = null;
 
         if (type === "igdb") {
             if (token) {
+                console.log("CLIEND ID", process.env.CLIENT_ID)
+                console.log("CLIENT SECRET", process.env.CLIENT_SECRET)
                 response = await fetch(`https://id.twitch.tv/oauth2/token?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&grant_type=client_credentials`, {
                     method: "POST"
                 })
@@ -20,7 +25,7 @@ const handler = async function (event) {
                 let requestOptions = {
                     method: 'POST',
                     headers: {
-                        "Client-ID": "e31044r4d7oqge4odpsqg7xeet90oz",
+                        "Client-ID": process.env.CLIENT_ID,
                         "Authorization": `Bearer ${accessToken}`,
                         "Content-Type": "text/plain"
                     },
@@ -31,10 +36,19 @@ const handler = async function (event) {
                 response = await fetch("https://api.igdb.com/v4" + url, requestOptions);
             }
         } else {
-            let requestOptions = {
-                method: "GET"
+            if (token) {
+                console.log("CLIEND ID", process.env.CLIENT_ID)
+                console.log("CLIENT SECRET", process.env.CLIENT_SECRET)
+                response = await fetch(`https://id.twitch.tv/oauth2/token?client_id=${process.env.CLIENT_ID}&client_secret=${process.env.CLIENT_SECRET}&grant_type=client_credentials`, {
+                    method: "POST"
+                })
+            } else {
+
+                let requestOptions = {
+                    method: "GET"
+                }
+                response = await fetch(url, requestOptions);
             }
-            response = await fetch(url, requestOptions);
         }
 
 
